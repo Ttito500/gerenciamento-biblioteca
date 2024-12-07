@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.bibliotech.bibliotech.controllers.BibliotechController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <children>
+        <Label fx:id="labelExemplo" layoutX="100" layoutY="20" text="Bem vindo ao Acervo Bibliotech!"></Label>
+
+        <VBox layoutX="20.0" layoutY="20.0" spacing="10.0">
+            <Button text="Exibir Gêneros" fx:id="btnExibirGeneros" onAction="#showGeneros"/>
+        </VBox>
+    </children>
+
+</AnchorPane>
