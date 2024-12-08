@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "genero", schema = "adelino_cunha")
 public class Genero {
@@ -14,20 +16,4 @@ public class Genero {
 
     @Column(name = "genero", nullable = false)
     private String genero;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
