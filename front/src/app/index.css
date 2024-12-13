@@ -33,6 +33,7 @@ body {
 .color-green { color: var(--color-green); }
 .color-red { color: var(--color-red); }
 .color-blue { color: var(--color-blue); }
+.color-white { color: var(--color-white); }
 
 .btn-orange {
   background-color: var(--color-orange);
@@ -56,6 +57,14 @@ body {
   color: var(--color-white);
 }
 
+.obgr {
+  color: var(--color-red);
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--color-white);
+}
+
 .acervo {
   display: flex;
   padding: 16px;
@@ -77,19 +86,43 @@ body {
   width: auto;
 }
 
-.acervo-tabela tr {
+.tabela tr {
   font-size: 14px;
 }
 
-.acervo-tabela td, .acervo-tabela th {
+.tabela td, .tabela th {
   vertical-align: middle;
   border: 1px solid #6C757D;
 }
 
-.acervo-tabela th {
+.tabela th {
   background-color: #CED4DA;
 }
 
-.acervo-tabela-acoes svg {
+.tabela-acoes svg {
   font-size: 20px;
+}
+
+.tabela td {
+  background-color: inherit;
+}
+
+.tabela tr:nth-child(even) {
+  background-color: #E9ECEF;
+}
+
+.tabela tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.tabela tr:hover {
+  background-color: #ddd;
+}
+
+.navbar .container {
+  margin-left: 0px;
+}
+
+.navbar-link {
+  color: var(--color-white);
 }
