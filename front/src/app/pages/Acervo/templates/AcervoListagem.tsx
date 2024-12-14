@@ -124,13 +124,13 @@ const AcervoListagem: React.FC = () => {
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Gênero</th>
-                        <th>Local</th>
-                        <th>Total</th>
-                        <th>Empr.</th>
-                        <th>Atrasos</th>
-                        <th>Extrav.</th>
-                        <th>Disp.</th>
-                        <th>Status</th>
+                        <th className="text-center">Local</th>
+                        <th className="text-center">Total</th>
+                        <th className="text-center">Empr.</th>
+                        <th className="text-center">Atrasos</th>
+                        <th className="text-center">Extrav.</th>
+                        <th className="text-center">Disp.</th>
+                        <th className="text-center">Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -145,12 +145,12 @@ const AcervoListagem: React.FC = () => {
                         <td className="text-center">10</td>
                         <td className="text-center">3</td>
                         <td className="text-center">
-                            <Badge bg="danger">1</Badge>
+                            <Badge className="bibliotech-badge" bg="danger">1</Badge>
                         </td>
                         <td className="text-center">0</td>
                         <td className="text-center">7</td>
                         <td className="text-center">
-                            <Badge bg="success">Disponível</Badge>
+                            <Badge className="bibliotech-badge" bg="success">Disponível</Badge>
                         </td>
                         <td>
                             <ButtonGroup aria-label="Ações" className="tabela-acoes">
@@ -184,13 +184,13 @@ const AcervoListagem: React.FC = () => {
                         <td className="text-center">4</td>
                         <td className="text-center">0</td>
                         <td className="text-center">
-                            <Badge bg="danger">1</Badge>
+                            <Badge className="bibliotech-badge" bg="danger">1</Badge>
                         </td>
                         <td className="text-center">
-                            <Badge bg="danger">0</Badge>
+                            <Badge className="bibliotech-badge" bg="danger">0</Badge>
                         </td>
                         <td className="text-center">
-                            <Badge bg="danger">Indisponível</Badge>
+                            <Badge className="bibliotech-badge" bg="danger">Indisponível</Badge>
                         </td>
                         <td>
                             <ButtonGroup aria-label="Ações" className="tabela-acoes">

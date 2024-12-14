@@ -35,6 +35,10 @@ body {
 .color-blue { color: var(--color-blue); }
 .color-white { color: var(--color-white); }
 
+.bibliotech-badge {
+  font-size: 14px;;
+}
+
 .btn-orange {
   background-color: var(--color-orange);
   color: var(--color-white);
@@ -123,6 +127,49 @@ body {
   margin-left: 0px;
 }
 
-.navbar-link {
+.navbar-brand-bibliotech {
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-orange);
+
+  background-color: var(--color-white);
+  padding: 4px 8px 4px 8px;
+  margin-right: 8px;
+  border-radius: 6px;
+}
+
+.navbar-nav .navbar-link {
+  color: #ddd;
+  font-weight: bold;
+}
+
+.navbar-nav .navbar-link.active {
   color: var(--color-white);
+  text-decoration-line: underline;
+}
+
+.navbar-nav .navbar-link:hover {
+  color: var(--color-white);
+}
+
+.alunos {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.alunos-acoes {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.alunos-filtros-radio {
+  width: auto;
 }

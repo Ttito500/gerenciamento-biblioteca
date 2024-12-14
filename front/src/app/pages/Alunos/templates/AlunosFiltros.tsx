@@ -1,13 +1,13 @@
 import React from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
 
-const AcervoFiltros: React.FC = () => {
+const AlunosFiltros: React.FC = () => {
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
@@ -20,8 +20,20 @@ const AcervoFiltros: React.FC = () => {
                   className="mb-3"
                   controlId="exampleForm.ControlInput1"
                 >
-                  <Form.Label>ISBN</Form.Label>
-                  <Form.Control type="text" placeholder="Digite o ISBN" />
+                  <Form.Label>
+                    Série <span className="obgr">*</span>
+                  </Form.Label>
+
+                  <Form.Select aria-label="Selecione">
+                    <option>Selecione</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </Form.Select>
+
+                  <Form.Control.Feedback type="invalid">
+                    Campo obrigatório.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
 
@@ -30,41 +42,44 @@ const AcervoFiltros: React.FC = () => {
                   className="mb-3"
                   controlId="exampleForm.ControlInput1"
                 >
-                  <Form.Label>Título</Form.Label>
-                  <Form.Control type="text" placeholder="Digite o título" />
+                  <Form.Label>
+                    Turma <span className="obgr">*</span>
+                  </Form.Label>
+                  <Form.Select aria-label="Selecione">
+                    <option>Selecione</option>
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
+                  </Form.Select>
+
+                  <Form.Control.Feedback type="invalid">
+                    Campo obrigatório.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
 
-              <Col>
+              <Col xs={6}>
                 <Form.Group
                   className="mb-3"
                   controlId="exampleForm.ControlInput1"
                 >
-                  <Form.Label>Autor</Form.Label>
+                  <Form.Label>
+                    Nome <span className="obgr">*</span>
+                  </Form.Label>
+
                   <Form.Control
                     type="text"
-                    placeholder="Digite o nome do autor"
+                    placeholder="Digite o nome do aluno"
                   />
+
+                  <Form.Control.Feedback type="invalid">
+                    Campo obrigatório.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
 
             <Row>
-              <Col>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                >
-                  <Form.Label>Gênero</Form.Label>
-                  <Form.Select aria-label="Selecione um gênero">
-                    <option>Todos</option>
-                    <option value="1">Romance</option>
-                    <option value="2">Drama</option>
-                    <option value="3">Terror</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-
               <Col>
                 <Form.Group as={Row} className="mb-3">
                   <Form.Label as="legend" column sm={2}>
@@ -73,7 +88,7 @@ const AcervoFiltros: React.FC = () => {
 
                   <Row className="m-0">
                     <Form.Check
-                      className="acervo-filtros-radio"
+                      className="alunos-filtros-radio"
                       type="radio"
                       label="Todos"
                       checked
@@ -81,16 +96,16 @@ const AcervoFiltros: React.FC = () => {
                       id="formHorizontalRadios1"
                     />
                     <Form.Check
-                      className="acervo-filtros-radio"
+                      className="alunos-filtros-radio"
                       type="radio"
-                      label="Disponível"
+                      label="Regular"
                       name="formHorizontalRadios"
                       id="formHorizontalRadios2"
                     />
                     <Form.Check
-                      className="acervo-filtros-radio"
+                      className="alunos-filtros-radio"
                       type="radio"
-                      label="Indisponível"
+                      label="Em Débito"
                       name="formHorizontalRadios"
                       id="formHorizontalRadios3"
                     />
@@ -113,4 +128,4 @@ const AcervoFiltros: React.FC = () => {
   );
 };
 
-export default AcervoFiltros;
+export default AlunosFiltros;
