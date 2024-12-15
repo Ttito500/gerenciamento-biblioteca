@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/livros")
@@ -29,8 +30,8 @@ public class LivrosControler {
         return ResponseEntity.ok(livros);
     }
 
-/*    @GetMapping("/{id}")
-    public ResponseEntity<Livro> getLivroById(@PathVariable Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Livro>> getLivroById(@PathVariable Integer id){
         return ResponseEntity.ok(livrosService.getLivroById(id));
-    }*/
+    }
 }
