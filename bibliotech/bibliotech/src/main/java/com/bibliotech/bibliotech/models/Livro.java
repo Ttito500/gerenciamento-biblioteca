@@ -2,11 +2,13 @@ package com.bibliotech.bibliotech.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -30,13 +32,13 @@ public class Livro {
     @Column(name = "situacao", length = 20)
     private String situacao;
 
-    @Column(name = "observacao", length = 500)
-    private String observacao;
+   @Column(name = "observacao", length = 500)
+   private String observacao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_secao", nullable = false)
-    private com.bibliotech.bibliotech.models.Secao idSecao;
+    private com.bibliotech.bibliotech.models.Secao idSecao; //era pra ser só o id, ou a entidade msm? e pq essa entidade ta assim?
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
