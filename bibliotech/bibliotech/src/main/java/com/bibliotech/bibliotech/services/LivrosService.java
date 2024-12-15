@@ -16,6 +16,7 @@ public class LivrosService {
     private LivroRepository livroRepository;
 
     public Livro cadastrarLivro(Livro livro){
+        
         livroRepository.save(livro);
         return livro;
     }
@@ -23,6 +24,4 @@ public class LivrosService {
     public List<Livro> getLivros(){return livroRepository.findAll();}
 
     public Optional<Livro> getLivroById(Integer id){return livroRepository.findById(id);}
-
-
 }

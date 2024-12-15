@@ -18,9 +18,8 @@ public class LivrosControler {
 
     @PostMapping("")
     public ResponseEntity<Livro> criarLivro (@RequestBody Livro body){
-
         Livro livro = livrosService.cadastrarLivro(body);
-        URI location = URI.create("livros" + livro.getId()); // não sei muito bem oq isso faz, to seguindo exemplo do codigo de GC
+        URI location = URI.create("/livros/" + livro.getId()); // não sei muito bem oq isso faz, to seguindo exemplo do codigo de GC
         return ResponseEntity.created(location).body(livro);
     }
 
@@ -30,8 +29,8 @@ public class LivrosControler {
         return ResponseEntity.ok(livros);
     }
 
-    @GetMapping("/{id}")
+/*    @GetMapping("/{id}")
     public ResponseEntity<Livro> getLivroById(@PathVariable Integer id){
         return ResponseEntity.ok(livrosService.getLivroById(id));
-    }
+    }*/
 }

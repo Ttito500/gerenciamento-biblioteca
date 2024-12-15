@@ -38,7 +38,7 @@ public class Livro {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_secao", nullable = false)
-    private com.bibliotech.bibliotech.models.Secao idSecao; //era pra ser só o id, ou a entidade msm? e pq essa entidade ta assim?
+    private com.bibliotech.bibliotech.models.Secao idSecao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
