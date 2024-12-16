@@ -46,4 +46,16 @@ public class LivrosController {
         Livro livroDeletado = livrosService.deletarLivro(id);
         return ResponseEntity.ok(livroDeletado);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Livro> updateLivroById(@PathVariable Integer id, @RequestBody Livro body){
+
+        if (!livrosService.existeLivro(id)){
+            throw new NotFoundException("Livro não encontrado com ID " + id);
+        }
+
+        Livro livro = livrosService.atualizarLivro(id, body);
+        return ResponseEntity.ok(livro);
+    }
+
 }

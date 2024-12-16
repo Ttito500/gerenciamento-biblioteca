@@ -32,8 +32,8 @@ public class Livro {
     @Column(name = "situacao", length = 20)
     private String situacao;
 
-   @Column(name = "observacao", length = 500)
-   private String observacao;
+    @Column(name = "observacao", length = 500)
+    private String observacao;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
