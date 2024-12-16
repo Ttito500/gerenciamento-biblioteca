@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,36 +20,29 @@ public class LivrosService {
     }
 
     public Livro deletarLivro(Integer id){
-        Optional<Livro> livro = livroRepository.findById(id);
+        Livro livro = livroRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
 
-        if(livro.isEmpty()){
-            throw new RuntimeException("Livro com ID" + id + " não encontrado.");
-        }
-
-        Livro livroDeletado = livro.get();
-        livroRepository.delete(livroDeletado);
-        return livroDeletado;
+        livroRepository.delete(livro);
+        return livro;
     }
 
     public Livro atualizarLivro(Integer id, Livro livro){
 
-        Optional<Livro> livroExistente = livroRepository.findById(id);
+        Livro livroExistente = livroRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
-        Livro livroAtualizado = livroExistente.get();
+        livroExistente.setIsbn(livro.getIsbn());
+        livroExistente.setTitulo(livro.getTitulo());
+        livroExistente.setAutor(livro.getAutor());
+        livroExistente.setSituacao(livro.getSituacao());
+        livroExistente.setObservacao(livro.getObservacao());
+        livroExistente.setIdSecao(livro.getIdSecao());
+        livroExistente.setIdEstantePrateleira(livro.getIdEstantePrateleira());
 
-        livroAtualizado.setIsbn(livro.getIsbn());
-        livroAtualizado.setTitulo(livro.getTitulo());
-        livroAtualizado.setAutor(livro.getAutor());
-        livroAtualizado.setSituacao(livro.getSituacao());
-        livroAtualizado.setObservacao(livro.getObservacao());
-        livroAtualizado.setIdSecao(livro.getIdSecao());
-        livroAtualizado.setIdEstantePrateleira(livro.getIdEstantePrateleira());
-
-        livroRepository.save(livroAtualizado);
-        return livroAtualizado;
+        livroRepository.save(livroExistente);
+        return livroExistente;
     }
-
-    public boolean existeLivro(Integer id){ return livroRepository.existsById(id); }
 
     public List<Livro> getLivros(){ return livroRepository.findAll(); }
 
