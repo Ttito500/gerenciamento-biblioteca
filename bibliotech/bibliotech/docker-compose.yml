@@ -24,18 +24,6 @@ services:
     depends_on:
       - postgres
 
-  api:
-    build: .
-    container_name: api
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bibliotech
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
-    ports:
-      - "8090:8090"
-    depends_on:
-      - postgres
-
 volumes:
   pg_data:
     driver: local
