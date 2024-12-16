@@ -1,8 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Secao;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
