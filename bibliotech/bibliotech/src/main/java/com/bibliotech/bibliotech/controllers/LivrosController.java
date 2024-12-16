@@ -1,7 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/livros")
-public class LivrosControler {
+public class LivrosController {
 
     @Autowired
     private LivrosService livrosService;
