@@ -38,11 +38,12 @@ public class LivrosController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Livro> deleteLivroById(@PathVariable Integer id){
-        try{
-            Livro livroDeletado = livrosService.deletarLivro(id);
-            return ResponseEntity.ok(livroDeletado);
-        } catch (NotFoundException e){
-            return ResponseEntity.notFound().build();
+
+        if (!livrosService.existeLivro(id)){
+            throw new NotFoundException("Livro não encontrado com ID " + id);
         }
+
+        Livro livroDeletado = livrosService.deletarLivro(id);
+        return ResponseEntity.ok(livroDeletado);
     }
 }

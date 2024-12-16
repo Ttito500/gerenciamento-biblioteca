@@ -33,6 +33,8 @@ public class LivrosService {
         return livroDeletado;
     }
 
+    public boolean existeLivro(Integer id){ return livroRepository.existsById(id); }
+
     public List<Livro> getLivros(){
         System.out.println(livroRepository.findAll());
         return livroRepository.findAll();}
