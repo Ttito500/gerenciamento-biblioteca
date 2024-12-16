@@ -1,5 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.exception.NotFoundException;
+import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,15 @@ public class LivrosControler {
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Livro>> getLivroById(@PathVariable Integer id){
         return ResponseEntity.ok(livrosService.getLivroById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Livro> deleteLivroById(@PathVariable Integer id){
+        try{
+            Livro livroDeletado = livrosService.deletarLivro(id);
+            return ResponseEntity.ok(livroDeletado);
+        } catch (NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }
