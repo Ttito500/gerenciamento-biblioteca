@@ -34,6 +34,11 @@ public class AlunosService {
         Turma turmaExistente = turmaRepository.findById(aluno.getIdTurma().getId())
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + aluno.getIdTurma().getId() + " não encontrada."));
 
+        // Preenche a série com base na turma
+        aluno.setIdTurma(turmaExistente);  // A turma já foi validada e recuperada
+        aluno.setIdTurma(turmaExistente);
+        aluno.setSituacao(aluno.getSituacao() != null ? aluno.getSituacao() : "regular");
+
         // Salva o Aluno no banco de dados
         return alunoRepository.save(aluno);
     }
