@@ -23,7 +23,6 @@ public class AlunosService {
         return alunoRepository.filtrarAlunos(serie, turma, nome, situacao);
     }
 
-
     public Aluno cadastrarAluno(Aluno aluno) {
         // Verifica se a Turma foi enviada corretamente
         if (aluno.getIdTurma() == null || aluno.getIdTurma().getId() == null) {
@@ -43,14 +42,13 @@ public class AlunosService {
         return alunoRepository.save(aluno);
     }
 
-
     public List<Aluno> getAlunos(){return alunoRepository.findAll();}
 
-    public Optional<Aluno> getAlunoById(Integer id){return alunoRepository.findById(Long.valueOf(id));}
+    public Optional<Aluno> getAlunoById(Integer id){return alunoRepository.findById(id);}
 
     public Aluno alterarAluno(Integer id, Aluno novoAluno) {
         // Verifica se o aluno existe
-        Aluno alunoExistente = alunoRepository.findById(Long.valueOf(id))
+        Aluno alunoExistente = alunoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
         alunoExistente.setNome(novoAluno.getNome());
@@ -69,9 +67,8 @@ public class AlunosService {
         return alunoRepository.save(alunoExistente);
     }
 
-
     public void deletarAluno(Integer id) {
-        Aluno aluno = alunoRepository.findById(Long.valueOf(id))
+        Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
         alunoRepository.delete(aluno);
