@@ -19,6 +19,11 @@ public class AlunosService {
     @Autowired
     private TurmaRepository turmaRepository;
 
+    public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao) {
+        return alunoRepository.filtrarAlunos(serie, turma, nome, situacao);
+    }
+
+
     public Aluno cadastrarAluno(Aluno aluno) {
         // Verifica se a Turma foi enviada corretamente
         if (aluno.getIdTurma() == null || aluno.getIdTurma().getId() == null) {

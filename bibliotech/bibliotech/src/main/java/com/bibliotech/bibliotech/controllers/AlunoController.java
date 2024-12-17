@@ -17,6 +17,18 @@ public class AlunoController {
     @Autowired
     private AlunosService alunosService;
 
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Aluno>> filtrarAlunos(
+            @RequestParam(required = false) Integer serie,
+            @RequestParam(required = false) String turma,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String situacao
+    ) {
+        List<Aluno> alunosFiltrados = alunosService.filtrarAlunos(serie, turma, nome, situacao);
+        return ResponseEntity.ok(alunosFiltrados);
+    }
+
+
     @PostMapping("")
     public ResponseEntity<Aluno> criarAluno (@RequestBody Aluno body){
         Aluno aluno = alunosService.cadastrarAluno(body);
