@@ -19,32 +19,36 @@ public class AlunosService {
     @Autowired
     private TurmaRepository turmaRepository;
 
+    public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao) {
+        return alunoRepository.filtrarAlunos(serie, turma, nome, situacao);
+    }
+
     public Aluno cadastrarAluno(Aluno aluno) {
+        // Verifica se a Turma foi enviada corretamente
         if (aluno.getIdTurma() == null || aluno.getIdTurma().getId() == null) {
             throw new IllegalArgumentException("A turma associada ao aluno é inválida.");
         }
 
+        // Busca a Turma no banco de dados
         Turma turmaExistente = turmaRepository.findById(aluno.getIdTurma().getId())
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + aluno.getIdTurma().getId() + " não encontrada."));
 
-        // Associa a turma ao aluno
+        // Preenche a série com base na turma
+        aluno.setIdTurma(turmaExistente);  // A turma já foi validada e recuperada
         aluno.setIdTurma(turmaExistente);
+        aluno.setSituacao(aluno.getSituacao() != null ? aluno.getSituacao() : "regular");
 
-        // Define o valor padrão para "situacao"
-        aluno.setSituacao("REGULAR");
-
-        // Salva o aluno no banco de dados
+        // Salva o Aluno no banco de dados
         return alunoRepository.save(aluno);
     }
 
-
     public List<Aluno> getAlunos(){return alunoRepository.findAll();}
 
-    public Optional<Aluno> getAlunoById(Integer id){return alunoRepository.findById(Long.valueOf(id));}
+    public Optional<Aluno> getAlunoById(Integer id){return alunoRepository.findById(id);}
 
     public Aluno alterarAluno(Integer id, Aluno novoAluno) {
         // Verifica se o aluno existe
-        Aluno alunoExistente = alunoRepository.findById(Long.valueOf(id))
+        Aluno alunoExistente = alunoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
         alunoExistente.setNome(novoAluno.getNome());
@@ -63,9 +67,8 @@ public class AlunosService {
         return alunoRepository.save(alunoExistente);
     }
 
-
     public void deletarAluno(Integer id) {
-        Aluno aluno = alunoRepository.findById(Long.valueOf(id))
+        Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
         alunoRepository.delete(aluno);
