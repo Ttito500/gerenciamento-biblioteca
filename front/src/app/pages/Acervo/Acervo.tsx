@@ -44,8 +44,8 @@ const Acervo: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 	const [editingLivro, setEditingLivro] = useState<GetLivroResponse | null>(null);
 	const [deletingLivro, setDeletingLivro] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(true);
-	const [showToastSuccess, setShowToastSuccess] = useState(true);
+	const [showToastError, setShowToastError] = useState(false);
+	const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   useEffect(() => {
     listarLivros();
@@ -101,6 +101,7 @@ const Acervo: React.FC = () => {
 
       listarLivros();
 			setShowToastSuccess(true);
+			setFormDataCadastrarLivro(null);
       handleCloseCadastrar();
     } catch (err) {
 			setShowToastError(true);
@@ -140,6 +141,7 @@ const Acervo: React.FC = () => {
 
       listarLivros();
 			setShowToastSuccess(true);
+			setFormDataEditarLivro(null);
       handleCloseEditar();
     } catch (err) {
       setShowToastError(true);

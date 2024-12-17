@@ -20,6 +20,11 @@ public class AlunosService {
     private TurmaRepository turmaRepository;
 
     public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao) {
+        System.out.println("Serie: " + serie);
+        System.out.println("Turma: " + turma);
+        System.out.println("Nome: " + nome);
+        System.out.println("Situacao: " + situacao);
+        
         return alunoRepository.filtrarAlunos(serie, turma, nome, situacao);
     }
 
