@@ -46,7 +46,4 @@ public class AlunoController {
         alunosService.deletarAluno(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
 }
