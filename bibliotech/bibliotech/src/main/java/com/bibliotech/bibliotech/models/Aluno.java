@@ -17,9 +17,10 @@ public class Aluno {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_turma", nullable = false)
-    private Turma idTurma;
+    private com.bibliotech.bibliotech.models.Turma idTurma;
 
     @Column(name = "nome", nullable = false)
     private String nome;
