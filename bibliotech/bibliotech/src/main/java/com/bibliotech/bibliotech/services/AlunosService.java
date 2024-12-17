@@ -20,20 +20,16 @@ public class AlunosService {
     private TurmaRepository turmaRepository;
 
     public Aluno cadastrarAluno(Aluno aluno) {
+        // Verifica se a Turma foi enviada corretamente
         if (aluno.getIdTurma() == null || aluno.getIdTurma().getId() == null) {
             throw new IllegalArgumentException("A turma associada ao aluno é inválida.");
         }
 
+        // Busca a Turma no banco de dados
         Turma turmaExistente = turmaRepository.findById(aluno.getIdTurma().getId())
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + aluno.getIdTurma().getId() + " não encontrada."));
 
-        // Associa a turma ao aluno
-        aluno.setIdTurma(turmaExistente);
-
-        // Define o valor padrão para "situacao"
-        aluno.setSituacao("REGULAR");
-
-        // Salva o aluno no banco de dados
+        // Salva o Aluno no banco de dados
         return alunoRepository.save(aluno);
     }
 
