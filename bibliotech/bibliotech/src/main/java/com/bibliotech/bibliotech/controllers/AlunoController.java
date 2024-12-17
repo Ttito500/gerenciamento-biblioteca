@@ -14,18 +14,19 @@ import java.util.Optional;
 @RequestMapping("/alunos")
 public class AlunoController {
 
+    private final AlunosService alunosService;
+
     @Autowired
-    private AlunosService alunosService;
+    public AlunoController(AlunosService alunosService) {
+        this.alunosService = alunosService;
+    }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<List<Aluno>> filtrarAlunos(
-            @RequestParam(required = false) Integer serie,
-            @RequestParam(required = false) String turma,
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) String situacao
-    ) {
-        List<Aluno> alunosFiltrados = alunosService.filtrarAlunos(serie, turma, nome, situacao);
-        return ResponseEntity.ok(alunosFiltrados);
+    public List<Aluno> filtrarAlunos(@RequestParam(required = false) Integer serie,
+                                     @RequestParam(required = false) String turma,
+                                     @RequestParam(required = false) String nome,
+                                     @RequestParam(required = false) String situacao) {
+        return alunosService.filtrarAlunos(serie, turma, nome, situacao);
     }
 
 
