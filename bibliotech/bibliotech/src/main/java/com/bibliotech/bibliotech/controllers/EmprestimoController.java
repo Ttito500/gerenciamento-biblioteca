@@ -1,6 +1,8 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
+import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +22,11 @@ public class EmprestimoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestParam Integer Alunoid, @RequestParam Integer livroId){
-        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(Alunoid, livroId);
+    public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody Emprestimo body){
+        Integer alunoId = body.getIdAluno().getId();
+        Integer livroId = body.getIdLivro().getId();
+
+        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId);
         return ResponseEntity.ok(emprestimo);
     }
 

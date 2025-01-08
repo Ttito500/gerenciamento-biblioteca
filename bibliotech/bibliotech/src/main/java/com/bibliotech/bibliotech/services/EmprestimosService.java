@@ -10,6 +10,7 @@ import com.bibliotech.bibliotech.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -28,24 +29,24 @@ public class EmprestimosService {
     public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId) {
         Livro livro = livroRepository.findById(livroId)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
-        if (!"regular".equalsIgnoreCase(livro.getSituacao())){
+        if (!"disponivel".equalsIgnoreCase(livro.getSituacao())){
             throw new RuntimeException("Aa");
         }
 
         Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-        if (!"disponivel".equalsIgnoreCase(aluno.getSituacao())){
+        if (!"regular".equalsIgnoreCase(aluno.getSituacao())){
             throw new RuntimeException("Aa");
         }
 
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.setIdAluno(aluno);
         emprestimo.setIdLivro(livro);
-        //DATAS
+        emprestimo.setDataEmprestimo(LocalDate.now());
+        emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
 
         livro.setSituacao("emprestado");
-        aluno.setSituacao("emprestado");
 
         return emprestimoRepository.save(emprestimo);
     }
