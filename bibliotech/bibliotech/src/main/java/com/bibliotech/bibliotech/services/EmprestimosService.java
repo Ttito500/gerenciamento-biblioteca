@@ -26,18 +26,18 @@ public class EmprestimosService {
     private AlunoRepository alunoRepository;
 
     //Ainda tem que fazer as excessoes bonitinhas
-    public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId) {
+    public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId, String observacao) {
         Livro livro = livroRepository.findById(livroId)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
         if (!"disponivel".equalsIgnoreCase(livro.getSituacao())){
-            throw new RuntimeException("Aa");
+            throw new RuntimeException("Erro de situação");
         }
 
         Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
         if (!"regular".equalsIgnoreCase(aluno.getSituacao())){
-            throw new RuntimeException("Aa");
+            throw new RuntimeException("Erro de situação");
         }
 
         Emprestimo emprestimo = new Emprestimo();
@@ -45,6 +45,7 @@ public class EmprestimosService {
         emprestimo.setIdLivro(livro);
         emprestimo.setDataEmprestimo(LocalDate.now());
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
+        emprestimo.setObservacao(observacao);
 
         livro.setSituacao("emprestado");
 
