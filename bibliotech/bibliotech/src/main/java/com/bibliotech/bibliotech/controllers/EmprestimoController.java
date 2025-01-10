@@ -26,7 +26,7 @@ public class EmprestimoController {
         Integer alunoId = body.getIdAluno().getId();
         Integer livroId = body.getIdLivro().getId();
 
-        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId, body.getObservacao());
+        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, livroId, body.getQtdRenovacao(), body.getSituacao(), body.getObservacao());
         return ResponseEntity.ok(emprestimo);
     }
 
