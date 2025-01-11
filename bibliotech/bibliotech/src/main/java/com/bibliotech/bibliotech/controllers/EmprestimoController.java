@@ -36,7 +36,7 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimos);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/renovarPrazo/{id}")
     public ResponseEntity<Emprestimo> renovarPrazo(@PathVariable Integer id){
         Emprestimo emprestimo = emprestimosService.renovarPrazo(id);
         return ResponseEntity.ok(emprestimo);
