@@ -54,6 +54,16 @@ public class EmprestimosService {
         return emprestimoRepository.save(emprestimo);
     }
 
+    public Emprestimo alterarSituacao(Integer id, String status){
+        Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
+
+        emprestimoExistente.setSituacao(status);
+
+        emprestimoRepository.save(emprestimoExistente);
+        return emprestimoExistente;
+    }
+
     public List<Emprestimo> getEmprestimos(){ return emprestimoRepository.findAll(); }
 
 }
