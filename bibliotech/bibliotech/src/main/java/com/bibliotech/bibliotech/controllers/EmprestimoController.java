@@ -35,4 +35,10 @@ public class EmprestimoController {
         List<Emprestimo> emprestimos = emprestimosService.getEmprestimos();
         return ResponseEntity.ok(emprestimos);
     }
+
+    @PatchMapping("/renovarPrazo/{id}")
+    public ResponseEntity<Emprestimo> renovarPrazo(@PathVariable Integer id){
+        Emprestimo emprestimo = emprestimosService.renovarPrazo(id);
+        return ResponseEntity.ok(emprestimo);
+    }
 }

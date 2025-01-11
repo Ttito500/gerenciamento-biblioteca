@@ -54,6 +54,21 @@ public class EmprestimosService {
         return emprestimoRepository.save(emprestimo);
     }
 
+    public Emprestimo renovarPrazo(Integer id){
+        Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
+
+        if (emprestimoExistente.getSituacao().equals("atrasado")){
+            emprestimoExistente.setDataPrazo(LocalDate.now().plusDays(7));
+        }
+        else {
+            emprestimoExistente.setDataPrazo(emprestimoExistente.getDataPrazo().plusDays(7));
+        }
+
+        emprestimoRepository.save(emprestimoExistente);
+        return emprestimoExistente;
+    }
+
     public List<Emprestimo> getEmprestimos(){ return emprestimoRepository.findAll(); }
 
 }
