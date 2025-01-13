@@ -19,11 +19,16 @@ public enum SituacaoEmprestimo {
     }
 
     public static SituacaoEmprestimo fromValor(String valor) {
+        if(valor == null){  //n sei se ele devia aceitar nulo ou n, fiz assim pois no postman a situação era passada nula
+            return null;
+        }
+
         for (SituacaoEmprestimo situacao : SituacaoEmprestimo.values()) {
             if (situacao.getValor().equals(valor)) {
                 return situacao;
             }
         }
+
         throw new ValidationException("Valor desconhecido: " + valor); //não tenho certeza se eu deveria criar nova excessão, ou usar essa msm
     }
 }
