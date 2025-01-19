@@ -5,6 +5,9 @@ import com.bibliotech.bibliotech.repositories.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class AutorService {
 
@@ -15,8 +18,11 @@ public class AutorService {
         return autorRepository.save(autor);
     }
 
-    public Autor getAll() {
+    public List<Autor> getAll() {
         return autorRepository.findAll();
     }
-}
 
+    public Optional<Autor> buscarPorNome(String nome) {
+        return autorRepository.findFirstByNomeIgnoreCase(nome);
+    }
+}
