@@ -6,21 +6,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/livroautor") // Define o endpoint para esta rota
+@RequestMapping("/livroautor")
 public class LivroautorController {
 
+    private final LivroautorService livroautorService;
+
     @Autowired
-    LivroautorService livroautorService;
+    public LivroautorController(LivroautorService livroautorService) {this.livroautorService = livroautorService;}
 
     @PostMapping
     public ResponseEntity<Livroautor> cadastrarLivroautor(@RequestBody Livroautor body) {
-        Livroautor livroautor = livroautorService.cadastrarLivroautor(body);
-        URI locantion =URI.create("/livroautor" + livroautor.getId());
-        return ResponseEntity.created(locantion).body(livroautor);
+
+        if (body.getId_livro() == null || body.getId_autor() == null) {
+            throw new IllegalArgumentException("Os campos 'id_livro' e 'id_autor' são obrigatórios.");
+        }
+
+        Integer livroId = body.getId_livro().getId();
+        Integer autorId = body.getId_autor().getId();
+
+        System.out.println(livroId + " " + autorId);
+
+        Livroautor livroautor = livroautorService.cadastrarLivroautor(livroId, autorId);
+        return ResponseEntity.ok(livroautor);
     }
 
     @GetMapping("")
