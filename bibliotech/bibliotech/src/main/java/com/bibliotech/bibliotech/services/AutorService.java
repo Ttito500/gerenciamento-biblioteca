@@ -25,4 +25,13 @@ public class AutorService {
     public Optional<Autor> buscarPorNome(String nome) {
         return autorRepository.findFirstByNomeIgnoreCase(nome);
     }
+
+    public boolean autorExiste(Autor autor) {
+        return autorRepository.existsById(autor.getId());
+    }
+
+    public void deleteAutor(Autor autor) {
+        // fazer a logica
+        autorRepository.delete(autor);
+    }
 }

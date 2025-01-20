@@ -41,4 +41,11 @@ public class AutorController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("")
+    public ResponseEntity<Void> deletarAutor(@RequestBody Autor body) {
+        autorService.deleteAutor(body);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
