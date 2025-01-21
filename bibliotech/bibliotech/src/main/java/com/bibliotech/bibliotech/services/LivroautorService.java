@@ -23,12 +23,11 @@ public class LivroautorService {
     private AutorRepository autorRepository;
 
     public Livroautor cadastrarLivroautor(Integer livroId, Integer autorId) {
+
         Livro livro = livroRepository.findById(livroId)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
         Autor autor = autorRepository.findById(autorId)
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado"));
-
-        //AQUI QUEBRA GABRIEL
 
         Livroautor livroautor = new Livroautor();
         livroautor.setId_livro(livro);
