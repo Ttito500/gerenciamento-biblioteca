@@ -21,4 +21,10 @@ public class Turma {
     @Column(name = "turma", nullable = false, length = 1)
     private String turma;
 
+    @Column(name = "ano_de_entrada", nullable = false)
+    int anoDeEntrada;
+
+    @ColumnDefault("true")
+    @Column(name = "ativo", nullable = false)
+    boolean ativo;
 }
