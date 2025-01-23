@@ -30,5 +30,19 @@ public class GenerosService {
         return generoRepository.findAll();
     }
 
-    public Optional<Genero> getGenero(Integer id) { return generoRepository.findById(id); }
+    public Genero getGeneroById(Integer id) {
+        return generoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Gênero com ID " + id + " não encontrado"));
+    }
+
+    public List<Genero> buscarPorNome(String genero) {
+
+        List<Genero> generos = generoRepository.findByGeneroContainingIgnoreCase(genero);
+
+        if (generos.isEmpty()) {
+            throw new NotFoundException("Gênero '" + genero + "' não encontrado");
+        }
+
+        return generos;
+    }
 }

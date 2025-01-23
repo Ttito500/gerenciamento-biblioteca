@@ -36,8 +36,14 @@ public class GenerosController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Genero>> getGeneroById(@PathVariable Integer id) {
-        return ResponseEntity.ok(generosService.getGenero(id));
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Genero> getGeneroById(@PathVariable Integer id) {
+        return ResponseEntity.ok(generosService.getGeneroById(id));
+    }
+
+    @GetMapping("/nome/{genero}")
+    public ResponseEntity<List<Genero>> buscarPorNome(@PathVariable String genero) {
+        List<Genero> generos = generosService.buscarPorNome(genero);
+        return ResponseEntity.ok(generos);
     }
 }

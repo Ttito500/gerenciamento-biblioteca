@@ -16,7 +16,6 @@ public class SecoesService {
     private SecaoRepository secaoRepository;
 
     public Secao criarSecao (Secao secao) {
-
         secaoRepository.save(secao);
         return secao;
     }
@@ -42,6 +41,9 @@ public class SecoesService {
 
     public List<Secao> getSecoes(){ return secaoRepository.findAll(); }
 
-    public Optional<Secao> getSecao(Integer id){ return secaoRepository.findById(id); }
+    public Secao getSecao(Integer id){
+        return secaoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Seção com ID " + id + " não encontrada"));
+    }
 
 }

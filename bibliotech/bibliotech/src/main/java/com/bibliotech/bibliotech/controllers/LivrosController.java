@@ -27,15 +27,6 @@ public class LivrosController {
         return ResponseEntity.created(location).body(livro);
     }
 
-    @GetMapping("/filtrar")
-    public List<Livro> filtrarLivros(@RequestParam(required = false) String isbn,
-                                     @RequestParam(required = false) String titulo,
-                                     @RequestParam(required = false) String autor,
-                                     @RequestParam(required = false) String situacao,
-                                     @RequestParam(required = false) Integer idSecao) {
-        return livrosService.filtrarLivros(isbn, titulo, autor, situacao, idSecao);
-    }
-
     @GetMapping("")
     public ResponseEntity<List<Livro>> getLivros(){
         List<Livro> livros = livrosService.getLivros();
