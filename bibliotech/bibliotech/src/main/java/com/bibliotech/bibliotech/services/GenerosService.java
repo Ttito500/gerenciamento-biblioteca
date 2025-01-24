@@ -35,14 +35,9 @@ public class GenerosService {
                 .orElseThrow(() -> new NotFoundException("Gênero com ID " + id + " não encontrado"));
     }
 
-    public List<Genero> buscarPorNome(String genero) {
-
-        List<Genero> generos = generoRepository.findByGeneroContainingIgnoreCase(genero);
-
-        if (generos.isEmpty()) {
-            throw new NotFoundException("Gênero '" + genero + "' não encontrado");
-        }
-
-        return generos;
+    public List<Genero> filtrarGenero(String genero) {
+        return generoRepository.filtrarGeneros(genero);
     }
+
+
 }
