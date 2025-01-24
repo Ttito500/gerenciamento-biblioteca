@@ -22,6 +22,7 @@ public class LivroautorService {
     @Autowired
     private AutorRepository autorRepository;
 
+    //projetada para nao ser chamada apenas por seu controller
     public Livroautor cadastrarLivroautor(Integer livroId, Integer autorId) {
 
         Livro livro = livroRepository.findById(livroId)
@@ -37,7 +38,7 @@ public class LivroautorService {
         return livroautor;
     }
 
-    //Teste de rota
+    //para ver se funcionava
     public List<Livroautor> getAllLivrosAutores(){
         return livroautorRepository.findAll();
     }

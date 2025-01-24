@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,11 +40,9 @@ public class AutorController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<Void> deletarAutor(@RequestBody Autor body) {
-        autorService.deleteAutor(body);
+    @DeleteMapping("/sem-associacao")
+    public ResponseEntity<Void> deletarAutoresSemAssociacao() {
+        autorService.deleteAutoresSemAssociacao();
         return ResponseEntity.noContent().build();
     }
-
-
 }

@@ -2,20 +2,12 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
-import com.bibliotech.bibliotech.repositories.LivroautorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,12 +20,13 @@ public class LivrosService {
     private LivroRepository livroRepository;
 
     @Autowired
-    private LivroautorRepository livroautorRepository;
+    private LivroautorService livroautorService;
 
     public Livro cadastrarLivro(Livro livro){
         livroRepository.save(livro);
 
-        Optional<Autor> autorOptional =autorService.buscarPorNome(livro.getAutor());
+        //lgc para ver se o autor já está no banco ou não
+        Optional<Autor> autorOptional = autorService.buscarPorNome(livro.getAutor());
         Autor autor;
 
         if(autorOptional.isPresent()){
@@ -46,7 +39,8 @@ public class LivrosService {
             autorService.addAutor(autor);
         }
 
-        //fazer lgc para associar
+        //associar autor e livro em Livroautor
+        livroautorService.cadastrarLivroautor(livro.getId(), autor.getId());
 
         return livro;
     }

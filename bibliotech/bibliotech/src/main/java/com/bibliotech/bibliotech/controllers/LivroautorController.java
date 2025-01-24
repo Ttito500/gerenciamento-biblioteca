@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// criada para teste, qualquer coisa podem apagar
 @RestController
 @RequestMapping("/livroautor")
 public class LivroautorController {

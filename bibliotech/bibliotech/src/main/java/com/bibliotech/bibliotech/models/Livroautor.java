@@ -11,7 +11,7 @@ import javax.net.ssl.SSLSession;
 @Getter
 @Setter
 @Entity
-@Table(name = "livrogenero", schema = "adelino_cunha")
+@Table(name = "livroautor", schema = "adelino_cunha")
 public class Livroautor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
