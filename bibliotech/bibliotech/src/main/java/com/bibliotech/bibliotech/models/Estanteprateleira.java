@@ -16,6 +16,7 @@ public class Estanteprateleira {
     private Integer id;
 
     @Column(name = "estante", nullable = false)
+    //@Size(min = 1, max = 1, message = "A estante deve conter exatamente 1 caractere.")
     private String estante;     //na tabela e no documento fala que eh caracter
 
     @Column(name = "prateleira", nullable = false)

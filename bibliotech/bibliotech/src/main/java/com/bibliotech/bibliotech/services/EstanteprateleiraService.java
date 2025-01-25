@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.repositories.EstanteprateleiraRepository;
@@ -29,6 +30,26 @@ public class EstanteprateleiraService {
 
     private Boolean estanteprateleiraExiste(String estante, Integer prateleira) {
         return estateprateleiraRepository.existsByEstanteAndPrateleira(estante, prateleira);
+    }
+
+    public Estanteprateleira atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
+
+        Estanteprateleira ep_existente = estateprateleiraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + id + " não encontrado."));
+
+
+        if (ep.getEstante() == null || ep.getEstante().isEmpty()) {
+            throw new ValidationException("O campo 'estante' não pode ser vazio ou nulo.");
+        }
+
+        if (ep.getPrateleira() == null) {
+            throw new ValidationException("O campo 'prateleira' não pode ser nulo.");
+        }
+
+        ep_existente.setEstante(ep.getEstante());
+        ep_existente.setPrateleira(ep.getPrateleira());
+
+        return estateprateleiraRepository.save(ep_existente);
     }
 
 }

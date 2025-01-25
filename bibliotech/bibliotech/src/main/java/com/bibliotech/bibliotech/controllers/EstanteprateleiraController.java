@@ -26,4 +26,10 @@ public class EstanteprateleiraController {
         List<Estanteprateleira> ep = estateprateleiraService.listarEstanteprateleiras();
         return ResponseEntity.ok(ep);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Estanteprateleira> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
+        Estanteprateleira ep = estateprateleiraService.atualizarEstanteprateleira(id, body);
+        return ResponseEntity.ok(ep);
+    }
 }
