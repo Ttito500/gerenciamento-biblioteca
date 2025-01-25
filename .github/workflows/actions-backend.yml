@@ -59,7 +59,7 @@ jobs:
 
       # Rodar testes da aplicação
       - name: Run tests
-        run: docker-compose -f docker-compose.yml exec api mvn test
+        run: docker-compose -f docker-compose.yml exec -T api mvn test
 
       # Encerrar os containers após a execução
       - name: Stop and clean up
