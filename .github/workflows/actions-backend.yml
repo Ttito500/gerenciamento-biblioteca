@@ -30,9 +30,18 @@ jobs:
           sudo apt-get install -y docker-compose
 
       #  Construir e rodar os containers com Docker Compose
-      # --wait espera até que todos os containers fiquem com o estado (healthy)
       - name: Build and start services
-        run: docker-compose -f docker-compose.yml up -d --build --wait
+        run: docker-compose -f docker-compose.yml up -d --build
+
+       # Aguardar a aplicação Spring Boot estar saudável
+      - name: Wait for the Spring Boot application to be healthy
+        run: |
+          echo "Waiting for Spring Boot application to start...";
+          until curl -s http://localhost:8090/actuator/health/readiness | grep UP; do
+            echo "Waiting for application...";
+            sleep 5;
+          done
+          echo "The application is healthy!"
 
       # Rodar testes da aplicação
       - name: Run tests
