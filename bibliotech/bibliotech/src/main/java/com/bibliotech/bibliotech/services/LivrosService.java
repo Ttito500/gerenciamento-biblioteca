@@ -23,23 +23,11 @@ public class LivrosService {
     private LivroautorService livroautorService;
 
     public Livro cadastrarLivro(Livro livro){
+
+        Autor autor = autorService.addAutor(livro.getAutor());
+
         livroRepository.save(livro);
 
-        //lgc para ver se o autor já está no banco ou não
-        Optional<Autor> autorOptional = autorService.buscarPorNome(livro.getAutor());
-        Autor autor;
-
-        if(autorOptional.isPresent()){
-            //autor já existe no banco de dados
-            autor = autorOptional.get();
-        }else{
-            //cadastrar novo autor
-            autor = new Autor();
-            autor.setNome(livro.getAutor());
-            autorService.addAutor(autor);
-        }
-
-        //associar autor e livro em Livroautor
         livroautorService.cadastrarLivroautor(livro.getId(), autor.getId());
 
         return livro;

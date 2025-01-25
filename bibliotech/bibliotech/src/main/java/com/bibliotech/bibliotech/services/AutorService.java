@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
 import com.bibliotech.bibliotech.repositories.LivroautorRepository;
@@ -18,8 +19,27 @@ public class AutorService {
     @Autowired
     private LivroautorRepository livroautorRepository;
 
-    public Autor addAutor(Autor autor) {
-        return autorRepository.save(autor);
+    public Autor addAutor(String nome_autor) {
+
+        if(nome_autor==null || nome_autor.isEmpty()){
+            throw new ValidationException("O nome do autor não pode estar vazio.");
+        }
+
+        Optional<Autor> autorOptional = buscarPorNome(nome_autor);
+        Autor autor;
+
+        if(autorOptional.isPresent()){
+            //autor já existe no banco de dados
+            autor = autorOptional.get();
+            System.out.println("autor já existe");
+        }else{
+            //cadastrar novo autor
+            autor = new Autor();
+            autor.setNome(nome_autor);
+            autorRepository.save(autor);
+            System.out.println("autor adicionado");
+        }
+        return autor;
     }
 
     public List<Autor> getAll() {

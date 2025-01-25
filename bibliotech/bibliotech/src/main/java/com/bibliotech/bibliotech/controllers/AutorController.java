@@ -19,11 +19,11 @@ public class AutorController {
 
     //para teste
     @PostMapping ("")
-    public ResponseEntity<Autor> cadastrarAutor(@RequestBody Autor body) {
-        Autor autor = autorService.addAutor(body);
-        URI locantion =URI.create("/autor" + autor.getId());
-        return ResponseEntity.created(locantion).body(autor);
+    public ResponseEntity<Void> cadastrarAutor(@RequestBody Autor body) {
+        autorService.addAutor(body.getNome());
+        return ResponseEntity.ok().build();
     }
+
     //para teste
     @GetMapping("")
     public ResponseEntity<List<Autor>> listarAutores() {
