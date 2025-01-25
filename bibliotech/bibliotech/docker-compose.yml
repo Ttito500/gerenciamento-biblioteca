@@ -32,8 +32,14 @@ services:
   api:
     build: .
     container_name: bibliotech-api
-    env_file:
-      - .env
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - JDBC_URL=${JDBC_URL}
+      - DB_SCHEMA_NAME=${DB_SCHEMA_NAME}
+      - API_PORT=${API_PORT}
     ports:
       - "${API_PORT}:8090"
     healthcheck:
