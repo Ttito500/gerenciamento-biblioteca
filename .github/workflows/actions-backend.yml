@@ -11,6 +11,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./bibliotech/bibliotech/
 
     steps:
       # Clonar o repositório
@@ -27,15 +30,12 @@ jobs:
       # --wait espera até que todos os containers fiquem com o estado (healthy)
       - name: Build and start services
         run: docker-compose up -d --build --wait
-        working-directory: bibliotech/bibliotech
 
       # Rodar testes da aplicação
       - name: Run tests
         run: docker-compose exec api mvn test
-        working-directory: bibliotech/bibliotech
 
       # Encerrar os containers após a execução
       - name: Stop and clean up
         if: always()
         run: docker-compose down
-        working-directory: bibliotech/bibliotech
