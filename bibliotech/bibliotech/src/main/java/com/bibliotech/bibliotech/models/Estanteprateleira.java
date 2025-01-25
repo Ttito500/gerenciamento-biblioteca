@@ -16,7 +16,7 @@ public class Estanteprateleira {
     private Integer id;
 
     @Column(name = "estante", nullable = false)
-    private Integer estante;
+    private String estante;     //na tabela e no documento fala que eh caracter
 
     @Column(name = "prateleira", nullable = false)
     private Integer prateleira;
