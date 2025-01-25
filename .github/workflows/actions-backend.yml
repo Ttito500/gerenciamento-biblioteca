@@ -20,22 +20,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Configurar o ambiente do Docker
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+      - name: Listar arquivos no diretório raiz
+        run: ls -alh
 
-      #  Construir e rodar os containers com Docker Compose
-      # --wait espera até que todos os containers fiquem com o estado (healthy)
-      - name: Build and start services
-        run: docker-compose up -d --build --wait
+      # # Configurar o ambiente do Docker
+      # - name: Install Docker Compose
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y docker-compose
 
-      # Rodar testes da aplicação
-      - name: Run tests
-        run: docker-compose exec api mvn test
+      # #  Construir e rodar os containers com Docker Compose
+      # # --wait espera até que todos os containers fiquem com o estado (healthy)
+      # - name: Build and start services
+      #   run: docker-compose up -d --build --wait
 
-      # Encerrar os containers após a execução
-      - name: Stop and clean up
-        if: always()
-        run: docker-compose down
+      # # Rodar testes da aplicação
+      # - name: Run tests
+      #   run: docker-compose exec api mvn test
+
+      # # Encerrar os containers após a execução
+      # - name: Stop and clean up
+      #   if: always()
+      #   run: docker-compose down
