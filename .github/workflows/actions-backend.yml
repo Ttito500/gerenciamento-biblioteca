@@ -26,11 +26,11 @@ jobs:
       #  Construir e rodar os containers com Docker Compose
       # --wait espera até que todos os containers fiquem com o estado (healthy)
       - name: Build and start services
-        run: docker-compose up -d --build --wait
+        run: docker-compose -f ../../bibliotech/bibliotech/docker-compose.yml up -d --build --wait
 
       # Rodar testes da aplicação
       - name: Run tests
-        run: docker-compose exec api mvn test
+        run: docker-compose -f ../../bibliotech/bibliotech/docker-compose.yml exec api mvn test
 
       # Encerrar os containers após a execução
       - name: Stop and clean up
