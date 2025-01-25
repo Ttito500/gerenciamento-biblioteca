@@ -15,8 +15,8 @@ public class Estanteprateleira {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "estante", nullable = false)
-    private Integer estante;
+    @Column(name = "estante", nullable = false, length = 1)
+    private String estante;
 
     @Column(name = "prateleira", nullable = false)
     private Integer prateleira;
