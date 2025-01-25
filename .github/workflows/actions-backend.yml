@@ -11,6 +11,20 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+        DB_NAME: ${{ vars.DB_NAME }}
+        DB_USER: ${{ vars.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_PORT: ${{ vars.DB_PORT }}
+
+        JDBC_URL: ${{ vars.JDBC_URL }}
+        DB_SCHEMA_NAME: ${{ vars.DB_SCHEMA_NAME }}
+        API_PORT: ${{ vars.API_PORT }}
+
+        PGADMIN_DEFAULT_EMAIL: ${{ vars.PGADMIN_DEFAULT_EMAIL }}
+        PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+        PGADMIN_LISTEN_PORT: ${{ vars.PGADMIN_LISTEN_PORT }}
+        PGADMIN_PORT: ${{ vars.PGADMIN_PORT }}
     defaults:
       run:
         working-directory: ./bibliotech/bibliotech/
@@ -37,7 +51,7 @@ jobs:
       - name: Wait for the Spring Boot application to be healthy
         run: |
           echo "Waiting for Spring Boot application to start...";
-          until curl -s http://localhost:8090/actuator/health/readiness | grep UP; do
+          until curl -s http://localhost:${{ vars.API_PORT }}/actuator/health/readiness | grep UP; do
             echo "Waiting for application...";
             sleep 5;
           done
