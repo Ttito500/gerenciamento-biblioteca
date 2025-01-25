@@ -18,8 +18,10 @@ jobs:
         uses: actions/checkout@v4
 
       # Configurar o ambiente do Docker
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       #  Construir e rodar os containers com Docker Compose
       # --wait espera até que todos os containers fiquem com o estado (healthy)
