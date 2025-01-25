@@ -23,22 +23,22 @@ jobs:
       - name: Listar arquivos no diretório raiz
         run: ls -alh
 
-      # # Configurar o ambiente do Docker
-      # - name: Install Docker Compose
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y docker-compose
+      # Configurar o ambiente do Docker
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-      # #  Construir e rodar os containers com Docker Compose
-      # # --wait espera até que todos os containers fiquem com o estado (healthy)
-      # - name: Build and start services
-      #   run: docker-compose up -d --build --wait
+      #  Construir e rodar os containers com Docker Compose
+      # --wait espera até que todos os containers fiquem com o estado (healthy)
+      - name: Build and start services
+        run: docker-compose -f docker-compose.yml up -d --build --wait
 
-      # # Rodar testes da aplicação
-      # - name: Run tests
-      #   run: docker-compose exec api mvn test
+      # Rodar testes da aplicação
+      - name: Run tests
+        run: docker-compose -f docker-compose.yml exec api mvn test
 
-      # # Encerrar os containers após a execução
-      # - name: Stop and clean up
-      #   if: always()
-      #   run: docker-compose down
+      # Encerrar os containers após a execução
+      - name: Stop and clean up
+        if: always()
+        run: docker-compose -f docker-compose.yml down
