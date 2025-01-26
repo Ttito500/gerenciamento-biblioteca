@@ -1,7 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.models.Turma;
-import com.bibliotech.bibliotech.services.LivrosService;
 import com.bibliotech.bibliotech.services.TurmasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +39,8 @@ public class TurmaController {
     public List<Turma> filtrarTurmas(@RequestParam(required = false) Integer serie,
                                      @RequestParam(required = false) String turma,
                                      @RequestParam(required = false) Integer anoDeEntrada,
-                                     @RequestParam(required = false) Boolean ativa) {
-        return turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativa);
+                                     @RequestParam(required = false) Boolean ativo) {
+        return turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
     }
 
 }
