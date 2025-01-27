@@ -43,4 +43,10 @@ public class TurmaController {
         return turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
     }
 
+    @PutMapping ("/{id}")
+    public ResponseEntity<Turma> alterarTurma(@PathVariable Integer id, @RequestBody Turma body) {
+        Turma turmaAtualizada = turmasService.alterarTurma(id, body);
+        return ResponseEntity.ok(turmaAtualizada);
+    }
+
 }
