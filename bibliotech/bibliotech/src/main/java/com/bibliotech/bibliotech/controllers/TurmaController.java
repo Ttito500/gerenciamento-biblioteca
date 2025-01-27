@@ -1,9 +1,12 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.services.TurmasService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -18,7 +21,11 @@ public class TurmaController {
     private TurmasService turmasService;
 
     @PostMapping("")
-    public ResponseEntity<Turma> criarTurma (@RequestBody Turma body){
+    public ResponseEntity<Turma> criarTurma (@Valid @RequestBody Turma body, BindingResult result){
+        if (result.hasErrors()) {
+            throw new ValidationException(result);
+        }
+
         Turma turma = turmasService.cadastrarTurma(body);
         URI location = URI.create("/turmas/" + turma.getId());
         return ResponseEntity.created(location).body(turma);
@@ -31,7 +38,7 @@ public class TurmaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Turma>> getTurmaById(@PathVariable Integer id){
+    public ResponseEntity<Turma> getTurmaById(@PathVariable Integer id){
         return ResponseEntity.ok(turmasService.getTurmaById(id));
     }
 
@@ -44,12 +51,15 @@ public class TurmaController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Turma> alterarTurma(@PathVariable Integer id, @RequestBody Turma body) {
+    public ResponseEntity<Turma> alterarTurma(@PathVariable Integer id, @Valid @RequestBody Turma body, BindingResult result){
+        if (result.hasErrors()) {
+            throw new ValidationException(result);
+        }
+
         Turma turmaAtualizada = turmasService.alterarTurma(id, body);
         return ResponseEntity.ok(turmaAtualizada);
     }
 
-    //não tinha nenhuma restrição nos requisitos, mas oq acontece numa turma q tem um aluno com emprestimo ativo e é inativada?
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarTurma(@PathVariable Integer id) {
         turmasService.deletarTurma(id);

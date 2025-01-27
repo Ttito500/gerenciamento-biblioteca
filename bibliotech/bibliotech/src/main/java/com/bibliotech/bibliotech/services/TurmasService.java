@@ -16,12 +16,16 @@ public class TurmasService {
     private TurmaRepository turmaRepository;
 
     public Turma cadastrarTurma(Turma turma){
+        turma.setTurma(turma.getTurma().toUpperCase());
         return turmaRepository.save(turma);
     }
 
     public List<Turma> getTurmas(){return turmaRepository.findAll();}
 
-    public Optional<Turma> getTurmaById(Integer id){return turmaRepository.findById(id);}
+    public Turma getTurmaById(Integer id){
+        return turmaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+    }
 
     public List<Turma> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
         return turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
@@ -33,7 +37,7 @@ public class TurmasService {
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
         turmaExistente.setSerie(novaTurma.getSerie());
-        turmaExistente.setTurma(novaTurma.getTurma());
+        turmaExistente.setTurma(novaTurma.getTurma().toUpperCase());
         turmaExistente.setAnoDeEntrada(novaTurma.getAnoDeEntrada());
         turmaExistente.setAtivo(novaTurma.isAtivo());
 
