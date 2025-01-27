@@ -39,4 +39,12 @@ public class TurmasService {
 
         return turmaRepository.save(turmaExistente);
     }
+
+    public void deletarTurma(Integer id) {
+        // Verifica se a turma existe
+        Turma turmaExistente = turmaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+
+        turmaRepository.delete(turmaExistente);
+    }
 }

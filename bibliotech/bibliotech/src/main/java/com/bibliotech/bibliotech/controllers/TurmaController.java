@@ -49,4 +49,11 @@ public class TurmaController {
         return ResponseEntity.ok(turmaAtualizada);
     }
 
+    //não tinha nenhuma restrição nos requisitos, mas oq acontece numa turma q tem um aluno com emprestimo ativo e é inativada?
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarTurma(@PathVariable Integer id) {
+        turmasService.deletarTurma(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
