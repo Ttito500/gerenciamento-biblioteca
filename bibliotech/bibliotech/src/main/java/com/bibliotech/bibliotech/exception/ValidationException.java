@@ -14,7 +14,15 @@ public class ValidationException extends RuntimeException {
         result.getAllErrors().forEach(error -> errorMessages.add(error.getDefaultMessage()));
     }
 
-    public ValidationException(String s) {
+    public ValidationException(String message) {
+        super(message);
+        this.errorMessages = new ArrayList<>();
+        this.errorMessages.add(message);
+    }
+
+    public ValidationException(List<String> messages) {
+        super("Erro de validação");
+        this.errorMessages = messages;
     }
 
     public List<String> getErrorMessages() {

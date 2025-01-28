@@ -3,10 +3,6 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -27,11 +23,6 @@ public class Turma {
     @Column(name = "ano_de_entrada", nullable = false)
     private Integer anoDeEntrada;
 
-    @ColumnDefault("true")
     @Column(name = "ativo", nullable = false)
-    private Boolean ativo = false;
-
-    @OneToMany(mappedBy = "idTurma")
-    private Set<Aluno> alunos = new LinkedHashSet<>();
-
+    private Boolean ativo = true;
 }
