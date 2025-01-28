@@ -35,4 +35,7 @@ public class Aluno {
     @Column(name = "situacao", length = 20)
     private String situacao;
 
+    @ColumnDefault("true")
+    @Column(name = "ativo", nullable = false)
+    boolean ativo;
 }

@@ -15,6 +15,9 @@ public class TurmasService {
     @Autowired
     private TurmaRepository turmaRepository;
 
+    @Autowired
+    private AlunosService alunosService;
+
     public Turma cadastrarTurma(Turma turma){
         turma.setTurma(turma.getTurma().toUpperCase());
         return turmaRepository.save(turma);
@@ -50,5 +53,15 @@ public class TurmasService {
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
         turmaRepository.delete(turmaExistente);
+    }
+
+    public void inativarTurma(Integer id) {
+        // Verifica se a turma existe
+        Turma turmaExistente = turmaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+
+        alunosService.inativarAlunosPorTurma(turmaExistente);
+        turmaExistente.setAtivo(false);
+        turmaRepository.save(turmaExistente);
     }
 }

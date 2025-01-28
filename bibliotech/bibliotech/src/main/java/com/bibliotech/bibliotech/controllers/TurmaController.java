@@ -66,4 +66,11 @@ public class TurmaController {
         return ResponseEntity.noContent().build();
     }
 
+    //falta testar, farei quando alves mandar o aluno atualizado, tava dando uns problema
+    @PatchMapping("/{id}/inativar")
+    public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
+        turmasService.inativarTurma(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

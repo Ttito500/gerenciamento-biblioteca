@@ -72,11 +72,18 @@ public class AlunosService {
         return alunoRepository.save(alunoExistente);
     }
 
-    public void deletarAluno(Integer id) {
+    public void deletarAluno(Integer id) { //achoq e so pra inativar ao inves de deletar
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
 
         alunoRepository.delete(aluno);
     }
 
+    public void inativarAlunosPorTurma(Turma turma) {
+        List<Aluno> alunos = filtrarAlunos(turma.getSerie(), turma.getTurma(), null, null);
+        for (Aluno aluno : alunos) {
+            aluno.setAtivo(false);
+            alunoRepository.save(aluno);
+        }
+    }
 }
