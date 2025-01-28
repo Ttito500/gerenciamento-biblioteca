@@ -18,12 +18,26 @@ public class AutorController {
     private AutorService autorService;
 
     //para teste
-    @PostMapping ("")
-    public ResponseEntity<Void> cadastrarAutor(@RequestBody Autor body) {
-        autorService.addAutor(body.getNome());
+    @PostMapping("")
+    public ResponseEntity<Void> cadastrarAutores(@RequestBody List<Autor> autores) {
+        if (autores == null || autores.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Extrai os nomes dos autores e chama o metodo addAutores
+        List<String> nomesAutores = autores.stream()
+                .map(Autor::getNome)
+                .filter(nome -> nome != null && !nome.isEmpty())
+                .toList();
+
+        if (nomesAutores.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        autorService.addAutores(nomesAutores);
         return ResponseEntity.ok().build();
     }
-
+    
     //para teste
     @GetMapping("")
     public ResponseEntity<List<Autor>> listarAutores() {

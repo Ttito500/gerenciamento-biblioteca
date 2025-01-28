@@ -7,6 +7,7 @@ import com.bibliotech.bibliotech.repositories.LivroautorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,27 +20,37 @@ public class AutorService {
     @Autowired
     private LivroautorRepository livroautorRepository;
 
-    public Autor addAutor(String nome_autor) {
-
-        if(nome_autor==null || nome_autor.isEmpty()){
-            throw new ValidationException("O nome do autor não pode estar vazio.");
+    public List<Autor> addAutores(List<String> nomesAutores) {
+        if (nomesAutores == null || nomesAutores.isEmpty()) {
+            throw new ValidationException("A lista de nomes de autores não pode estar vazia.");
         }
 
-        Optional<Autor> autorOptional = buscarPorNome(nome_autor);
-        Autor autor;
+        List<Autor> autores = new ArrayList<>();
 
-        if(autorOptional.isPresent()){
-            //autor já existe no banco de dados
-            autor = autorOptional.get();
-            System.out.println("autor já existe");
-        }else{
-            //cadastrar novo autor
-            autor = new Autor();
-            autor.setNome(nome_autor);
-            autorRepository.save(autor);
-            System.out.println("autor adicionado");
+        for (String nomeAutor : nomesAutores) {
+            if (nomeAutor == null || nomeAutor.isEmpty()) {
+                throw new ValidationException("O nome do autor não pode estar vazio.");
+            }
+
+            Optional<Autor> autorOptional = buscarPorNome(nomeAutor);
+            Autor autor;
+
+            if (autorOptional.isPresent()) {
+                // Autor já existe no banco de dados
+                autor = autorOptional.get();
+                System.out.println("Autor já existe: " + nomeAutor);
+            } else {
+                // Cadastrar novo autor
+                autor = new Autor();
+                autor.setNome(nomeAutor);
+                autorRepository.save(autor);
+                System.out.println("Autor adicionado: " + nomeAutor);
+            }
+
+            autores.add(autor);
         }
-        return autor;
+
+        return autores;
     }
 
     public List<Autor> getAll() {
