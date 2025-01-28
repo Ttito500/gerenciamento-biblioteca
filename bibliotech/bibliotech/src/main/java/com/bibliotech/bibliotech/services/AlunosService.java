@@ -109,4 +109,13 @@ public class AlunosService {
         alunoExistente.setAtivo(false);
         alunoRepository.save(alunoExistente); // Não esqueça de salvar a alteração!
     }
+
+    //achei melhor passar logo o obj de turma ao inves de passar id para evitar a query do banco
+    public void inativarAlunosPorTurma(Turma turma) {
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null);
+        for (Aluno aluno : alunos) {
+            aluno.setAtivo(false);
+        }
+        alunoRepository.saveAll(alunos);
+    }
 }
