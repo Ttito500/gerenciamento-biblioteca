@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,15 +34,14 @@ public class Aluno {
     private Boolean ativo = true;
 
     @Column(name = "situacao", length = 20)
-    private String situacao = "regular";
+    private String situacao = "regular"; // "regular", "debito", "irregular"
+
+    @OneToMany(mappedBy = "idAluno")
+    private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
 
     @PrePersist
     public void prePersist() {
-        if (Objects.isNull(this.ativo)) {
-            this.ativo = true;
-        }
-        if (Objects.isNull(this.situacao)) {
-            this.situacao = "regular";
-        }
+        this.ativo = true;
+        this.situacao = "regular";
     }
 }
