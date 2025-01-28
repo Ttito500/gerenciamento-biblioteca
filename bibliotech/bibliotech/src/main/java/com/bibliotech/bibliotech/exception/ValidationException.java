@@ -1,10 +1,12 @@
 package com.bibliotech.bibliotech.exception;
 
+import lombok.Getter;
 import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class ValidationException extends RuntimeException {
     private List<String> errorMessages;
 
