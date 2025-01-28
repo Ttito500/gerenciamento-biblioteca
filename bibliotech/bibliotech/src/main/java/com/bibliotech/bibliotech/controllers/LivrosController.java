@@ -1,7 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,10 @@ import java.util.Optional;
 @RequestMapping("/livros")
 public class LivrosController {
 
+    private final LivrosService livrosService;
+
     @Autowired
-    private LivrosService livrosService;
+    private LivrosController (LivrosService livrosService) { this.livrosService = livrosService; };
 
     @PostMapping("")
     public ResponseEntity<Livro> criarLivro (@RequestBody Livro body){
