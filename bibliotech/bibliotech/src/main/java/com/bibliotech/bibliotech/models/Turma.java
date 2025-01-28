@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @Entity
-@Table(name = "turma", schema = "adelino_cunha")
+@Table(name = "turma")
 public class Turma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,15 @@ public class Turma {
     private Integer serie;
 
     @Column(name = "turma", nullable = false, length = 1)
+    @Pattern(regexp = "[a-cA-C]", message = "O campo turma deve ser uma letra entre A e C")
+    @NotEmpty(message = "O campo turma não pode ser vazio")
     private String turma;
 
+    @Column(name = "ano_de_entrada", nullable = false)
+    @NotNull(message = "O campo ano de entrada não pode ser nulo")
+    Integer anoDeEntrada;
+
+    @ColumnDefault("true")
+    @Column(name = "ativo", nullable = false)
+    boolean ativo;
 }
