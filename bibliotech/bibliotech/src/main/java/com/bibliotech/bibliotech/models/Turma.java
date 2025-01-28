@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @Entity
-@Table(name = "turma", schema = "adelino_cunha")
+@Table(name = "turma")
 public class Turma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +17,6 @@ public class Turma {
     private Integer id;
 
     @Column(name = "serie", nullable = false)
-    @Min(value = 1, message = "O campo série deve ser maior que 0")
-    @Max(value = 3, message = "O campo série deve ser menor que 4")
-    @NotNull(message = "O campo série não pode ser nulo")
     private Integer serie;
 
     @Column(name = "turma", nullable = false, length = 1)

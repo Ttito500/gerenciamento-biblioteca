@@ -22,11 +22,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                "Recurso não encontrado",
-                List.of(ex.getMessage())
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Recurso não encontrado", List.of(ex.getMessage())));
     }
 
     // Tratamento de erro de conversão de JSON (se eu coloco um campo do tipo String onde deveria ser um Integer, por exemplo)
@@ -50,13 +46,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
-        // Log do erro para análise posterior (pode ser integrado com ferramentas de monitoramento)
-        ex.printStackTrace();
-
-        ErrorResponse errorResponse = new ErrorResponse(
-                "Erro interno do servidor",
-                List.of("Ocorreu um erro inesperado. Tente novamente mais tarde.")
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        ex.printStackTrace(); // Log do erro
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Erro interno do servidor", List.of("Ocorreu um erro inesperado. Tente novamente mais tarde.")));
     }
 }

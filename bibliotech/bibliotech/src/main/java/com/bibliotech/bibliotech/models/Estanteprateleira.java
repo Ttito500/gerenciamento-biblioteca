@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "estanteprateleira", schema = "adelino_cunha")
+@Table(name = "estanteprateleira")
 public class Estanteprateleira {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +23,14 @@ public class Estanteprateleira {
 
     @Column(name = "prateleira", nullable = false)
     private Integer prateleira;
+
+    @OneToMany(mappedBy = "idEstantePrateleira")
+    private Set<com.bibliotech.bibliotech.models.Estanteprateleirasecao> estantePrateleiraSecoes = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idEstantePrateleira")
+    private Set<com.bibliotech.bibliotech.models.Exemplar> exemplares = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idEstantePrateleira")
+    private Set<com.bibliotech.bibliotech.models.Livro> livros = new LinkedHashSet<>();
 
 }
