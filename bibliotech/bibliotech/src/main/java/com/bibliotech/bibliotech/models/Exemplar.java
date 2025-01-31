@@ -20,11 +20,11 @@ public class Exemplar {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_livro", nullable = false)
-    private com.bibliotech.bibliotech.models.Livro idLivro;
+    private Livro idLivro;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_secao", nullable = false)
-    private com.bibliotech.bibliotech.models.Secao idSecao;
+    private Secao idSecao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_estante_prateleira")
@@ -36,11 +36,14 @@ public class Exemplar {
     @Column(name = "numero", nullable = false)
     private Integer numero;
 
-    @ColumnDefault("'disponivel'")
     @Column(name = "situacao", length = 10)
-    private String situacao;
+    private String situacao = "disponivel"; // "disponivel", "emprestado", "extraviado"
 
     @OneToMany(mappedBy = "idExemplar")
     private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
 
+    @PrePersist
+    public void prePersist() {
+        this.situacao = "disponivel";
+    }
 }

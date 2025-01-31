@@ -26,9 +26,8 @@ public class Livro {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @ColumnDefault("true")
     @Column(name = "ativo", nullable = false)
-    private Boolean ativo = false;
+    private Boolean ativo = true;
 
     @Column(name = "autor", nullable = false)
     private String autor;
@@ -36,19 +35,16 @@ public class Livro {
     @Column(name = "observacao", length = 500)
     private String observacao;
 
-    @ColumnDefault("'disponivel'")
     @Column(name = "situacao", length = 20)
-    private String situacao;
+    private String situacao = "disponivel";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_estante_prateleira")
     private Estanteprateleira idEstantePrateleira;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_secao", nullable = false)
-    private com.bibliotech.bibliotech.models.Secao idSecao;
+    private Secao idSecao;
 
     @OneToMany(mappedBy = "idLivro")
     private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
@@ -57,9 +53,9 @@ public class Livro {
     private Set<Exemplar> exemplares = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idLivro")
-    private Set<com.bibliotech.bibliotech.models.Livroautor> livroAutores = new LinkedHashSet<>();
+    private Set<Livroautor> livroAutores = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idLivro")
-    private Set<com.bibliotech.bibliotech.models.Livrogenero> livroGeneros = new LinkedHashSet<>();
+    private Set<Livrogenero> livroGeneros = new LinkedHashSet<>();
 
 }

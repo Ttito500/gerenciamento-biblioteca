@@ -3,7 +3,6 @@ package com.bibliotech.bibliotech.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -22,6 +21,5 @@ public class Autor {
     private String nome;
 
     @OneToMany(mappedBy = "idAutor")
-    private Set<com.bibliotech.bibliotech.models.Livroautor> livroAutores = new LinkedHashSet<>();
-
+    private Set<Livroautor> livroAutores = new LinkedHashSet<>();
 }
