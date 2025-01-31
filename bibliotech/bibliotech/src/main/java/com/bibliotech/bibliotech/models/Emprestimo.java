@@ -12,29 +12,26 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "emprestimo", schema = "adelino_cunha")
+@Table(name = "emprestimo")
 public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_aluno", nullable = false)
     private Aluno idAluno;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_livro", nullable = false)
-    private com.bibliotech.bibliotech.models.Livro idLivro;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_exemplar", nullable = false)
+    private Exemplar idExemplar;
 
-    @ColumnDefault("CURRENT_DATE")
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
 
-    @Column(name = "data_devolucao")
-    private LocalDate dataDevolucao;
+    @Column(name = "data_conclusao")
+    private LocalDate dataConclusao;
 
     @Column(name = "data_prazo", nullable = false)
     private LocalDate dataPrazo;
@@ -43,11 +40,26 @@ public class Emprestimo {
     @Column(name = "qtd_renovacao")
     private Integer qtdRenovacao;
 
-    @ColumnDefault("'pendente'")
     @Column(name = "situacao", length = 20)
-    private String situacao;
+    private String situacao; // "pendente", "entregue", "atrasado", "extraviado", "cancelado"
 
     @Column(name = "observacao", length = 500)
     private String observacao;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "realizado_por", nullable = false)
+    private Usuario realizadoPor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "concluido_por")
+    private Usuario concluidoPor;
+
+    @Column(name = "data_devolucao")
+    private LocalDate dataDevolucao;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_livro", nullable = false)
+    private Livro idLivro;
 
 }

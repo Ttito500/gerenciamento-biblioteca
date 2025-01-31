@@ -10,17 +10,21 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "usuario", schema = "adelino_cunha", uniqueConstraints = {
-        @UniqueConstraint(name = "usuario_email_key", columnNames = {"email"})
-})
+@Table(name = "usuario")
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
     @Column(name = "cargo", nullable = false, length = 50)
     private String cargo;
+
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = true;
 
     @Column(name = "email", nullable = false)
     private String email;

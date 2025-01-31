@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "genero", schema = "adelino_cunha")
+@Table(name = "genero")
 public class Genero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +19,11 @@ public class Genero {
 
     @Column(name = "genero", nullable = false)
     private String genero;
+
+    @OneToMany(mappedBy = "idGenero")
+    private Set<Livrogenero> livroGeneros = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idGenero")
+    private Set<Secaogenero> secaoGeneros = new LinkedHashSet<>();
+
 }

@@ -14,8 +14,10 @@ import java.util.Optional;
 @RequestMapping("/livros")
 public class LivrosController {
 
+    private final LivrosService livrosService;
+
     @Autowired
-    private LivrosService livrosService;
+    private LivrosController (LivrosService livrosService) { this.livrosService = livrosService; };
 
     @PostMapping("")
     public ResponseEntity<Livro> criarLivro (@RequestBody Livro body){
@@ -37,8 +39,8 @@ public class LivrosController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Livro> deleteLivroById(@PathVariable Integer id){
-        Livro livroDeletado = livrosService.deletarLivro(id);
-        return ResponseEntity.ok(livroDeletado);
+        livrosService.deletarLivro(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")

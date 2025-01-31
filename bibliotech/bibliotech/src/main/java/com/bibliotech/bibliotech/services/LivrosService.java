@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +12,22 @@ import java.util.Optional;
 
 @Service
 public class LivrosService {
+
+    @Autowired
+    AutorService autorService;
+
     @Autowired
     private LivroRepository livroRepository;
 
+
     public Livro cadastrarLivro(Livro livro){
+
+        // Autor autor = autorService.addAutor(livro.getAutor()); (refazer devido a lista de autores)
+
         livroRepository.save(livro);
+
+        // livroautorService.cadastrarLivroautor(livro.getId(), autor.getId()); (refazer devido a lista de autores)
+
         return livro;
     }
 
@@ -30,11 +42,11 @@ public class LivrosService {
     public Livro atualizarLivro(Integer id, Livro livro){
 
         Livro livroExistente = livroRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Aluno com ID " + id + " não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
 
         livroExistente.setIsbn(livro.getIsbn());
         livroExistente.setTitulo(livro.getTitulo());
-        livroExistente.setAutor(livro.getAutor());
+        livroExistente.setAutor(livro.getAutor());          // refazer devido a lista de autor
         livroExistente.setSituacao(livro.getSituacao());
         livroExistente.setObservacao(livro.getObservacao());
         livroExistente.setIdSecao(livro.getIdSecao());
