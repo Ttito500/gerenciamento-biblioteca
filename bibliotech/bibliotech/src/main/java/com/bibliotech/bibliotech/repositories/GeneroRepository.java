@@ -11,4 +11,6 @@ public interface GeneroRepository extends JpaRepository<Genero, Integer> {
     @Query("SELECT g FROM Genero g " +
             "WHERE (:genero IS NULL OR LOWER(g.genero) LIKE LOWER(CONCAT('%', :genero, '%')))")
     List<Genero> filtrarGeneros(@Param("genero") String genero);
+
+    boolean existsByGenero(String genero);
 }

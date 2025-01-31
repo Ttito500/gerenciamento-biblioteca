@@ -33,9 +33,6 @@ public class Secao {
     private Set<Livro> livros = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idSecao")
-    private Set<Estanteprateleirasecao> estantePrateleiraSecoes = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idSecao")
     private Set<Secaogenero> secaoGeneros = new LinkedHashSet<>();
 
 }

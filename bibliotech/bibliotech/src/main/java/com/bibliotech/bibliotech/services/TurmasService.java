@@ -23,8 +23,6 @@ public class TurmasService {
         return turmaRepository.save(turma);
     }
 
-    public List<Turma> getTurmas(){return turmaRepository.findAll();}
-
     public Turma getTurmaById(Integer id){
         return turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
@@ -47,16 +45,8 @@ public class TurmasService {
         return turmaRepository.save(turmaExistente);
     }
 
-    public void deletarTurma(Integer id) {
-        // Verifica se a turma existe
-        Turma turmaExistente = turmaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
-
-        turmaRepository.delete(turmaExistente);
-    }
-
     public void inativarTurma(Integer id) {
-        // Verifica se a turma existe
+
         Turma turmaExistente = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 

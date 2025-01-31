@@ -19,8 +19,6 @@ public class LivrosService {
     @Autowired
     private LivroRepository livroRepository;
 
-    @Autowired
-    private LivroautorService livroautorService;
 
     public Livro cadastrarLivro(Livro livro){
 

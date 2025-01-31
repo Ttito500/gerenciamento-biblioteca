@@ -34,7 +34,7 @@ public class Aluno {
     private Boolean ativo = true;
 
     @Column(name = "situacao", length = 20)
-    private String situacao = "regular"; // "regular", "debito", "irregular"
+    private String situacao;
 
     @OneToMany(mappedBy = "idAluno")
     private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
