@@ -1,15 +1,15 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.exception.ValidationException;
+import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
-import com.bibliotech.bibliotech.repositories.LivroautorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,40 +17,31 @@ public class AutorService {
 
     @Autowired
     private AutorRepository autorRepository;
-    @Autowired
-    private LivroautorRepository livroautorRepository;
 
-    public List<Autor> addAutores(List<String> nomesAutores) {
-        if (nomesAutores == null || nomesAutores.isEmpty()) {
-            throw new ValidationException("A lista de nomes de autores não pode estar vazia.");
-        }
+    public List<Autor> cadastrarAutores(List<Autor> autores) {
 
-        List<Autor> autores = new ArrayList<>();
+        // Coleta os nomes dos autores em um Set para remover duplicados
+        Set<String> nomesNovosAutores = autores.stream()
+                .map(Autor::getNome)
+                .filter(nome -> nome != null && !nome.isEmpty())
+                .collect(Collectors.toSet());
 
-        for (String nomeAutor : nomesAutores) {
-            if (nomeAutor == null || nomeAutor.isEmpty()) {
-                throw new ValidationException("O nome do autor não pode estar vazio.");
-            }
+        // Cria uma lista para armazenar os novos autores
+        List<Autor> novosAutores = new ArrayList<>();
 
-            Optional<Autor> autorOptional = buscarPorNome(nomeAutor);
-            Autor autor;
+        // Itera sobre cada nome único e cadastra o autor se ele não existir
+        nomesNovosAutores.forEach(nome -> {
+            Optional<Autor> autorOptional = autorRepository.findFirstByNomeIgnoreCase(nome);
+            autorOptional.orElseGet(() -> {
+                Autor novoAutor = new Autor();
+                novoAutor.setNome(nome);
+                novoAutor = autorRepository.save(novoAutor);
+                novosAutores.add(novoAutor);
+                return novoAutor;
+            });
+        });
 
-            if (autorOptional.isPresent()) {
-                // Autor já existe no banco de dados
-                autor = autorOptional.get();
-                System.out.println("Autor já existe: " + nomeAutor);
-            } else {
-                // Cadastrar novo autor
-                autor = new Autor();
-                autor.setNome(nomeAutor);
-                autorRepository.save(autor);
-                System.out.println("Autor adicionado: " + nomeAutor);
-            }
-
-            autores.add(autor);
-        }
-
-        return autores;
+        return novosAutores;
     }
 
     public List<Autor> getAll() {
@@ -58,24 +49,22 @@ public class AutorService {
     }
 
     public Optional<Autor> buscarPorNome(String nome) {
-        return autorRepository.findFirstByNomeIgnoreCase(nome);
+        Optional<Autor> autor = autorRepository.findFirstByNomeIgnoreCase(nome);
+        if (autor.isEmpty() ) {
+            throw new NotFoundException("Autor com o nome: "+ nome +" não encontrado.");
+        }
+
+        return autor;
     }
 
-    // é mais facil saber os autores que estão associados a um livro, sabendo quem são, podemos subtrair
-    // do total de autores no banco de dados, descobrindo quais são os NÃo associados (gepeto q fez).
-    public void deleteAutoresSemAssociacao() {
+    public void deletarAutoresSemAssociacao() {
+        List<Autor> autoresSemLivros = autorRepository.findAutoresSemLivros();
 
-        //buscar todos os IDs de autores associados a pelo menos um livro
-        List<Integer> idsAutoresAssociados = livroautorRepository.findAll()
-                .stream()
-                .map(la -> la.getId_autor().getId())
-                .distinct()
-                .collect(Collectors.toList());
+        System.out.println("Deletando {} autores não associados a livros." + autoresSemLivros.size());
 
-        //busca todos os autores que não estão na lista de associados
-        List<Autor> autoresSemAssociacao = autorRepository.findByIdNotIn(idsAutoresAssociados);
+        // Excluir os autores
+        autorRepository.deleteAll(autoresSemLivros);
 
-        //deletar os autores sem associação
-        autorRepository.deleteAll(autoresSemAssociacao);
+        autorRepository.deleteAll(autoresSemLivros);
     }
 }
