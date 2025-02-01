@@ -22,9 +22,9 @@ public class GenerosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(genero);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Genero> deleteGenero(@PathVariable Integer id) {
-        generosService.deletarGenero(id);
+    @DeleteMapping("/sem-associacao")
+    public ResponseEntity<Void> deleteGenero() {
+        generosService.deletarGenerosSemAssociacao();
         return ResponseEntity.noContent().build();
     }
 
