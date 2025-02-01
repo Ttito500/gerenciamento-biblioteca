@@ -19,11 +19,11 @@ public class Estanteprateleirasecao {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_estante_prateleira", nullable = false)
-    private Estanteprateleira idEstantePrateleira;
+    private Estanteprateleira estanteprateleira;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_secao", nullable = false)
-    private Secao idSecao;
+    private Secao secao;
 
 }

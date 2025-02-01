@@ -36,9 +36,6 @@ public class Aluno {
     @Column(name = "situacao", length = 20)
     private String situacao;
 
-    @OneToMany(mappedBy = "idAluno")
-    private Set<Emprestimo> emprestimos = new LinkedHashSet<>();
-
     @PrePersist
     public void prePersist() {
         this.ativo = true;

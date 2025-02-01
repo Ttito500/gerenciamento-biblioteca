@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
@@ -22,18 +19,5 @@ public class Estanteprateleira {
 
     @Column(name = "prateleira", nullable = false)
     private Integer prateleira;
-
-    @OneToMany(mappedBy = "idEstantePrateleira")
-    private Set<Estanteprateleirasecao> estantePrateleiraSecoes = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idEstantePrateleira")
-    private Set<Exemplar> exemplares = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idEstantePrateleira")
-    private Set<Livro> livros = new LinkedHashSet<>();
-
-    @ManyToOne
-    @JoinColumn(name = "id_secao")
-    private Secao idSecao;
 
 }

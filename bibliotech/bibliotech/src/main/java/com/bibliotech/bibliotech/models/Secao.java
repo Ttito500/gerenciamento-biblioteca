@@ -23,16 +23,4 @@ public class Secao {
     @Column(name = "descricao", length = 500)
     private String descricao;
 
-    @OneToMany(mappedBy = "idSecao")
-    private Set<Estanteprateleira> estantePrateleiras = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idSecao")
-    private Set<Exemplar> exemplares = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idSecao")
-    private Set<Livro> livros = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idSecao")
-    private Set<Secaogenero> secaoGeneros = new LinkedHashSet<>();
-
 }

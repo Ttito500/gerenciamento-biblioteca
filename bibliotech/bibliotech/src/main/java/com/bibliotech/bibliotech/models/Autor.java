@@ -20,6 +20,4 @@ public class Autor {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @OneToMany(mappedBy = "idAutor")
-    private Set<Livroautor> livroAutores = new LinkedHashSet<>();
 }
