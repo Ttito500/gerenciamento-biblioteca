@@ -20,6 +20,7 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS l
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS livrogenero_id_genero_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS livroautor_id_livro_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS livroautor_id_autor_fkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_secao_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_livro_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_estante_prateleira_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT IF EXISTS estanteprateleirasecao_id_secao_fkey;
@@ -278,6 +279,7 @@ ALTER SEQUENCE adelino_cunha.estanteprateleirasecao_id_seq OWNED BY adelino_cunh
 CREATE TABLE adelino_cunha.exemplar (
                                         id integer NOT NULL,
                                         id_livro integer NOT NULL,
+                                        id_secao integer NOT NULL,
                                         id_estante_prateleira integer,
                                         observacao character varying(500),
                                         numero integer NOT NULL,
@@ -665,7 +667,7 @@ COPY adelino_cunha.estanteprateleirasecao (id, id_estante_prateleira, id_secao) 
 -- Data for Name: exemplar; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
 --
 
-COPY adelino_cunha.exemplar (id, id_livro, id_estante_prateleira, observacao, numero, situacao) FROM stdin;
+COPY adelino_cunha.exemplar (id, id_livro, id_secao, id_estante_prateleira, observacao, numero, situacao) FROM stdin;
 \.
 
 
@@ -1070,6 +1072,14 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 ALTER TABLE ONLY adelino_cunha.exemplar
     ADD CONSTRAINT exemplar_id_livro_fkey FOREIGN KEY (id_livro) REFERENCES adelino_cunha.livro(id);
+
+
+--
+-- Name: exemplar exemplar_id_secao_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.exemplar
+    ADD CONSTRAINT exemplar_id_secao_fkey FOREIGN KEY (id_secao) REFERENCES adelino_cunha.secao(id);
 
 
 --
