@@ -17,4 +17,6 @@ public interface TurmaRepository extends JpaRepository<Turma, Integer> {
                               @Param("turma") String turma,
                               @Param("anoDeEntrada") Integer anoDeEntrada,
                               @Param("ativo") Boolean ativo);
+
+    boolean existsBySerieAndTurmaAndAnoDeEntrada(Integer serie, String turma, Integer anoDeEntrada);
 }
