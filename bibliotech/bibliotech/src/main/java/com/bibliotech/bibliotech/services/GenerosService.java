@@ -26,11 +26,11 @@ public class GenerosService {
         return generoRepository.save(genero);
     }
 
-    public void deletarGenero(Integer id) {
-        Genero genero = generoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Genero com ID " + id + " não encontrado"));
+    public void deletarGenerosSemAssociacao() {
+        List<Genero> generosSemAssociacao = generoRepository.findGenerosSemAssociacao();
+        System.out.println("Deletando " + generosSemAssociacao.size() + " gêneros não associados.");
 
-        generoRepository.delete(genero);
+        generoRepository.deleteAll(generosSemAssociacao);
     }
 
     public Genero getGeneroById(Integer id) {

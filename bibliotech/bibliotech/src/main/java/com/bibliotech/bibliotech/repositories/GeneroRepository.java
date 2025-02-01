@@ -12,5 +12,8 @@ public interface GeneroRepository extends JpaRepository<Genero, Integer> {
             "WHERE (:genero IS NULL OR LOWER(g.genero) LIKE LOWER(CONCAT('%', :genero, '%')))")
     List<Genero> filtrarGeneros(@Param("genero") String genero);
 
+    @Query("SELECT g FROM Genero g WHERE NOT EXISTS (SELECT 1 FROM Livrogenero lg WHERE lg.idGenero = g) AND NOT EXISTS (SELECT 1 FROM Secaogenero sg WHERE sg.idGenero = g)")
+    List<Genero> findGenerosSemAssociacao();
+
     boolean existsByGenero(String genero);
 }
