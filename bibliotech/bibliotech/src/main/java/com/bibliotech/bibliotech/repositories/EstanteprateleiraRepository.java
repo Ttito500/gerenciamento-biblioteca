@@ -4,5 +4,5 @@ import com.bibliotech.bibliotech.models.Estanteprateleira;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EstanteprateleiraRepository extends JpaRepository<Estanteprateleira, Integer> {
-    boolean existsByEstanteAndPrateleira(String estante, Integer prateleira);
+    boolean existsByEstante(String estante);
 }

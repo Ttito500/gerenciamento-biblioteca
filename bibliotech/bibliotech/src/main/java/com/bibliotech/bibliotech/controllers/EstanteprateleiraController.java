@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Estanteprateleira")
+@RequestMapping("/estanteprateleira")
 public class EstanteprateleiraController {
 
     @Autowired
@@ -31,5 +31,11 @@ public class EstanteprateleiraController {
     public ResponseEntity<Estanteprateleira> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
         Estanteprateleira ep = estateprateleiraService.atualizarEstanteprateleira(id, body);
         return ResponseEntity.ok(ep);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Estanteprateleira> deletarEstanteprateleira(@PathVariable Integer id) {
+        estateprateleiraService.deletarEstanteprateleira(id);
+        return ResponseEntity.noContent().build();
     }
 }
