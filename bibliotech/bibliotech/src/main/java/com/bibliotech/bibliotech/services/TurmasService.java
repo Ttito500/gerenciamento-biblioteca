@@ -59,7 +59,6 @@ public class TurmasService {
         turmaExistente.setSerie(novaTurma.getSerie());
         turmaExistente.setTurma(novaTurma.getTurma().toUpperCase());
         turmaExistente.setAnoDeEntrada(novaTurma.getAnoDeEntrada());
-        turmaExistente.setAtivo(novaTurma.isAtivo());
 
         return turmaRepository.save(turmaExistente);
     }
