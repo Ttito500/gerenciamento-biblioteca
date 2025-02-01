@@ -59,11 +59,7 @@ public class AutorService {
 
     public void deletarAutoresSemAssociacao() {
         List<Autor> autoresSemLivros = autorRepository.findAutoresSemLivros();
-
         System.out.println("Deletando {} autores não associados a livros." + autoresSemLivros.size());
-
-        // Excluir os autores
-        autorRepository.deleteAll(autoresSemLivros);
 
         autorRepository.deleteAll(autoresSemLivros);
     }
