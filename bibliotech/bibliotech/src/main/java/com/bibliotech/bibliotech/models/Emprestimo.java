@@ -21,11 +21,11 @@ public class Emprestimo {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_aluno", nullable = false)
-    private Aluno idAluno;
+    private Aluno aluno;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_exemplar", nullable = false)
-    private Exemplar idExemplar;
+    private Exemplar exemplar;
 
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
@@ -56,10 +56,4 @@ public class Emprestimo {
 
     @Column(name = "data_devolucao")
     private LocalDate dataDevolucao;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_livro", nullable = false)
-    private Livro idLivro;
-
 }

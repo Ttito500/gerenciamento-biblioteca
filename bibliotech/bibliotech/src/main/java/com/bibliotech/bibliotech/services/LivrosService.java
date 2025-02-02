@@ -2,7 +2,6 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,11 +45,6 @@ public class LivrosService {
 
         livroExistente.setIsbn(livro.getIsbn());
         livroExistente.setTitulo(livro.getTitulo());
-        livroExistente.setAutor(livro.getAutor());          // refazer devido a lista de autor
-        livroExistente.setSituacao(livro.getSituacao());
-        livroExistente.setObservacao(livro.getObservacao());
-        livroExistente.setIdSecao(livro.getIdSecao());
-        livroExistente.setIdEstantePrateleira(livro.getIdEstantePrateleira());
 
         livroRepository.save(livroExistente);
         return livroExistente;
