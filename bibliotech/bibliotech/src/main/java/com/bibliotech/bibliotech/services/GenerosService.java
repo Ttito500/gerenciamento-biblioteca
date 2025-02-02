@@ -38,8 +38,13 @@ public class GenerosService {
                 .orElseThrow(() -> new NotFoundException("Gênero com ID " + id + " não encontrado"));
     }
 
-    public List<Genero> filtrarGenero(String genero) {
-        return generoRepository.filtrarGeneros(genero);
+    public Genero buscarGeneroPorGenero(String genero) {
+        return generoRepository.findByGenero(genero)
+                .orElseThrow(() -> new NotFoundException("Gênero " + genero + " não encontrado"));
+    }
+
+    public List<Genero> listarGeneros() {
+        return generoRepository.findAll();
     }
 
 

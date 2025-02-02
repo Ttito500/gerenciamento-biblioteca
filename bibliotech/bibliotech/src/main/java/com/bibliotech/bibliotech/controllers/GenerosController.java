@@ -33,8 +33,13 @@ public class GenerosController {
         return ResponseEntity.ok(generosService.getGeneroById(id));
     }
 
-    @GetMapping("/filtrar")
-    public List<Genero> filtrarGeneros(@RequestParam(required = false) String genero) {
-        return generosService.filtrarGenero(genero);
+    @GetMapping("/por-genero/{genero}")
+    public Genero buscarGeneroPorGenero(@PathVariable String genero) {
+        return generosService.buscarGeneroPorGenero(genero);
+    }
+
+    @GetMapping("")
+    public List<Genero> listarGeneros() {
+        return generosService.listarGeneros();
     }
 }

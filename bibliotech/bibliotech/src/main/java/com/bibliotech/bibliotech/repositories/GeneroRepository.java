@@ -7,14 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GeneroRepository extends JpaRepository<Genero, Integer> {
-    @Query("SELECT g FROM Genero g " +
-            "WHERE (:genero IS NULL OR LOWER(g.genero) LIKE LOWER(CONCAT('%', :genero, '%')))")
-    List<Genero> filtrarGeneros(@Param("genero") @Nullable String genero);
-
     @Query("SELECT g FROM Genero g WHERE NOT EXISTS (SELECT lg FROM Livrogenero lg WHERE lg.genero = g)")
     List<Genero> findGenerosSemAssociacao();
 
     boolean existsByGenero(String genero);
+
+    Optional<Genero> findByGenero(String genero);
 }
