@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 
 
 
-const AcervoEditarLivro: React.FC = () => {
+const ConfirmarEntrega: React.FC = () => {
     return (
         <Form>
             {/* Primeira Linha - Seleção de Livro e Exemplar */}
@@ -116,4 +116,4 @@ const AcervoEditarLivro: React.FC = () => {
     );
 };
 
-export default AcervoEditarLivro;
+export default ConfirmarEntrega;
