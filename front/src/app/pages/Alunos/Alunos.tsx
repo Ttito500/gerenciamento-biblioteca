@@ -13,8 +13,13 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import Toast from "react-bootstrap/Toast";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
 import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
+import GerenciarTurmas from "./turmas/GerenciarTurmas";
 
 const Alunos: React.FC = () => {
+
+    const[showGerenciarTurmas, setShowGerenciarTurmas] = useState(false)
+    const handleCloseGerenciarTurmas = () => setShowGerenciarTurmas(false);
+    const handleShowGerenciarTurmas = () => setShowGerenciarTurmas(true);
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
@@ -272,6 +277,33 @@ const Alunos: React.FC = () => {
 						<Button variant="success" onClick={handleSubmitCadastrarAluno}><FontAwesomeIcon icon={faCheck} /> Salvar</Button>
 					</Modal.Footer>
 				</Modal>
+
+                <Button variant="info" className="btn-orange" onClick={handleShowGerenciarTurmas}>
+                    <FontAwesomeIcon icon={ faPlus } /> Gerenciar Turmas
+                </Button>
+
+                <Modal
+                    show={showGerenciarTurmas}
+                    onHide={handleCloseGerenciarTurmas}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}>
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Gerenciar Turmas</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <GerenciarTurmas/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseGerenciarTurmas}>Ok</Button>
+
+                    </Modal.Footer>
+                </Modal>
+
 			</div>
 
 			<div className="w-100">
