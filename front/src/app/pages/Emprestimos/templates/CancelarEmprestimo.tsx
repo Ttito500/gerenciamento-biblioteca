@@ -1,9 +1,11 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import Table from "react-bootstrap/Table";
+import Badge from "react-bootstrap/Badge";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import Form from "react-bootstrap/esm/Form";
 
-const ConfirmarEntrega: React.FC = () => {
+const CancelarEmprestimo: React.FC = () => {
     return (
         <Form>
             <Row>
@@ -44,14 +46,9 @@ const ConfirmarEntrega: React.FC = () => {
             </Row>
 
             <Row>
-                <Col xs={12}>
+                <Col xs={10}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Observação</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={1}
-                            placeholder="Digite uma observação (opcional)"
-                        />
+                        <Form.Label>Tem certeza que deseja cancelar o empréstimo?</Form.Label>
                     </Form.Group>
                 </Col>
             </Row>
@@ -59,4 +56,4 @@ const ConfirmarEntrega: React.FC = () => {
     );
 };
 
-export default ConfirmarEntrega;
+export default CancelarEmprestimo;

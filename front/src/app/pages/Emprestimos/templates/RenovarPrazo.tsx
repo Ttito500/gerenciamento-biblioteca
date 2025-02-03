@@ -1,9 +1,9 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
 
-const ConfirmarEntrega: React.FC = () => {
+const RenovarPrazo: React.FC = () => {
     return (
         <Form>
             <Row>
@@ -28,35 +28,17 @@ const ConfirmarEntrega: React.FC = () => {
                     </Form.Group>
                 </Col>
 
-                <Col xs={2}>
-                    <Form.Group className="mb-3">
-                        <Form.Label><strong>Estante: </strong></Form.Label>
-                        <Form.Text className="ms-2">A</Form.Text>
-                    </Form.Group>
-                </Col>
-
-                <Col xs={2}>
-                    <Form.Group className="mb-3">
-                        <Form.Label><strong>Prateleira: </strong></Form.Label>
-                        <Form.Text className="ms-2">2</Form.Text>
-                    </Form.Group>
-                </Col>
             </Row>
 
             <Row>
-                <Col xs={12}>
+                <Col xs={10}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Observação</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={1}
-                            placeholder="Digite uma observação (opcional)"
-                        />
+                        <Form.Label>Tem certeza que deseja renovar o prazo do empréstimo para mais 7 dias?</Form.Label>
                     </Form.Group>
                 </Col>
             </Row>
         </Form>
     );
-};
+}
 
-export default ConfirmarEntrega;
+export default RenovarPrazo;

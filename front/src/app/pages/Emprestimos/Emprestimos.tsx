@@ -1,15 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTrash, faFileImport } from '@fortawesome/free-solid-svg-icons';
+import {faCheck, faFileImport, faCalendarCheck, faCalendarPlus, faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 import ListagemEmprestimos from './templates/ListagemEmprestimos';
 import FiltrosEmprestimo from "./templates/FiltrosEmprestimo";
 import Modal from 'react-bootstrap/Modal';
 import CadastrarEmprestimo from "./templates/CadastrarEmprestimo";
 import Spinner from "react-bootstrap/Spinner";
 import ConfirmarEntrega from "./templates/ConfirmarEntrega";
-import AcervoEmprestimosLivro from "./templates/AcervoEmprestimosLivro";
-import AcervoRealizarEmprestimo from "./templates/AcervoRealizarEmprestimo";
+import CancelarEmprestimo from "./templates/CancelarEmprestimo";
+import RenovarPrazo from "./templates/RenovarPrazo";
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
@@ -38,6 +38,17 @@ const Emprestimo: React.FC = () => {
     const handleCloseCadastrar = () => setShowCadastrar(false);
     const handleShowCadastrar = () => setShowCadastrar(true);
 
+    const [showReceber, setShowReceber] = useState(false)
+    const handleCloseReceber = () =>setShowReceber(false);
+    const handleShowReceber = () => setShowReceber(true);
+
+    const [showRenovar, setShowRenovar] = useState(false)
+    const handleCloseRenovar = () => setShowRenovar(false);
+    const handleShowRenovar = () => setShowRenovar(true);
+
+    const[showCancelar, setShowCancelar] = useState(false)
+    const handleCloseCancelar = () => setShowCancelar(false);
+    const handleShowCancelar = () => setShowCancelar(true);
 
     if (loading) {
         return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
@@ -95,6 +106,94 @@ const Emprestimo: React.FC = () => {
                         <Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
                         <Button variant="success">
                             <FontAwesomeIcon icon={faCheck} /> Salvar
+                        </Button>
+
+                    </Modal.Footer>
+                </Modal>
+
+                {/*botoes para testar modais pq eu não consigui por na tabela KSksks*/}
+                <Button variant="info" className="btn-orange" onClick={handleShowReceber}>
+                    <FontAwesomeIcon icon={faCalendarCheck} />
+                </Button>
+
+                <Button variant="info" className="btn-blue" onClick={handleShowRenovar}>
+                    <FontAwesomeIcon icon={faCalendarPlus} />
+                </Button>
+
+                <Button variant="info" className="btn-danger" onClick={handleShowCancelar}>
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                </Button>
+
+                <Modal
+                    show={showReceber}
+                    onHide={handleCloseReceber}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}>
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Concluir Empréstimo</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <ConfirmarEntrega/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseReceber}>Desistir</Button>
+                        <Button variant="success">
+                            <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
+                        </Button>
+
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal
+                    show={showRenovar}
+                    onHide={handleCloseRenovar}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}>
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Renovar Prazo</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <RenovarPrazo/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseRenovar}>Desistir</Button>
+                        <Button variant="success">
+                            <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
+                        </Button>
+
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal
+                    show={showCancelar}
+                    onHide={handleCloseCancelar}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}>
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Cancelar Empréstimo</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <CancelarEmprestimo/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseCancelar}>Desistir</Button>
+                        <Button variant="danger">
+                            <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
                         </Button>
 
                     </Modal.Footer>
