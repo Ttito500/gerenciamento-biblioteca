@@ -165,8 +165,8 @@ const Acervo: React.FC = () => {
   }
 
 	return (
-		<section className="emprestimos">
-			<div className="emprestimos-acoes">
+		<section className="acervo">
+			<div className="acervo-acoes">
 
 				<ToastContainer
           className="p-3"
