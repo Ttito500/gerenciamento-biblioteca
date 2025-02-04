@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/generos")
@@ -16,25 +17,24 @@ public class GenerosController {
     @Autowired
     private GenerosService generosService;
 
+    @GetMapping("")
+    public ResponseEntity<List<Genero>> listarGeneros() {
+        return ResponseEntity.ok(generosService.getAllGeneros());
+    }
+
     @PostMapping("")
-    public ResponseEntity<Genero> adicionarGenero(@RequestBody Genero body) {
-        Genero genero = generosService.criarGenero(body);
-        return ResponseEntity.status(HttpStatus.CREATED).body(genero);
+    public ResponseEntity<List<Genero>> adicionarGeneros(@RequestBody List<Genero> generos) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(generosService.addGenero(generos));
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<Optional<Genero>> buscarGeneroPorGenero(@RequestParam String genero) {
+        return ResponseEntity.ok(generosService.findGeneroByGenero(genero));
     }
 
     @DeleteMapping("/sem-associacao")
-    public ResponseEntity<Void> deleteGenero() {
-        generosService.deletarGenerosSemAssociacao();
+    public ResponseEntity<Void> deletarGeneroSemAssociacao() {
+        generosService.removeGenerosWithNoAssociation();
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Genero> getGeneroById(@PathVariable Integer id) {
-        return ResponseEntity.ok(generosService.getGeneroById(id));
-    }
-
-    @GetMapping("/filtrar")
-    public List<Genero> filtrarGeneros(@RequestParam(required = false) String genero) {
-        return generosService.filtrarGenero(genero);
     }
 }

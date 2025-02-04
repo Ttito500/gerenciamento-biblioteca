@@ -16,10 +16,14 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+ALTER TABLE IF EXISTS ONLY adelino_cunha.ocorrencias DROP CONSTRAINT IF EXISTS ocorrencias_registrada_por_fkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.ocorrencias DROP CONSTRAINT IF EXISTS ocorrencias_id_aluno_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS livrogenero_id_livro_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS livrogenero_id_genero_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS livroautor_id_livro_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS livroautor_id_autor_fkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_registrada_por_fkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_id_aluno_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_secao_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_livro_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_estante_prateleira_fkey;
@@ -29,12 +33,14 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS em
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_id_exemplar_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_id_aluno_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_concluido_por_fkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_id_aluno_monitor_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.aluno DROP CONSTRAINT IF EXISTS aluno_id_turma_fkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.usuario DROP CONSTRAINT IF EXISTS usuario_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.usuario DROP CONSTRAINT IF EXISTS usuario_email_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.turma DROP CONSTRAINT IF EXISTS turma_serie_turma_ano_de_entrada_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.turma DROP CONSTRAINT IF EXISTS turma_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.secao DROP CONSTRAINT IF EXISTS secao_pkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.ocorrencias DROP CONSTRAINT IF EXISTS ocorrencias_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS livrogenero_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livrogenero DROP CONSTRAINT IF EXISTS livrogenero_id_livro_id_genero_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS livroautor_pkey;
@@ -42,6 +48,8 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.livroautor DROP CONSTRAINT IF EXISTS li
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livro DROP CONSTRAINT IF EXISTS livro_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.livro DROP CONSTRAINT IF EXISTS livro_isbn_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.genero DROP CONSTRAINT IF EXISTS genero_pkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_pkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_id_aluno_data_frequencia_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_numero_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT IF EXISTS estanteprateleirasecao_pkey;
@@ -50,20 +58,25 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EX
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_prateleira_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_pkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_pkey;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.autor DROP CONSTRAINT IF EXISTS autor_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.aluno DROP CONSTRAINT IF EXISTS aluno_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.aluno DROP CONSTRAINT IF EXISTS aluno_email_key;
 ALTER TABLE IF EXISTS adelino_cunha.usuario ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.turma ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.secao ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS adelino_cunha.ocorrencias ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.livrogenero ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.livroautor ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.livro ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.genero ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS adelino_cunha.frequenciaalunos ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.exemplar ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.estanteprateleirasecao ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.estanteprateleira ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.emprestimo ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS adelino_cunha.cronogramaalunomonitor ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.autor ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS adelino_cunha.aluno ALTER COLUMN id DROP DEFAULT;
 DROP SEQUENCE IF EXISTS adelino_cunha.usuario_id_seq;
@@ -72,6 +85,8 @@ DROP SEQUENCE IF EXISTS adelino_cunha.turma_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.turma;
 DROP SEQUENCE IF EXISTS adelino_cunha.secao_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.secao;
+DROP SEQUENCE IF EXISTS adelino_cunha.ocorrencias_id_seq;
+DROP TABLE IF EXISTS adelino_cunha.ocorrencias;
 DROP SEQUENCE IF EXISTS adelino_cunha.livrogenero_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.livrogenero;
 DROP SEQUENCE IF EXISTS adelino_cunha.livroautor_id_seq;
@@ -80,6 +95,8 @@ DROP SEQUENCE IF EXISTS adelino_cunha.livro_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.livro;
 DROP SEQUENCE IF EXISTS adelino_cunha.genero_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.genero;
+DROP SEQUENCE IF EXISTS adelino_cunha.frequenciaalunos_id_seq;
+DROP TABLE IF EXISTS adelino_cunha.frequenciaalunos;
 DROP SEQUENCE IF EXISTS adelino_cunha.exemplar_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.exemplar;
 DROP SEQUENCE IF EXISTS adelino_cunha.estanteprateleirasecao_id_seq;
@@ -88,6 +105,8 @@ DROP SEQUENCE IF EXISTS adelino_cunha.estanteprateleira_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.estanteprateleira;
 DROP SEQUENCE IF EXISTS adelino_cunha.emprestimo_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.emprestimo;
+DROP SEQUENCE IF EXISTS adelino_cunha.cronogramaalunomonitor_id_seq;
+DROP TABLE IF EXISTS adelino_cunha.cronogramaalunomonitor;
 DROP SEQUENCE IF EXISTS adelino_cunha.autor_id_seq;
 DROP TABLE IF EXISTS adelino_cunha.autor;
 DROP SEQUENCE IF EXISTS adelino_cunha.aluno_id_seq;
@@ -168,6 +187,38 @@ CREATE SEQUENCE adelino_cunha.autor_id_seq
 --
 
 ALTER SEQUENCE adelino_cunha.autor_id_seq OWNED BY adelino_cunha.autor.id;
+
+
+--
+-- Name: cronogramaalunomonitor; Type: TABLE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE TABLE adelino_cunha.cronogramaalunomonitor (
+                                                      id integer NOT NULL,
+                                                      id_aluno_monitor integer NOT NULL,
+                                                      dia_da_semana character varying(20) NOT NULL,
+                                                      CONSTRAINT cronogramaalunomonitor_dia_da_semana_check CHECK (((dia_da_semana)::text = ANY ((ARRAY['segunda-feira'::character varying, 'terca-feira'::character varying, 'quarta-feira'::character varying, 'quinta-feira'::character varying, 'sexta-feira'::character varying])::text[])))
+);
+
+
+--
+-- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE SEQUENCE adelino_cunha.cronogramaalunomonitor_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: -
+--
+
+ALTER SEQUENCE adelino_cunha.cronogramaalunomonitor_id_seq OWNED BY adelino_cunha.cronogramaalunomonitor.id;
 
 
 --
@@ -309,6 +360,40 @@ ALTER SEQUENCE adelino_cunha.exemplar_id_seq OWNED BY adelino_cunha.exemplar.id;
 
 
 --
+-- Name: frequenciaalunos; Type: TABLE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE TABLE adelino_cunha.frequenciaalunos (
+                                                id integer NOT NULL,
+                                                id_aluno integer NOT NULL,
+                                                registrada_por integer NOT NULL,
+                                                atividade character varying(20) DEFAULT 'lendo'::character varying,
+                                                data_frequencia date NOT NULL,
+                                                CONSTRAINT frequenciaalunos_atividade_check CHECK (((atividade)::text = ANY ((ARRAY['lendo'::character varying, 'celula_de_estudo'::character varying, 'estudo_individual'::character varying, 'descansando'::character varying, 'outros'::character varying])::text[])))
+);
+
+
+--
+-- Name: frequenciaalunos_id_seq; Type: SEQUENCE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE SEQUENCE adelino_cunha.frequenciaalunos_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: frequenciaalunos_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: -
+--
+
+ALTER SEQUENCE adelino_cunha.frequenciaalunos_id_seq OWNED BY adelino_cunha.frequenciaalunos.id;
+
+
+--
 -- Name: genero; Type: TABLE; Schema: adelino_cunha; Owner: -
 --
 
@@ -433,6 +518,39 @@ ALTER SEQUENCE adelino_cunha.livrogenero_id_seq OWNED BY adelino_cunha.livrogene
 
 
 --
+-- Name: ocorrencias; Type: TABLE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE TABLE adelino_cunha.ocorrencias (
+                                           id integer NOT NULL,
+                                           id_aluno integer NOT NULL,
+                                           registrada_por integer NOT NULL,
+                                           detalhes character varying(500),
+                                           data_ocorrencia date NOT NULL
+);
+
+
+--
+-- Name: ocorrencias_id_seq; Type: SEQUENCE; Schema: adelino_cunha; Owner: -
+--
+
+CREATE SEQUENCE adelino_cunha.ocorrencias_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ocorrencias_id_seq; Type: SEQUENCE OWNED BY; Schema: adelino_cunha; Owner: -
+--
+
+ALTER SEQUENCE adelino_cunha.ocorrencias_id_seq OWNED BY adelino_cunha.ocorrencias.id;
+
+
+--
 -- Name: secao; Type: TABLE; Schema: adelino_cunha; Owner: -
 --
 
@@ -547,6 +665,13 @@ ALTER TABLE ONLY adelino_cunha.autor ALTER COLUMN id SET DEFAULT nextval('adelin
 
 
 --
+-- Name: cronogramaalunomonitor id; Type: DEFAULT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor ALTER COLUMN id SET DEFAULT nextval('adelino_cunha.cronogramaalunomonitor_id_seq'::regclass);
+
+
+--
 -- Name: emprestimo id; Type: DEFAULT; Schema: adelino_cunha; Owner: -
 --
 
@@ -575,6 +700,13 @@ ALTER TABLE ONLY adelino_cunha.exemplar ALTER COLUMN id SET DEFAULT nextval('ade
 
 
 --
+-- Name: frequenciaalunos id; Type: DEFAULT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.frequenciaalunos ALTER COLUMN id SET DEFAULT nextval('adelino_cunha.frequenciaalunos_id_seq'::regclass);
+
+
+--
 -- Name: genero id; Type: DEFAULT; Schema: adelino_cunha; Owner: -
 --
 
@@ -600,6 +732,13 @@ ALTER TABLE ONLY adelino_cunha.livroautor ALTER COLUMN id SET DEFAULT nextval('a
 --
 
 ALTER TABLE ONLY adelino_cunha.livrogenero ALTER COLUMN id SET DEFAULT nextval('adelino_cunha.livrogenero_id_seq'::regclass);
+
+
+--
+-- Name: ocorrencias id; Type: DEFAULT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.ocorrencias ALTER COLUMN id SET DEFAULT nextval('adelino_cunha.ocorrencias_id_seq'::regclass);
 
 
 --
@@ -640,6 +779,14 @@ COPY adelino_cunha.autor (id, nome) FROM stdin;
 
 
 --
+-- Data for Name: cronogramaalunomonitor; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
+--
+
+COPY adelino_cunha.cronogramaalunomonitor (id, id_aluno_monitor, dia_da_semana) FROM stdin;
+\.
+
+
+--
 -- Data for Name: emprestimo; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
 --
 
@@ -672,6 +819,14 @@ COPY adelino_cunha.exemplar (id, id_livro, id_secao, id_estante_prateleira, obse
 
 
 --
+-- Data for Name: frequenciaalunos; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
+--
+
+COPY adelino_cunha.frequenciaalunos (id, id_aluno, registrada_por, atividade, data_frequencia) FROM stdin;
+\.
+
+
+--
 -- Data for Name: genero; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
 --
 
@@ -700,6 +855,14 @@ COPY adelino_cunha.livroautor (id, id_livro, id_autor) FROM stdin;
 --
 
 COPY adelino_cunha.livrogenero (id, id_livro, id_genero) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ocorrencias; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
+--
+
+COPY adelino_cunha.ocorrencias (id, id_aluno, registrada_por, detalhes, data_ocorrencia) FROM stdin;
 \.
 
 
@@ -742,6 +905,13 @@ SELECT pg_catalog.setval('adelino_cunha.autor_id_seq', 1, false);
 
 
 --
+-- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
+--
+
+SELECT pg_catalog.setval('adelino_cunha.cronogramaalunomonitor_id_seq', 1, false);
+
+
+--
 -- Name: emprestimo_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
@@ -770,6 +940,13 @@ SELECT pg_catalog.setval('adelino_cunha.exemplar_id_seq', 1, false);
 
 
 --
+-- Name: frequenciaalunos_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
+--
+
+SELECT pg_catalog.setval('adelino_cunha.frequenciaalunos_id_seq', 1, false);
+
+
+--
 -- Name: genero_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
@@ -795,6 +972,13 @@ SELECT pg_catalog.setval('adelino_cunha.livroautor_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('adelino_cunha.livrogenero_id_seq', 1, false);
+
+
+--
+-- Name: ocorrencias_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
+--
+
+SELECT pg_catalog.setval('adelino_cunha.ocorrencias_id_seq', 1, false);
 
 
 --
@@ -840,6 +1024,22 @@ ALTER TABLE ONLY adelino_cunha.aluno
 
 ALTER TABLE ONLY adelino_cunha.autor
     ADD CONSTRAINT autor_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cronogramaalunomonitor cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
+    ADD CONSTRAINT cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key UNIQUE (id_aluno_monitor, dia_da_semana);
+
+
+--
+-- Name: cronogramaalunomonitor cronogramaalunomonitor_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
+    ADD CONSTRAINT cronogramaalunomonitor_pkey PRIMARY KEY (id);
 
 
 --
@@ -907,6 +1107,22 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
+-- Name: frequenciaalunos frequenciaalunos_id_aluno_data_frequencia_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.frequenciaalunos
+    ADD CONSTRAINT frequenciaalunos_id_aluno_data_frequencia_key UNIQUE (id_aluno, data_frequencia);
+
+
+--
+-- Name: frequenciaalunos frequenciaalunos_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.frequenciaalunos
+    ADD CONSTRAINT frequenciaalunos_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: genero genero_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
 --
 
@@ -963,6 +1179,14 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 
 --
+-- Name: ocorrencias ocorrencias_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.ocorrencias
+    ADD CONSTRAINT ocorrencias_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: secao secao_pkey; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
 --
 
@@ -1008,6 +1232,14 @@ ALTER TABLE ONLY adelino_cunha.usuario
 
 ALTER TABLE ONLY adelino_cunha.aluno
     ADD CONSTRAINT aluno_id_turma_fkey FOREIGN KEY (id_turma) REFERENCES adelino_cunha.turma(id);
+
+
+--
+-- Name: cronogramaalunomonitor cronogramaalunomonitor_id_aluno_monitor_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
+    ADD CONSTRAINT cronogramaalunomonitor_id_aluno_monitor_fkey FOREIGN KEY (id_aluno_monitor) REFERENCES adelino_cunha.usuario(id);
 
 
 --
@@ -1083,6 +1315,22 @@ ALTER TABLE ONLY adelino_cunha.exemplar
 
 
 --
+-- Name: frequenciaalunos frequenciaalunos_id_aluno_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.frequenciaalunos
+    ADD CONSTRAINT frequenciaalunos_id_aluno_fkey FOREIGN KEY (id_aluno) REFERENCES adelino_cunha.aluno(id);
+
+
+--
+-- Name: frequenciaalunos frequenciaalunos_registrada_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.frequenciaalunos
+    ADD CONSTRAINT frequenciaalunos_registrada_por_fkey FOREIGN KEY (registrada_por) REFERENCES adelino_cunha.usuario(id);
+
+
+--
 -- Name: livroautor livroautor_id_autor_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
 --
 
@@ -1112,6 +1360,22 @@ ALTER TABLE ONLY adelino_cunha.livrogenero
 
 ALTER TABLE ONLY adelino_cunha.livrogenero
     ADD CONSTRAINT livrogenero_id_livro_fkey FOREIGN KEY (id_livro) REFERENCES adelino_cunha.livro(id) ON DELETE CASCADE;
+
+
+--
+-- Name: ocorrencias ocorrencias_id_aluno_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.ocorrencias
+    ADD CONSTRAINT ocorrencias_id_aluno_fkey FOREIGN KEY (id_aluno) REFERENCES adelino_cunha.aluno(id);
+
+
+--
+-- Name: ocorrencias ocorrencias_registrada_por_fkey; Type: FK CONSTRAINT; Schema: adelino_cunha; Owner: -
+--
+
+ALTER TABLE ONLY adelino_cunha.ocorrencias
+    ADD CONSTRAINT ocorrencias_registrada_por_fkey FOREIGN KEY (registrada_por) REFERENCES adelino_cunha.usuario(id);
 
 
 --
