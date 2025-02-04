@@ -45,14 +45,16 @@ public class TurmaController {
         return ResponseEntity.ok(turmasResponseDTO);
     }
 
-    @PutMapping ("/{id}")
-    public ResponseEntity<Turma> alterarTurma(@PathVariable Integer id, @Valid @RequestBody Turma body, BindingResult result){
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
+    @GetMapping("")
+    public ResponseEntity<List<TurmaResponseDTO>> listarTurmas() {
+        List<TurmaResponseDTO> turmasResponseDTO = turmasService.listarTurmas();
+        return ResponseEntity.ok(turmasResponseDTO);
+    }
 
-        Turma turmaAtualizada = turmasService.alterarTurma(id, body);
-        return ResponseEntity.ok(turmaAtualizada);
+    @PutMapping ("/{id}")
+    public ResponseEntity<TurmaResponseDTO> alterarTurma(@PathVariable Integer id, @RequestBody TurmaRequestDTO requestDTO) {
+        TurmaResponseDTO turmaAtualizadaResponseDTO = turmasService.alterarTurma(id, requestDTO);
+        return ResponseEntity.ok(turmaAtualizadaResponseDTO);
     }
 
     @PatchMapping("/{id}/inativar")

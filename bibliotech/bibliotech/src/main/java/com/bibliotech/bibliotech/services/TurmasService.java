@@ -64,20 +64,28 @@ public class TurmasService {
                 .map(turmaResponseMapper::toDto)
                 .collect(Collectors.toList());
     }
+    
+    public List<TurmaResponseDTO> listarTurmas() {
+        List<Turma> turmas = turmaRepository.findAll();
+        return turmas.stream()
+                .map(turmaResponseMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
-    public Turma alterarTurma(Integer id, Turma novaTurma) {
+    public TurmaResponseDTO alterarTurma(Integer id, TurmaRequestDTO novaTurmaDTO) {
         Turma turmaExistente = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
-        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(novaTurma.getSerie(), novaTurma.getTurma(), novaTurma.getAnoDeEntrada())) {
+        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(novaTurmaDTO.getSerie(), novaTurmaDTO.getTurma(), novaTurmaDTO.getAnoDeEntrada())) {
             throw new ValidationException("Já existe uma turma com essa combinação de série, turma e ano de entrada.");
         }
 
-        turmaExistente.setSerie(novaTurma.getSerie());
-        turmaExistente.setTurma(novaTurma.getTurma().toUpperCase());
-        turmaExistente.setAnoDeEntrada(novaTurma.getAnoDeEntrada());
+        turmaExistente.setSerie(novaTurmaDTO.getSerie());
+        turmaExistente.setTurma(novaTurmaDTO.getTurma().toUpperCase());
+        turmaExistente.setAnoDeEntrada(novaTurmaDTO.getAnoDeEntrada());
 
-        return turmaRepository.save(turmaExistente);
+        Turma turmaAtualizada = turmaRepository.save(turmaExistente);
+        return turmaResponseMapper.toDto(turmaAtualizada);
     }
 
     public void inativarTurma(Integer id) {
