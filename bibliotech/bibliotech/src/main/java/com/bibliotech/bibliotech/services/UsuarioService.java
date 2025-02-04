@@ -51,19 +51,11 @@ public class UsuarioService {
     public Usuario alterarUsuario(Integer id, Usuario novoUsuario) {
         Usuario usuarioExistente = usuarioRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
-        if (novoUsuario.getNome() == null) {
-            throw new ValidationException("O nome do usuário é obrigatório.");
-        }
-        if (novoUsuario.getEmail() == null) {
-            throw new ValidationException("O email do usuário é obrigatório.");
-        }
-        if (novoUsuario.getSenha() == null) {
-            throw new ValidationException("A senha do usuário é obrigatória.");
-        }
+
         if (!novoUsuario.getCargo().equals("aluno_monitor") && !novoUsuario.getCargo().equals("bibliotecario")) {
             throw new ValidationException("Cargo invalido! Cargos válidos: 'aluno_monitor', 'bibliotecario'.");
         }
-        if (usuarioRepository.existsByEmail(novoUsuario.getEmail())) {
+        if (usuarioRepository.existsByEmail(novoUsuario.getEmail()) && !usuarioExistente.getEmail().equals(novoUsuario.getEmail())) {
             throw new ValidationException("Já existe um usuário cadastrado com esse e-mail.");
         }
 
