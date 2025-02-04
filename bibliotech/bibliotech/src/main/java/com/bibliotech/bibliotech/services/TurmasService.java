@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TurmasService {
@@ -51,13 +52,17 @@ public class TurmasService {
         return turmaResponseMapper.toDto(turmaSalva);
     }
 
-    public Turma getTurmaById(Integer id){
-        return turmaRepository.findById(id)
+    public TurmaResponseDTO getTurmaById(Integer id){
+        Turma turma = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+        return turmaResponseMapper.toDto(turma);
     }
 
-    public List<Turma> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
-        return turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+    public List<TurmaResponseDTO> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
+        List<Turma> turmas = turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+        return turmas.stream()
+                .map(turmaResponseMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public Turma alterarTurma(Integer id, Turma novaTurma) {

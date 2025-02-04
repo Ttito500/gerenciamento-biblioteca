@@ -32,16 +32,17 @@ public class TurmaController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Turma> getTurmaById(@PathVariable Integer id){
+    public ResponseEntity<TurmaResponseDTO> getTurmaById(@PathVariable Integer id){
         return ResponseEntity.ok(turmasService.getTurmaById(id));
     }
 
     @GetMapping("/filtrar")
-    public List<Turma> filtrarTurmas(@RequestParam(required = false) Integer serie,
-                                     @RequestParam(required = false) String turma,
-                                     @RequestParam(required = false) Integer anoDeEntrada,
-                                     @RequestParam(required = false) Boolean ativo) {
-        return turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+    public ResponseEntity<List<TurmaResponseDTO>> filtrarTurmas(@RequestParam(required = false) Integer serie,
+                                                                @RequestParam(required = false) String turma,
+                                                                @RequestParam(required = false) Integer anoDeEntrada,
+                                                                @RequestParam(required = false) Boolean ativo) {
+        List<TurmaResponseDTO> turmasResponseDTO = turmasService.filtrarTurmas(serie, turma.toUpperCase(), anoDeEntrada, ativo);
+        return ResponseEntity.ok(turmasResponseDTO);
     }
 
     @PutMapping ("/{id}")
