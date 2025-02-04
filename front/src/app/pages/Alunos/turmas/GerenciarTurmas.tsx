@@ -3,13 +3,11 @@ import ToastContainer from "react-bootstrap/esm/ToastContainer";
 import Toast from "react-bootstrap/esm/Toast";
 import Button from "react-bootstrap/esm/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCheck, faPlus, faEdit, faPowerOff} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/esm/Modal";
 import ListagemTurma from "../../Alunos/turmas/templates/ListagemTurma";
 import FiltrosTurma from "./templates/FiltrosTurma";
 import CadastrarTurma from "./templates/CadastrarTurma";
-import EditarTurma from "./templates/EditarTurma";
-import InativarTurma from "./templates/InativarTurma";
 
 const GerenciarTurmas: React.FC = () => {
 
@@ -78,15 +76,6 @@ const GerenciarTurmas: React.FC = () => {
                     <FontAwesomeIcon icon={faPlus}/> Cadastrar Nova Turma
                 </Button>
 
-                {/*botoes oara teste*/}
-                <Button variant="info" className="btn-success" onClick={handleShowEditar}>
-                    <FontAwesomeIcon icon={faEdit}/>
-                </Button>
-
-                <Button variant="info" className="btn-danger" onClick={handleShowInativar}>
-                    <FontAwesomeIcon icon={faPowerOff}/>
-                </Button>
-
                 <Modal
                     show={showCadastrar}
                     onHide={handleCloseCadastrar}
@@ -107,56 +96,6 @@ const GerenciarTurmas: React.FC = () => {
                         <Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
                         <Button variant="success">
                             <FontAwesomeIcon icon={faCheck}/> Salvar
-                        </Button>
-
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal
-                    show={showEditar}
-                    onHide={handleCloseEditar}
-                    size="lg"
-                    backdrop="static"
-                    centered
-                    keyboard={false}>
-
-                    <Modal.Header closeButton>
-                        <Modal.Title>Ediar Turma</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <EditarTurma/>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseEditar}>Desistir</Button>
-                        <Button variant="success">
-                            <FontAwesomeIcon icon={faCheck} /> Salvar
-                        </Button>
-
-                    </Modal.Footer>
-                </Modal>
-
-                <Modal
-                    show={showInativar}
-                    onHide={handleCloseInativar}
-                    size="sm"
-                    backdrop="static"
-                    centered
-                    keyboard={false}>
-
-                    <Modal.Header closeButton>
-                        <Modal.Title>Confirmação</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <InativarTurma/>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseInativar}>Desistir</Button>
-                        <Button variant="danger">
-                            <FontAwesomeIcon icon={faCheck} /> Inativar
                         </Button>
 
                     </Modal.Footer>

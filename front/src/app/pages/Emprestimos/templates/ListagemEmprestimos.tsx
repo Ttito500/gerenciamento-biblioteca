@@ -1,12 +1,29 @@
-import React from "react";
-import { faCalendarCheck, faCalendarPlus, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import React, { useState} from "react";
+import {faCalendarCheck, faCalendarPlus, faCheck, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import Table from "react-bootstrap/Table";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Badge from "react-bootstrap/Badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/esm/Modal";
+import ConfirmarEntrega from "./ConfirmarEntrega";
+import RenovarPrazo from "./RenovarPrazo";
+import CancelarEmprestimo from "./CancelarEmprestimo";
 
 const ListagemEmprestimos = () => {
+
+    const [showReceber, setShowReceber] = useState(false)
+    const handleCloseReceber = () =>setShowReceber(false);
+    const handleShowReceber = () => setShowReceber(true);
+
+    const [showRenovar, setShowRenovar] = useState(false)
+    const handleCloseRenovar = () => setShowRenovar(false);
+    const handleShowRenovar = () => setShowRenovar(true);
+
+    const[showCancelar, setShowCancelar] = useState(false)
+    const handleCloseCancelar = () => setShowCancelar(false);
+    const handleShowCancelar = () => setShowCancelar(true);
+
     return (
         <>
             <Table striped className="tabela">
@@ -45,13 +62,13 @@ const ListagemEmprestimos = () => {
                     </td>
                     <td>
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                            <Button variant="btn-outline-secondary" className="color-orange">
+                            <Button onClick={handleShowReceber} variant="btn-outline-secondary" className="color-orange">
                                 <FontAwesomeIcon icon={faCalendarCheck} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-blue">
+                            <Button onClick={handleShowRenovar} variant="btn-outline-secondary" className="color-blue">
                                 <FontAwesomeIcon icon={faCalendarPlus} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-red">
+                            <Button onClick={handleShowCancelar} variant="btn-outline-secondary" className="color-red">
                                 <FontAwesomeIcon icon={faCircleXmark} />
                             </Button>
                         </ButtonGroup>
@@ -74,13 +91,13 @@ const ListagemEmprestimos = () => {
                     </td>
                     <td>
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                            <Button variant="btn-outline-secondary" className="color-orange">
+                            <Button onClick={handleShowReceber} variant="btn-outline-secondary" className="color-orange">
                                 <FontAwesomeIcon icon={faCalendarCheck} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-blue">
+                            <Button onClick={handleShowRenovar} variant="btn-outline-secondary" className="color-blue">
                                 <FontAwesomeIcon icon={faCalendarPlus} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-red">
+                            <Button onClick={handleShowCancelar}variant="btn-outline-secondary" className="color-red">
                                 <FontAwesomeIcon icon={faCircleXmark} />
                             </Button>
                         </ButtonGroup>
@@ -103,13 +120,13 @@ const ListagemEmprestimos = () => {
                     </td>
                     <td>
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                            <Button variant="btn-outline-secondary" className="color-orange">
+                            <Button onClick={handleShowReceber} variant="btn-outline-secondary" className="color-orange">
                                 <FontAwesomeIcon icon={faCalendarCheck} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-blue">
+                            <Button onClick={handleShowRenovar} variant="btn-outline-secondary" className="color-blue">
                                 <FontAwesomeIcon icon={faCalendarPlus} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-red">
+                            <Button onClick={handleShowCancelar} variant="btn-outline-secondary" className="color-red">
                                 <FontAwesomeIcon icon={faCircleXmark} />
                             </Button>
                         </ButtonGroup>
@@ -132,13 +149,13 @@ const ListagemEmprestimos = () => {
                     </td>
                     <td>
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                            <Button variant="btn-outline-secondary" className="color-orange">
+                            <Button onClick={handleShowReceber} variant="btn-outline-secondary" className="color-orange">
                                 <FontAwesomeIcon icon={faCalendarCheck} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-blue">
+                            <Button onClick={handleShowRenovar} variant="btn-outline-secondary" className="color-blue">
                                 <FontAwesomeIcon icon={faCalendarPlus} />
                             </Button>
-                            <Button variant="btn-outline-secondary" className="color-red">
+                            <Button onClick={handleShowCancelar} variant="btn-outline-secondary" className="color-red">
                                 <FontAwesomeIcon icon={faCircleXmark} />
                             </Button>
                         </ButtonGroup>
@@ -147,6 +164,82 @@ const ListagemEmprestimos = () => {
 
                 </tbody>
             </Table>
+
+            <Modal
+                show={showReceber}
+                onHide={handleCloseReceber}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Concluir Empréstimo</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <ConfirmarEntrega/>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseReceber}>Desistir</Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
+                    </Button>
+
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showRenovar}
+                onHide={handleCloseRenovar}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Renovar Prazo</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <RenovarPrazo/>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseRenovar}>Desistir</Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
+                    </Button>
+
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showCancelar}
+                onHide={handleCloseCancelar}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Cancelar Empréstimo</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <CancelarEmprestimo/>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseCancelar}>Desistir</Button>
+                    <Button variant="danger">
+                        <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
+                    </Button>
+
+                </Modal.Footer>
+            </Modal>
+
         </>
     );
 };

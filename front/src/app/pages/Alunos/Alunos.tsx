@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheck, faTrash, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
 import AlunosListagem from './templates/AlunosListagem';
 import AlunosFiltros from "./templates/AlunosFiltros";
 import Modal from 'react-bootstrap/Modal';
@@ -279,7 +279,7 @@ const Alunos: React.FC = () => {
 				</Modal>
 
                 <Button variant="info" className="btn-orange" onClick={handleShowGerenciarTurmas}>
-                    <FontAwesomeIcon icon={ faPlus } /> Gerenciar Turmas
+                    <FontAwesomeIcon icon={faUsersRectangle} /> Gerenciar Turmas
                 </Button>
 
                 <Modal
