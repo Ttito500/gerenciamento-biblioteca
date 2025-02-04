@@ -5,9 +5,9 @@ import { NavLink } from 'react-router-dom';
 
 const Menu: React.FC = () => {
   return (
-    <>
-      <Navbar className="bg-green navbar">
-        <Container>
+      <>
+        <Navbar className="bg-green navbar">
+          <Container>
           <span className="navbar-brand-bibliotech">
             Acervo Bibliotech
           </span>
