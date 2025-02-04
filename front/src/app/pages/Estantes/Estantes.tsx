@@ -14,6 +14,8 @@ import Row from "react-bootstrap/Row";
 import styles from "./Estantes.module.css";
 import { Estante, GetEstantePrateleiraResponse, UpdateEstantePrateleiraRequest, UpdateEstantePrateleiraResponse, CreateEstantePrateleiraRequest } from "./../../interfaces/estante-prateleira";
 import { createEstantePrateleira, deleteEstantePrateleira, getEstantePrateleiras, updateEstantePrateleira } from "./../../api/EstantePrateleiraApi";
+import EstantesListagem from "./templates/EstantesListagem/EstantesListagem";
+import EstantesGerenciarEstantePrateleira from "./templates/EstantesGerenciarEstantePrateleira/EstantesGerenciarEstantePrateleira";
 
 function transformEstantes(lista: GetEstantePrateleiraResponse[]): Estante[] {
   const mapa = new Map<string, Estante>();
@@ -255,7 +257,7 @@ const Estantes: React.FC = () => {
             <Col xs={3}>
               <Form.Group>
                 <Form.Label>
-                  Estante (Letra) * <span className="obgr">*</span>
+                  Estante (Letra) <span className="obgr">*</span>
                 </Form.Label>
 
                 <Form.Control
@@ -275,7 +277,7 @@ const Estantes: React.FC = () => {
 
             <Col xs={4}>
               <Form.Group>
-                <Form.Label>Número da Prateleira *</Form.Label>
+                <Form.Label>Número da Prateleira <span className="obgr">*</span></Form.Label>
 
                 <Form.Control
                   type="text"

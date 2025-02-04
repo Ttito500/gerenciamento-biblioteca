@@ -4,7 +4,7 @@ import styles from './SecoesListagem.module.css'
 
 interface SecoesListagemProps {
   secoes: GetSecaoResponse[];
-  onGerenciar: (aluno: GetSecaoResponse) => void;
+  onGerenciar: (secao: GetSecaoResponse) => void;
 }
 
 const SecoesListagem: React.FC<SecoesListagemProps> = ({ secoes, onGerenciar }) => {

@@ -238,7 +238,7 @@ const Secoes: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseExcluirSecao}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="danger" onClick={handleSubmitExcluirSecao}>
             <FontAwesomeIcon icon={faTrash} /> Excluir

@@ -111,7 +111,7 @@ const GerenciarTurmas: React.FC = () => {
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseCadastrar}>
-              Desistir
+              Cancelar
             </Button>
             <Button variant="success">
               <FontAwesomeIcon icon={faCheck} /> Salvar
