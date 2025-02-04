@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,14 +58,11 @@ public class TurmasService {
     }
 
     public List<TurmaResponseDTO> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
+        if (turma != null) {
+            turma = turma.toUpperCase();
+        }
+        
         List<Turma> turmas = turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
-        return turmas.stream()
-                .map(turmaResponseMapper::toDto)
-                .collect(Collectors.toList());
-    }
-    
-    public List<TurmaResponseDTO> listarTurmas() {
-        List<Turma> turmas = turmaRepository.findAll();
         return turmas.stream()
                 .map(turmaResponseMapper::toDto)
                 .collect(Collectors.toList());
