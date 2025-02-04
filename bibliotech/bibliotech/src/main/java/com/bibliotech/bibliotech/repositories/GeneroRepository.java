@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GeneroRepository extends JpaRepository<Genero, Integer> {
-    @Query("SELECT g FROM Genero g WHERE NOT EXISTS (SELECT lg FROM Livrogenero lg WHERE lg.genero = g)")
+    @Query("SELECT g FROM Genero g WHERE NOT EXISTS (SELECT lg FROM Livrogenero lg WHERE lg.genero = g ORDER BY g.genero)")
     List<Genero> findGenerosSemAssociacao();
 
     Optional<Genero> findByGenero(String genero);
