@@ -22,11 +22,6 @@ public class AutorController {
         return ResponseEntity.ok(autorService.getAll());
     }
 
-    @PostMapping("")
-    public ResponseEntity<List<Autor>> cadastrarAutores(@RequestBody List<Autor> autores) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(autorService.cadastrarAutores(autores));
-    }
-
     @GetMapping("/buscar")
     public ResponseEntity<Optional<Autor>> buscarAutorPorNome(@RequestParam String nome) {
         return ResponseEntity.ok(autorService.buscarPorNome(nome));

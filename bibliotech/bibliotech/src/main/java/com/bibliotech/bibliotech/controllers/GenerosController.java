@@ -22,10 +22,6 @@ public class GenerosController {
         return ResponseEntity.ok(generosService.getAllGeneros());
     }
 
-    @PostMapping("")
-    public ResponseEntity<List<Genero>> adicionarGeneros(@RequestBody List<Genero> generos) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(generosService.addGenero(generos));
-    }
 
     @GetMapping("/buscar")
     public ResponseEntity<Optional<Genero>> buscarGeneroPorGenero(@RequestParam String genero) {
