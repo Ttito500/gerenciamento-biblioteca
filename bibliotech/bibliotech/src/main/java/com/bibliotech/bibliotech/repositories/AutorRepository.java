@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AutorRepository extends JpaRepository<Autor, Integer> {
 
-    @Query("SELECT a FROM Autor a WHERE NOT EXISTS (SELECT 1 FROM Livroautor la WHERE la.idAutor = a)")
+    @Query("SELECT a FROM Autor a WHERE NOT EXISTS (SELECT 1 FROM Livroautor la WHERE la.idAutor = a ORDER BY a.nome)")
     List<Autor> findAutoresSemLivros();
 
     Optional<Autor> findFirstByNomeIgnoreCase(String nome);
