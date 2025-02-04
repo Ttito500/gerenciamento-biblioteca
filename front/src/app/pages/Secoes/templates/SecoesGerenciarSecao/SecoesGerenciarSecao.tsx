@@ -123,6 +123,7 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
         if(selectedEstantePrateleira && !isNaN(Number(selectedEstantePrateleira))) {
           await addSecaoEstantePrateleira(idSecao, Number(selectedEstantePrateleira));
           setShowToastSuccess(true);
+          listarEstantesPorSecao();
         }
       }
     } catch (err) {

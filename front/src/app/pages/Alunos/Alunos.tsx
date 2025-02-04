@@ -198,7 +198,7 @@ const Alunos: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseEditar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success" onClick={handleSubmitEditarAluno}>
             <FontAwesomeIcon icon={faCheck} /> Salvar
@@ -243,7 +243,7 @@ const Alunos: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseExcluirAluno}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="danger" onClick={handleSubmitExcluirAluno}>
             <FontAwesomeIcon icon={faTrash} /> Excluir
@@ -273,7 +273,7 @@ const Alunos: React.FC = () => {
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
+						<Button variant="secondary" onClick={handleCloseCadastrar}>Cancelar</Button>
 						<Button variant="success" onClick={handleSubmitCadastrarAluno}><FontAwesomeIcon icon={faCheck} /> Salvar</Button>
 					</Modal.Footer>
 				</Modal>

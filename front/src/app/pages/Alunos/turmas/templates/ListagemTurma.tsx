@@ -133,7 +133,7 @@ const ListagemTurma: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseEditar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success">
             <FontAwesomeIcon icon={faCheck} /> Salvar
@@ -159,7 +159,7 @@ const ListagemTurma: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseInativar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="danger">
             <FontAwesomeIcon icon={faCheck} /> Inativar

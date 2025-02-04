@@ -242,7 +242,7 @@ const ListagemEmprestimos = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseReceber}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success">
             <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
@@ -268,7 +268,7 @@ const ListagemEmprestimos = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRenovar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success">
             <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
@@ -294,7 +294,7 @@ const ListagemEmprestimos = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseCancelar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="danger">
             <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
