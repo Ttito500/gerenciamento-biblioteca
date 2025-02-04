@@ -1,12 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import {
   CreateSecaoRequest,
-  Estante,
-  GetSecaoEstantePrateleiraResponse,
   GetSecaoResponse,
   UpdateSecaoRequest,
   UpdateSecaoResponse,
@@ -14,8 +12,6 @@ import {
 import {
   createSecao,
   deleteSecao,
-  deleteSecaoEstantePrateleira,
-  getSecaoEstantePrateleiras,
   getSecoes,
   updateSecao,
 } from "./../../api/SecoesApi";
