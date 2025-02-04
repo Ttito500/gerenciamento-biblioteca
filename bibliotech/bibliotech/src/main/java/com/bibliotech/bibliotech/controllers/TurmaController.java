@@ -1,5 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
+import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.services.TurmasService;
@@ -21,14 +23,11 @@ public class TurmaController {
     private TurmasService turmasService;
 
     @PostMapping("")
-    public ResponseEntity<Turma> criarTurma (@Valid @RequestBody Turma body, BindingResult result){
-        if (result.hasErrors()) {
-            throw new ValidationException(result);
-        }
+    public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody TurmaRequestDTO requestDTO){
 
-        Turma turma = turmasService.cadastrarTurma(body);
-        URI location = URI.create("/turmas/" + turma.getId());
-        return ResponseEntity.created(location).body(turma);
+        TurmaResponseDTO turmaResponseDTO = turmasService.cadastrarTurma(requestDTO);
+        URI location = URI.create("/turmas/" + turmaResponseDTO.getId());
+        return ResponseEntity.created(location).body(turmaResponseDTO);
     }
 
 

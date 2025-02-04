@@ -1,5 +1,9 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
@@ -19,24 +23,32 @@ public class TurmasService {
     @Autowired
     private AlunosService alunosService;
 
-    public Turma cadastrarTurma(Turma turma) {
-        if (turma.getSerie() == null || turma.getSerie() < 1) {
+    @Autowired
+    private TurmaRequestMapper turmaRequestMapper;
+
+    @Autowired
+    private TurmaResponseMapper turmaResponseMapper;
+
+    public TurmaResponseDTO cadastrarTurma(TurmaRequestDTO requestDTO) {
+        if (requestDTO.getSerie() == null || requestDTO.getSerie() < 1) {
             throw new ValidationException("Série é obrigatória e deve ser maior que zero.");
         }
-        if (turma.getTurma() == null || turma.getTurma().length() > 1) {
+        if (requestDTO.getTurma() == null || requestDTO.getTurma().length() > 1) {
             throw new ValidationException("Turma é obrigatória e deve ter no máximo 1 caractere.");
         }
-        if (turma.getAnoDeEntrada() == null || turma.getAnoDeEntrada() <= 0) {
+        if (requestDTO.getAnoDeEntrada() == null || requestDTO.getAnoDeEntrada() <= 0) {
             throw new ValidationException("Ano de entrada é obrigatório e deve ser maior que zero.");
         }
-        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(turma.getSerie(), turma.getTurma(), turma.getAnoDeEntrada())) {
+        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(requestDTO.getSerie(), requestDTO.getTurma(), requestDTO.getAnoDeEntrada())) {
             throw new ValidationException("Já existe uma turma com essa combinação de série, turma e ano de entrada.");
         }
 
-        turma.setAtivo(true);
-        turma.setTurma(turma.getTurma().toUpperCase());
+        requestDTO.setTurma(requestDTO.getTurma().toUpperCase());
 
-        return turmaRepository.save(turma);
+        Turma turma = turmaRequestMapper.toEntity(requestDTO);
+        turma.setAtivo(true);
+        Turma turmaSalva = turmaRepository.save(turma);
+        return turmaResponseMapper.toDto(turmaSalva);
     }
 
     public Turma getTurmaById(Integer id){

@@ -3,7 +3,9 @@ package com.bibliotech.bibliotech.dtos.request.mappers;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TurmaRequestMapper {
     private final TurmaRepository turmaRepository;
 
