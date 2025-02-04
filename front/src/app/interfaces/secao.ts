@@ -26,12 +26,18 @@ export interface UpdateSecaoResponse {
   descricao: string;
 }
 
+export interface GetSecaoEstantePrateleiraResponse {
+  id: number;
+  estante: string;
+  prateleira: number;
+}
+
 export interface Estante {
-  letra: string;
+  estante: string;
   prateleiras: Prateleira[];
 }
 
 export interface Prateleira {
   id: number;
-  numero: number;
+  prateleira: number;
 }

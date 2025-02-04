@@ -5,6 +5,8 @@ import { faCheck, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import {
   CreateSecaoRequest,
+  Estante,
+  GetSecaoEstantePrateleiraResponse,
   GetSecaoResponse,
   UpdateSecaoRequest,
   UpdateSecaoResponse,
@@ -12,6 +14,8 @@ import {
 import {
   createSecao,
   deleteSecao,
+  deleteSecaoEstantePrateleira,
+  getSecaoEstantePrateleiras,
   getSecoes,
   updateSecao,
 } from "./../../api/SecoesApi";
@@ -43,9 +47,7 @@ const Secoes: React.FC = () => {
     setShowGerenciar(true);
   };
 
-  const [editingSecao, setEditingSecao] = useState<GetSecaoResponse | null>(
-    null
-  );
+  const [editingSecao, setEditingSecao] = useState<GetSecaoResponse | null>(null);
   const [deletingSecao, setDeletingSecao] = useState<number | null>(null);
 
   const [formDataEditarSecao, setFormDataEditarSecao] = useState({
@@ -209,12 +211,11 @@ const Secoes: React.FC = () => {
 
         <Modal.Body>
           <SecoesGerenciarSecao
+            idSecao={editingSecao?.id}
             formData={formDataEditarSecao}
             onChange={handleChangeEditarSecao}
             onEdit={handleSubmitEditarSecao}
             onDelete={handleShowExcluirSecao}
-            onDeletePrateleira={}
-            estantes={}
           />
         </Modal.Body>
 
