@@ -1,5 +1,9 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
@@ -8,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TurmasService {
@@ -19,48 +23,65 @@ public class TurmasService {
     @Autowired
     private AlunosService alunosService;
 
-    public Turma cadastrarTurma(Turma turma) {
-        if (turma.getSerie() == null || turma.getSerie() < 1) {
+    @Autowired
+    private TurmaRequestMapper turmaRequestMapper;
+
+    @Autowired
+    private TurmaResponseMapper turmaResponseMapper;
+
+    public TurmaResponseDTO cadastrarTurma(TurmaRequestDTO requestDTO) {
+        if (requestDTO.getSerie() == null || requestDTO.getSerie() < 1) {
             throw new ValidationException("Série é obrigatória e deve ser maior que zero.");
         }
-        if (turma.getTurma() == null || turma.getTurma().length() > 1) {
+        if (requestDTO.getTurma() == null || requestDTO.getTurma().length() > 1) {
             throw new ValidationException("Turma é obrigatória e deve ter no máximo 1 caractere.");
         }
-        if (turma.getAnoDeEntrada() == null || turma.getAnoDeEntrada() <= 0) {
+        if (requestDTO.getAnoDeEntrada() == null || requestDTO.getAnoDeEntrada() <= 0) {
             throw new ValidationException("Ano de entrada é obrigatório e deve ser maior que zero.");
         }
-        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(turma.getSerie(), turma.getTurma(), turma.getAnoDeEntrada())) {
+        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(requestDTO.getSerie(), requestDTO.getTurma(), requestDTO.getAnoDeEntrada())) {
             throw new ValidationException("Já existe uma turma com essa combinação de série, turma e ano de entrada.");
         }
 
+        requestDTO.setTurma(requestDTO.getTurma().toUpperCase());
+
+        Turma turma = turmaRequestMapper.toEntity(requestDTO);
         turma.setAtivo(true);
-        turma.setTurma(turma.getTurma().toUpperCase());
-
-        return turmaRepository.save(turma);
+        Turma turmaSalva = turmaRepository.save(turma);
+        return turmaResponseMapper.toDto(turmaSalva);
     }
 
-    public Turma getTurmaById(Integer id){
-        return turmaRepository.findById(id)
+    public TurmaResponseDTO getTurmaById(Integer id){
+        Turma turma = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+        return turmaResponseMapper.toDto(turma);
     }
 
-    public List<Turma> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
-        return turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+    public List<TurmaResponseDTO> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
+        if (turma != null) {
+            turma = turma.toUpperCase();
+        }
+        
+        List<Turma> turmas = turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+        return turmas.stream()
+                .map(turmaResponseMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Turma alterarTurma(Integer id, Turma novaTurma) {
+    public TurmaResponseDTO alterarTurma(Integer id, TurmaRequestDTO novaTurmaDTO) {
         Turma turmaExistente = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
-        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(novaTurma.getSerie(), novaTurma.getTurma(), novaTurma.getAnoDeEntrada())) {
+        if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(novaTurmaDTO.getSerie(), novaTurmaDTO.getTurma(), novaTurmaDTO.getAnoDeEntrada())) {
             throw new ValidationException("Já existe uma turma com essa combinação de série, turma e ano de entrada.");
         }
 
-        turmaExistente.setSerie(novaTurma.getSerie());
-        turmaExistente.setTurma(novaTurma.getTurma().toUpperCase());
-        turmaExistente.setAnoDeEntrada(novaTurma.getAnoDeEntrada());
+        turmaExistente.setSerie(novaTurmaDTO.getSerie());
+        turmaExistente.setTurma(novaTurmaDTO.getTurma().toUpperCase());
+        turmaExistente.setAnoDeEntrada(novaTurmaDTO.getAnoDeEntrada());
 
-        return turmaRepository.save(turmaExistente);
+        Turma turmaAtualizada = turmaRepository.save(turmaExistente);
+        return turmaResponseMapper.toDto(turmaAtualizada);
     }
 
     public void inativarTurma(Integer id) {
