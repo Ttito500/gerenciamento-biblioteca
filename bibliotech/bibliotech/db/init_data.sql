@@ -51,12 +51,11 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.genero DROP CONSTRAINT IF EXISTS genero
 ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.frequenciaalunos DROP CONSTRAINT IF EXISTS frequenciaalunos_id_aluno_data_frequencia_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_pkey;
-ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_numero_key;
+ALTER TABLE IF EXISTS ONLY adelino_cunha.exemplar DROP CONSTRAINT IF EXISTS exemplar_id_livro_numero_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT IF EXISTS estanteprateleirasecao_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT IF EXISTS estanteprateleirasecao_id_estante_prateleira_id_secao_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_prateleira_key;
-ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key;
@@ -128,14 +127,14 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE adelino_cunha.aluno (
-                                     id integer NOT NULL,
-                                     id_turma integer,
-                                     nome character varying(255) NOT NULL,
-                                     email character varying(255) NOT NULL,
-                                     telefone character varying(15),
-                                     ativo boolean DEFAULT true NOT NULL,
-                                     situacao character varying(7) DEFAULT 'regular'::character varying,
-                                     CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['regular'::character varying, 'irregular'::character varying, 'debito'::character varying])::text[])))
+    id integer NOT NULL,
+    id_turma integer,
+    nome character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    telefone character varying(15),
+    ativo boolean DEFAULT true NOT NULL,
+    situacao character varying(7) DEFAULT 'regular'::character varying,
+    CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['regular'::character varying, 'irregular'::character varying, 'debito'::character varying])::text[])))
 );
 
 
@@ -164,8 +163,8 @@ ALTER SEQUENCE adelino_cunha.aluno_id_seq OWNED BY adelino_cunha.aluno.id;
 --
 
 CREATE TABLE adelino_cunha.autor (
-                                     id integer NOT NULL,
-                                     nome character varying(255) NOT NULL
+    id integer NOT NULL,
+    nome character varying(255) NOT NULL
 );
 
 
@@ -194,10 +193,10 @@ ALTER SEQUENCE adelino_cunha.autor_id_seq OWNED BY adelino_cunha.autor.id;
 --
 
 CREATE TABLE adelino_cunha.cronogramaalunomonitor (
-                                                      id integer NOT NULL,
-                                                      id_aluno_monitor integer NOT NULL,
-                                                      dia_da_semana character varying(20) NOT NULL,
-                                                      CONSTRAINT cronogramaalunomonitor_dia_da_semana_check CHECK (((dia_da_semana)::text = ANY ((ARRAY['segunda-feira'::character varying, 'terca-feira'::character varying, 'quarta-feira'::character varying, 'quinta-feira'::character varying, 'sexta-feira'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno_monitor integer NOT NULL,
+    dia_da_semana character varying(20) NOT NULL,
+    CONSTRAINT cronogramaalunomonitor_dia_da_semana_check CHECK (((dia_da_semana)::text = ANY ((ARRAY['segunda-feira'::character varying, 'terca-feira'::character varying, 'quarta-feira'::character varying, 'quinta-feira'::character varying, 'sexta-feira'::character varying])::text[])))
 );
 
 
@@ -226,18 +225,18 @@ ALTER SEQUENCE adelino_cunha.cronogramaalunomonitor_id_seq OWNED BY adelino_cunh
 --
 
 CREATE TABLE adelino_cunha.emprestimo (
-                                          id integer NOT NULL,
-                                          id_aluno integer NOT NULL,
-                                          id_exemplar integer NOT NULL,
-                                          data_emprestimo date DEFAULT CURRENT_DATE NOT NULL,
-                                          data_conclusao date,
-                                          data_prazo date NOT NULL,
-                                          qtd_renovacao integer DEFAULT 0,
-                                          situacao character varying(10) DEFAULT 'pendente'::character varying,
-                                          observacao character varying(500),
-                                          realizado_por integer NOT NULL,
-                                          concluido_por integer,
-                                          CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['pendente'::character varying, 'atrasado'::character varying, 'entregue'::character varying, 'extraviado'::character varying, 'cancelado'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    id_exemplar integer NOT NULL,
+    data_emprestimo date DEFAULT CURRENT_DATE NOT NULL,
+    data_conclusao date,
+    data_prazo date NOT NULL,
+    qtd_renovacao integer DEFAULT 0,
+    situacao character varying(10) DEFAULT 'pendente'::character varying,
+    observacao character varying(500),
+    realizado_por integer NOT NULL,
+    concluido_por integer,
+    CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['pendente'::character varying, 'atrasado'::character varying, 'entregue'::character varying, 'extraviado'::character varying, 'cancelado'::character varying])::text[])))
 );
 
 
@@ -266,9 +265,9 @@ ALTER SEQUENCE adelino_cunha.emprestimo_id_seq OWNED BY adelino_cunha.emprestimo
 --
 
 CREATE TABLE adelino_cunha.estanteprateleira (
-                                                 id integer NOT NULL,
-                                                 estante character varying(1) NOT NULL,
-                                                 prateleira integer NOT NULL
+    id integer NOT NULL,
+    estante character varying(1) NOT NULL,
+    prateleira integer NOT NULL
 );
 
 
@@ -297,9 +296,9 @@ ALTER SEQUENCE adelino_cunha.estanteprateleira_id_seq OWNED BY adelino_cunha.est
 --
 
 CREATE TABLE adelino_cunha.estanteprateleirasecao (
-                                                      id integer NOT NULL,
-                                                      id_estante_prateleira integer NOT NULL,
-                                                      id_secao integer NOT NULL
+    id integer NOT NULL,
+    id_estante_prateleira integer NOT NULL,
+    id_secao integer NOT NULL
 );
 
 
@@ -328,14 +327,14 @@ ALTER SEQUENCE adelino_cunha.estanteprateleirasecao_id_seq OWNED BY adelino_cunh
 --
 
 CREATE TABLE adelino_cunha.exemplar (
-                                        id integer NOT NULL,
-                                        id_livro integer NOT NULL,
-                                        id_secao integer NOT NULL,
-                                        id_estante_prateleira integer,
-                                        observacao character varying(500),
-                                        numero integer NOT NULL,
-                                        situacao character varying(10) DEFAULT 'disponivel'::character varying,
-                                        CONSTRAINT exemplar_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['disponivel'::character varying, 'emprestado'::character varying, 'extraviado'::character varying])::text[])))
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_secao integer NOT NULL,
+    id_estante_prateleira integer,
+    observacao character varying(500),
+    numero integer NOT NULL,
+    situacao character varying(10) DEFAULT 'disponivel'::character varying,
+    CONSTRAINT exemplar_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['disponivel'::character varying, 'emprestado'::character varying, 'extraviado'::character varying])::text[])))
 );
 
 
@@ -364,12 +363,12 @@ ALTER SEQUENCE adelino_cunha.exemplar_id_seq OWNED BY adelino_cunha.exemplar.id;
 --
 
 CREATE TABLE adelino_cunha.frequenciaalunos (
-                                                id integer NOT NULL,
-                                                id_aluno integer NOT NULL,
-                                                registrada_por integer NOT NULL,
-                                                atividade character varying(20) DEFAULT 'lendo'::character varying,
-                                                data_frequencia date NOT NULL,
-                                                CONSTRAINT frequenciaalunos_atividade_check CHECK (((atividade)::text = ANY ((ARRAY['lendo'::character varying, 'celula_de_estudo'::character varying, 'estudo_individual'::character varying, 'descansando'::character varying, 'outros'::character varying])::text[])))
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    registrada_por integer NOT NULL,
+    atividade character varying(20) DEFAULT 'lendo'::character varying,
+    data_frequencia date NOT NULL,
+    CONSTRAINT frequenciaalunos_atividade_check CHECK (((atividade)::text = ANY ((ARRAY['lendo'::character varying, 'celula_de_estudo'::character varying, 'estudo_individual'::character varying, 'descansando'::character varying, 'outros'::character varying])::text[])))
 );
 
 
@@ -398,8 +397,8 @@ ALTER SEQUENCE adelino_cunha.frequenciaalunos_id_seq OWNED BY adelino_cunha.freq
 --
 
 CREATE TABLE adelino_cunha.genero (
-                                      id integer NOT NULL,
-                                      genero character varying(100) NOT NULL
+    id integer NOT NULL,
+    genero character varying(100) NOT NULL
 );
 
 
@@ -428,10 +427,10 @@ ALTER SEQUENCE adelino_cunha.genero_id_seq OWNED BY adelino_cunha.genero.id;
 --
 
 CREATE TABLE adelino_cunha.livro (
-                                     id integer NOT NULL,
-                                     isbn character varying(13) NOT NULL,
-                                     titulo character varying(255) NOT NULL,
-                                     ativo boolean DEFAULT true NOT NULL
+    id integer NOT NULL,
+    isbn character varying(13) NOT NULL,
+    titulo character varying(255) NOT NULL,
+    ativo boolean DEFAULT true NOT NULL
 );
 
 
@@ -460,9 +459,9 @@ ALTER SEQUENCE adelino_cunha.livro_id_seq OWNED BY adelino_cunha.livro.id;
 --
 
 CREATE TABLE adelino_cunha.livroautor (
-                                          id integer NOT NULL,
-                                          id_livro integer NOT NULL,
-                                          id_autor integer NOT NULL
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_autor integer NOT NULL
 );
 
 
@@ -491,9 +490,9 @@ ALTER SEQUENCE adelino_cunha.livroautor_id_seq OWNED BY adelino_cunha.livroautor
 --
 
 CREATE TABLE adelino_cunha.livrogenero (
-                                           id integer NOT NULL,
-                                           id_livro integer NOT NULL,
-                                           id_genero integer NOT NULL
+    id integer NOT NULL,
+    id_livro integer NOT NULL,
+    id_genero integer NOT NULL
 );
 
 
@@ -522,11 +521,11 @@ ALTER SEQUENCE adelino_cunha.livrogenero_id_seq OWNED BY adelino_cunha.livrogene
 --
 
 CREATE TABLE adelino_cunha.ocorrencias (
-                                           id integer NOT NULL,
-                                           id_aluno integer NOT NULL,
-                                           registrada_por integer NOT NULL,
-                                           detalhes character varying(500),
-                                           data_ocorrencia date NOT NULL
+    id integer NOT NULL,
+    id_aluno integer NOT NULL,
+    registrada_por integer NOT NULL,
+    detalhes character varying(500),
+    data_ocorrencia date NOT NULL
 );
 
 
@@ -555,9 +554,9 @@ ALTER SEQUENCE adelino_cunha.ocorrencias_id_seq OWNED BY adelino_cunha.ocorrenci
 --
 
 CREATE TABLE adelino_cunha.secao (
-                                     id integer NOT NULL,
-                                     nome character varying(100) NOT NULL,
-                                     descricao character varying(500)
+    id integer NOT NULL,
+    nome character varying(100) NOT NULL,
+    descricao character varying(500)
 );
 
 
@@ -586,11 +585,11 @@ ALTER SEQUENCE adelino_cunha.secao_id_seq OWNED BY adelino_cunha.secao.id;
 --
 
 CREATE TABLE adelino_cunha.turma (
-                                     id integer NOT NULL,
-                                     serie integer NOT NULL,
-                                     turma character varying(1) NOT NULL,
-                                     ano_de_entrada smallint NOT NULL,
-                                     ativo boolean DEFAULT true NOT NULL
+    id integer NOT NULL,
+    serie integer NOT NULL,
+    turma character varying(1) NOT NULL,
+    ano_de_entrada smallint NOT NULL,
+    ativo boolean DEFAULT true NOT NULL
 );
 
 
@@ -619,14 +618,14 @@ ALTER SEQUENCE adelino_cunha.turma_id_seq OWNED BY adelino_cunha.turma.id;
 --
 
 CREATE TABLE adelino_cunha.usuario (
-                                       id integer NOT NULL,
-                                       nome character varying(255) NOT NULL,
-                                       cargo character varying(13) NOT NULL,
-                                       ativo boolean DEFAULT true NOT NULL,
-                                       email character varying(255) NOT NULL,
-                                       senha character varying(255) NOT NULL,
-                                       data_ultimo_acesso timestamp with time zone,
-                                       CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY ((ARRAY['bibliotecario'::character varying, 'aluno_monitor'::character varying])::text[])))
+    id integer NOT NULL,
+    nome character varying(255) NOT NULL,
+    cargo character varying(13) NOT NULL,
+    ativo boolean DEFAULT true NOT NULL,
+    email character varying(255) NOT NULL,
+    senha character varying(255) NOT NULL,
+    data_ultimo_acesso timestamp with time zone,
+    CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY ((ARRAY['bibliotecario'::character varying, 'aluno_monitor'::character varying])::text[])))
 );
 
 
@@ -1051,14 +1050,6 @@ ALTER TABLE ONLY adelino_cunha.emprestimo
 
 
 --
--- Name: estanteprateleira estanteprateleira_estante_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
---
-
-ALTER TABLE ONLY adelino_cunha.estanteprateleira
-    ADD CONSTRAINT estanteprateleira_estante_key UNIQUE (estante);
-
-
---
 -- Name: estanteprateleira estanteprateleira_estante_prateleira_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
 --
 
@@ -1091,11 +1082,11 @@ ALTER TABLE ONLY adelino_cunha.estanteprateleirasecao
 
 
 --
--- Name: exemplar exemplar_numero_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
+-- Name: exemplar exemplar_id_livro_numero_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
 --
 
 ALTER TABLE ONLY adelino_cunha.exemplar
-    ADD CONSTRAINT exemplar_numero_key UNIQUE (numero);
+    ADD CONSTRAINT exemplar_id_livro_numero_key UNIQUE (id_livro, numero);
 
 
 --
@@ -1381,4 +1372,3 @@ ALTER TABLE ONLY adelino_cunha.ocorrencias
 --
 -- PostgreSQL database dump complete
 --
-
