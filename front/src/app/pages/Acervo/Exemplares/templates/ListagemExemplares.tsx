@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/esm/Modal";
 import EditarExemplar from "./EditarExemplar";
+import ConfirmarStatus from "./ConfirmarStatus";
 
 const ListagemExemplares: React.FC = () => {
 
@@ -11,6 +12,10 @@ const ListagemExemplares: React.FC = () => {
     const handleCloseEditar = () => setShowEditar(false);
     const handleShowEditar = () => setShowEditar(true);
 
+
+    const [ShowConfirmar, setShowConfirmar] = useState(false);
+    const handleCloseConfirma = () => setShowConfirmar(false);
+    const handleShowConfirmar = () => setShowConfirmar(true);
 
     return(
       <>
@@ -30,8 +35,8 @@ const ListagemExemplares: React.FC = () => {
               </thead>
               <tbody>
               <tr className="tabela-tr">
+                  <td>A</td>
                   <td>1</td>
-                  <td>5</td>
                   <td>3</td>
                   <td>Literatura</td>
                   <td>Bom estado</td>
@@ -53,8 +58,8 @@ const ListagemExemplares: React.FC = () => {
                   </td>
               </tr>
               <tr className="tabela-tr">
-                  <td>2</td>
-                  <td>2</td>
+                  <td>A</td>
+                  <td>1</td>
                   <td>1</td>
                   <td>Ciências</td>
                   <td>Pequenos desgastes</td>
@@ -76,7 +81,7 @@ const ListagemExemplares: React.FC = () => {
                   </td>
               </tr>
               <tr className="tabela-tr">
-                  <td>3</td>
+                  <td>A</td>
                   <td>1</td>
                   <td>4</td>
                   <td>História</td>
@@ -123,6 +128,32 @@ const ListagemExemplares: React.FC = () => {
                   </Button>
                   <Button variant="success">
                       <FontAwesomeIcon icon={faCheck} /> Salvar
+                  </Button>
+              </Modal.Footer>
+          </Modal>
+
+          <Modal
+              show={ShowConfirmar}
+              onHide={handleCloseConfirma}
+              size="lg"
+              backdrop="static"
+              centered
+              keyboard={false}
+          >
+              <Modal.Header closeButton>
+                  <Modal.Title>Confirmação</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                  <ConfirmarStatus />
+              </Modal.Body>
+
+              <Modal.Footer>
+                  <Button variant="secondary" onClick={handleCloseConfirma}>
+                      Cancelar
+                  </Button>
+                  <Button variant="danger">
+                      <FontAwesomeIcon icon={faCheck} /> Sim
                   </Button>
               </Modal.Footer>
           </Modal>

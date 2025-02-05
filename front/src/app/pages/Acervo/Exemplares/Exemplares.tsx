@@ -3,7 +3,7 @@ import ToastContainer from "react-bootstrap/esm/ToastContainer";
 import Toast from "react-bootstrap/esm/Toast";
 import Button from "react-bootstrap/esm/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Accordion from "react-bootstrap/esm/Accordion";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
@@ -81,8 +81,8 @@ const Exemplares: React.FC = () => {
                             <strong>Cadastro de Exemplares do Livro:</strong>
                             <Form className="mt-3">
                                 <Row>
-                                    <Col>
-                                        <Form.Group className="mb-6">
+                                    <Col xs={2}>
+                                        <Form.Group className="mb-3">
                                             <Form.Label>
                                                 Estante <span className="obgr">*</span>
                                             </Form.Label>
@@ -97,7 +97,7 @@ const Exemplares: React.FC = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
-                                    <Col>
+                                    <Col xs={2}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>
                                                 Prateleira <span className="obgr">*</span>
@@ -113,7 +113,7 @@ const Exemplares: React.FC = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
-                                    <Col>
+                                    <Col xs={2}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>
                                                 Seção <span className="obgr">*</span>
@@ -129,10 +129,10 @@ const Exemplares: React.FC = () => {
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
-                                    <Col>
-                                        <Form.Group className="mb-10">
+                                    <Col xs={6}>
+                                        <Form.Group className="mb-3">
                                             <Form.Label>
-                                                Quantidade de Exemplares <span className="obgr">*</span>
+                                                Quantidade de Exemplares a ser Cadastrada <span className="obgr">*</span>
                                             </Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -145,7 +145,7 @@ const Exemplares: React.FC = () => {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col>
+                                    <Col xs={8}>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Observação</Form.Label>
                                             <Form.Control
@@ -156,9 +156,9 @@ const Exemplares: React.FC = () => {
                                         </Form.Group>
                                     </Col>
                                     <Col>
-                                        <div className="w-100 h-100 d-flex justify-content-end align-items-end">
+                                        <div className="w-100 h-100 d-flex justify-content-end align-items-center">
                                             <Button variant="success">
-                                                <FontAwesomeIcon icon={faCheck} /> Cadastrar Novo(s) Exemplar(es)
+                                                <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo(s) Exemplar(es)
                                             </Button>
                                         </div>
                                     </Col>

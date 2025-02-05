@@ -2,47 +2,67 @@ import React from "react";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
-import Button from "react-bootstrap/esm/Button";
 
 const EditarExemplar: React.FC = () => {
 
     return (
-        <Form>
-            <Row>
-                <Col xs={3}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>
-                            Série <span className="obgr">*</span>
-                        </Form.Label>
-                        <Form.Control type="number" placeholder="Digite a série" required />
-                    </Form.Group>
-                </Col>
+            <Form>
+                <Row>
+                    <Col xs={3}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Estante</Form.Label>
+                            <Form.Select>
+                                <option>Selecione</option>
+                                <option>A</option>
+                                <option>B</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
 
-                <Col xs={3}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>
-                            Turma <span className="obgr">*</span>
-                        </Form.Label>
-                        <Form.Control type="text" placeholder="Digite a turma" required />
-                    </Form.Group>
-                </Col>
+                    <Col xs={3}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Prateleira</Form.Label>
+                            <Form.Select>
+                                <option>Selecione</option>
+                                <option> 1 </option>
+                                <option> 2 </option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
 
-                <Col xs={3}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>
-                            Ano de Entrada <span className="obgr">*</span>
-                        </Form.Label>
-                        <Form.Control type="number" placeholder="Digite o ano" required />
-                    </Form.Group>
-                </Col>
-            </Row>
+                    <Col xs={3}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Seção</Form.Label>
+                            <Form.Select>
+                                <option>Selecione</option>
+                                <option>Romance</option>
+                                <option>Dorama</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
 
-            <Row>
-                <Col className="d-flex justify-content-end">
-                    <Button variant="success">Ativar Turma</Button>
-                </Col>
-            </Row>
-        </Form>
+                    <Col xs={3}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Situação</Form.Label>
+                            <Form.Select>
+                                <option>Selecione</option>
+                                <option>Disponível</option>
+                                <option>Emprestado</option>
+                                <option>Extraviado</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Observação</Form.Label>
+                            <Form.Control type="text" placeholder="Digite uma observação" />
+                        </Form.Group>
+                    </Col>
+                </Row>
+            </Form>
     );
 };
 
