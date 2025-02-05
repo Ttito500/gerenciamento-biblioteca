@@ -30,9 +30,6 @@ public class Emprestimo {
     @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
 
-    @Column(name = "data_conclusao")
-    private LocalDate dataConclusao;
-
     @Column(name = "data_prazo", nullable = false)
     private LocalDate dataPrazo;
 
@@ -54,6 +51,6 @@ public class Emprestimo {
     @JoinColumn(name = "concluido_por")
     private Usuario concluidoPor;
 
-    @Column(name = "data_devolucao")
-    private LocalDate dataDevolucao;
+    @Column(name = "data_conclusao")
+    private LocalDate dataConclusao;
 }

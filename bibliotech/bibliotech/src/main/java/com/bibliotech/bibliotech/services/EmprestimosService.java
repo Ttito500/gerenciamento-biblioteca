@@ -1,12 +1,12 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.mappers.EmprestimoRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.mappers.EmprestimoResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.repositories.AlunoRepository;
-import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
-import com.bibliotech.bibliotech.repositories.LivroRepository;
+import com.bibliotech.bibliotech.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,21 @@ import java.util.List;
 
 @Service
 public class EmprestimosService {
-    @Autowired
-    private EmprestimoRepository emprestimoRepository;
 
-    @Autowired
-    private LivroRepository livroRepository;
+    private final AlunoRepository alunoRepository;
+    private final ExemplarRepository exemplarRepository;
+    private final EmprestimoRepository emprestimoRepository;
+    private final EmprestimoRequestMapper emprestimoRequestMapper;
+    private final EmprestimoResponseMapper emprestimoResponseMapper;
 
-    @Autowired
-    private AlunoRepository alunoRepository;
+    public EmprestimosService(AlunoRepository alunoRepository, ExemplarRepository exemplarRepository, EmprestimoRepository emprestimoRepository, EmprestimoRequestMapper emprestimoRequestMapper, EmprestimoResponseMapper emprestimoResponseMapper) {
+        this.alunoRepository = alunoRepository;
+        this.exemplarRepository = exemplarRepository;
+        this.emprestimoRepository = emprestimoRepository;
+        this.emprestimoRequestMapper = emprestimoRequestMapper;
+        this.emprestimoResponseMapper = emprestimoResponseMapper;
+    }
+
 
     //Ainda tem que fazer as excessoes bonitinhas
     public Emprestimo realizarEmprestimo (Integer alunoId, Integer livroId, Integer qtdRenovacao ,String observacao) {
