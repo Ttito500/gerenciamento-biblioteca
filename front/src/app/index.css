@@ -69,7 +69,7 @@ body {
   background-color: var(--color-white);
 }
 
-.emprestimos {
+.indentacaoPadrao {
   display: flex;
   padding: 16px;
   flex-direction: column;
@@ -79,7 +79,7 @@ body {
   align-self: stretch;
 }
 
-.emprestimos-acoes {
+.indentacaoPadrao-acoes {
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -173,3 +173,22 @@ body {
 .alunos-filtros-radio {
   width: auto;
 }
+
+.accordion-body-expanded {
+  width: 100%;
+  padding: 50px;
+}
+
+.Exemplar-acoes {
+  width: 100%;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.Exemplar {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+}
+
