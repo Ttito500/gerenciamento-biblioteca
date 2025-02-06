@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.List;
 
@@ -62,12 +63,24 @@ public class EmprestimosService {
         Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
+        if (ChronoUnit.DAYS.between(emprestimoExistente.getDataEmprestimo(), LocalDate.now()) > 30) {
+            throw new ValidationException("Renovação não permitida. O prazo máximo para renovação foi excedido.");
+        }
+
+
+        if (emprestimoExistente.getQtdRenovacao() >= 3){
+            throw new ValidationException("Renovação não permitida. O número máximo de renovações foi atingido");
+        }
+
         if (emprestimoExistente.getSituacao().equals("atrasado")){
             emprestimoExistente.setDataPrazo(LocalDate.now().plusDays(7));
+            emprestimoExistente.setSituacao("pendente");
         }
         else {
             emprestimoExistente.setDataPrazo(emprestimoExistente.getDataPrazo().plusDays(7));
         }
+
+        emprestimoExistente.setQtdRenovacao(emprestimoExistente.getQtdRenovacao() + 1);
 
         emprestimoRepository.save(emprestimoExistente);
         return emprestimoExistente;
