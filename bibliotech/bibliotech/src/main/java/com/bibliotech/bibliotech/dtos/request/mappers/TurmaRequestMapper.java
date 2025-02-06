@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TurmaRequestMapper {
-    private final TurmaRepository turmaRepository;
-
-    public TurmaRequestMapper(TurmaRepository turmaRepository) {this.turmaRepository = turmaRepository;}
 
     public Turma toEntity(TurmaRequestDTO turmaRequestDTO) {
         if (turmaRequestDTO == null) {
