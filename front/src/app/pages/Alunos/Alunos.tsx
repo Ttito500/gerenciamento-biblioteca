@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheck, faTrash, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
 import AlunosListagem from './templates/AlunosListagem';
 import AlunosFiltros from "./templates/AlunosFiltros";
 import Modal from 'react-bootstrap/Modal';
@@ -13,8 +13,13 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import Toast from "react-bootstrap/Toast";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
 import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
+import GerenciarTurmas from "./turmas/GerenciarTurmas";
 
 const Alunos: React.FC = () => {
+
+    const[showGerenciarTurmas, setShowGerenciarTurmas] = useState(false)
+    const handleCloseGerenciarTurmas = () => setShowGerenciarTurmas(false);
+    const handleShowGerenciarTurmas = () => setShowGerenciarTurmas(true);
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
@@ -193,7 +198,7 @@ const Alunos: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseEditar}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="success" onClick={handleSubmitEditarAluno}>
             <FontAwesomeIcon icon={faCheck} /> Salvar
@@ -238,7 +243,7 @@ const Alunos: React.FC = () => {
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseExcluirAluno}>
-            Desistir
+            Cancelar
           </Button>
           <Button variant="danger" onClick={handleSubmitExcluirAluno}>
             <FontAwesomeIcon icon={faTrash} /> Excluir
@@ -268,10 +273,37 @@ const Alunos: React.FC = () => {
 					</Modal.Body>
 
 					<Modal.Footer>
-						<Button variant="secondary" onClick={handleCloseCadastrar}>Desistir</Button>
+						<Button variant="secondary" onClick={handleCloseCadastrar}>Cancelar</Button>
 						<Button variant="success" onClick={handleSubmitCadastrarAluno}><FontAwesomeIcon icon={faCheck} /> Salvar</Button>
 					</Modal.Footer>
 				</Modal>
+
+                <Button variant="info" className="btn-orange" onClick={handleShowGerenciarTurmas}>
+                    <FontAwesomeIcon icon={faUsersRectangle} /> Gerenciar Turmas
+                </Button>
+
+                <Modal
+                    show={showGerenciarTurmas}
+                    onHide={handleCloseGerenciarTurmas}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}>
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Gerenciar Turmas</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <GerenciarTurmas/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseGerenciarTurmas}>Ok</Button>
+
+                    </Modal.Footer>
+                </Modal>
+
 			</div>
 
 			<div className="w-100">

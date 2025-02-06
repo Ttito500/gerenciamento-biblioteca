@@ -46,6 +46,7 @@ public class AlunosService {
 
     @Transactional
     public AlunoResponseDTO cadastrarAluno(AlunoRequestDTO requestDTO) {
+        //acredito que da pra fazer essas validaçoes se nos colocar as anotaçoes de validação no dto
         if (requestDTO.getIdTurma() == null) {
             throw new ValidationException("A turma não pode ser nula.");
         }
