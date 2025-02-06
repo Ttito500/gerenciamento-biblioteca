@@ -1,10 +1,13 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +25,9 @@ public class EmprestimoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Emprestimo> realizarEmprestimo(@RequestBody Emprestimo body){
-        Integer alunoId = body.getAluno().getId();
-
-        Emprestimo emprestimo = emprestimosService.realizarEmprestimo(alunoId, body.getQtdRenovacao(), 1, "");
-        return ResponseEntity.ok(emprestimo);
+    public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO){
+            EmprestimoResponseDTO emprestimoResponseDTO = emprestimosService.realizarEmprestimo(requestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoResponseDTO);
     }
 
     @GetMapping("")

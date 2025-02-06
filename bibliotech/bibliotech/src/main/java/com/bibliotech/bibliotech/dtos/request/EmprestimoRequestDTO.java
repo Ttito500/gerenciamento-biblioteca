@@ -6,7 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmprestimoRequestDTO {
-    private Integer alunoId;
-    private Integer exemplarId;
+    private Integer idAluno;
+    private Integer idExemplar;
     private String observacao;
+
+    private Integer idUsuario; //TEMPORARIO PARA DEBUG
 }

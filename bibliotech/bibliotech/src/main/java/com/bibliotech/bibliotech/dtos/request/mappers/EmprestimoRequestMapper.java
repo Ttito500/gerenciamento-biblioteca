@@ -6,8 +6,10 @@ import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.models.Exemplar;
+import com.bibliotech.bibliotech.models.Usuario;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.ExemplarRepository;
+import com.bibliotech.bibliotech.repositories.UsuarioRepository;
 import org.springframework.stereotype.Component;
 
 
@@ -17,18 +19,23 @@ import java.time.LocalDate;
 public class EmprestimoRequestMapper {
     private final AlunoRepository alunoRepository;
     private final ExemplarRepository exemplarRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public EmprestimoRequestMapper(AlunoRepository alunoRepository, ExemplarRepository exemplarRepository) {
+    public EmprestimoRequestMapper(AlunoRepository alunoRepository, ExemplarRepository exemplarRepository, UsuarioRepository usuarioRepository) {
         this.alunoRepository = alunoRepository;
         this.exemplarRepository = exemplarRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public Emprestimo toEntity(EmprestimoRequestDTO EmprestimoDto){
-        Aluno aluno = alunoRepository.findById(EmprestimoDto.getAlunoId())
+        Aluno aluno = alunoRepository.findById(EmprestimoDto.getIdAluno())
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-        Exemplar exemplar = exemplarRepository.findById(EmprestimoDto.getExemplarId())
+        Exemplar exemplar = exemplarRepository.findById(EmprestimoDto.getIdExemplar())
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
+
+        Usuario usuario = usuarioRepository.findById(Long.valueOf(EmprestimoDto.getIdUsuario())) //TEMPORARIO PARA DEBUG
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         if (EmprestimoDto == null){
             return null;
@@ -49,13 +56,7 @@ public class EmprestimoRequestMapper {
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
         emprestimo.setQtdRenovacao(0);
         emprestimo.setObservacao(EmprestimoDto.getObservacao());
-        //emprestimo.setRealizadoPor();
-
-        aluno.setSituacao("debito");
-
-        exemplar.setSituacao("emprestado");
-
-        emprestimo.setSituacao("pendente");
+        emprestimo.setRealizadoPor(usuario); //TEMP PARA DEBUG
 
         return emprestimo;
     }
