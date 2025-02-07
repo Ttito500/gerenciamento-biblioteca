@@ -2,6 +2,8 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,36 +50,55 @@ public class EmprestimoController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<EmprestimoResponseDTO> emprestimosDTO = emprestimosService.consultarEmprestimos(
-                nomeAluno, tituloLivro, isbn, situacao, nomeRealizadoPor,
+                nomeAluno,
+                tituloLivro,
+                isbn,
+                situacao,
+                nomeRealizadoPor,
                 dataEmprestimo,
                 nomeConcluidoPor,
-                dataPrazo, dataConclusao, pageable);
+                dataPrazo,
+                dataConclusao,
+                pageable);
 
         return ResponseEntity.ok(emprestimosDTO);
     }
 
     @GetMapping("/aluno/{idAluno}")
-    public ResponseEntity<Page<EmprestimoResponseDTO>> consultarEmprestimosPorAluno(
-            @PathVariable Integer idAluno,  // Recebendo o id do aluno na URL
+    public ResponseEntity<Page<EmprestimoResponseDTOAluno>> consultarEmprestimosPorAluno(
+            @PathVariable Integer idAluno,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmprestimoResponseDTO> emprestimosDTO = emprestimosService.consultarEmprestimosPorAluno(idAluno, pageable);  // Chamando o service com o idAluno
+        Page<EmprestimoResponseDTOAluno> emprestimosDTO = emprestimosService.consultarEmprestimosPorAluno(idAluno, dataEmprestimo, pageable);
 
         return ResponseEntity.ok(emprestimosDTO);
     }
 
+    @GetMapping("/livro/{idLivro}")
+    public ResponseEntity<Page<EmprestimoResponseDTOLivro>> consultarEmprestimosPorLivro(
+            @PathVariable Integer idLivro,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimo,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EmprestimoResponseDTOLivro> emprestimosDTO = emprestimosService.consultarEmprestimosPorLivro(idLivro, dataEmprestimo, pageable);
+
+        return ResponseEntity.ok(emprestimosDTO);
+    }
+
+    @PatchMapping("/renovarPrazo/{id}")
+    public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
+        Emprestimo emprestimo = emprestimosService.renovarPrazo(id);
+        return ResponseEntity.ok("Prazo renovado com sucesso");
+    }
 
     @PatchMapping("/alterarSituacao/{id}")
 public ResponseEntity<Emprestimo> alterarSituacao(@PathVariable Integer id, @RequestParam String situacao){
     Emprestimo emprestimo = emprestimosService.alterarSituacao(id, situacao);
     return ResponseEntity.ok(emprestimo);
-}
-
-@PatchMapping("/renovarPrazo/{id}")
-public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
-    Emprestimo emprestimo = emprestimosService.renovarPrazo(id);
-    return ResponseEntity.ok("Prazo renovado com sucesso");
 }
 }

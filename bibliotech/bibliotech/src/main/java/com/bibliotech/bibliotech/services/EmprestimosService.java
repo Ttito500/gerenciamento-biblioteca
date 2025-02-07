@@ -3,6 +3,8 @@ package com.bibliotech.bibliotech.services;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.EmprestimoRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.dtos.response.mappers.EmprestimoResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
@@ -94,24 +96,37 @@ public class EmprestimosService {
             String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor,
             LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
 
-        // Cria a especificação (filtros)
         Specification<Emprestimo> spec = emprestimoSpecification.buildSpecification(
                 nomeAluno, tituloLivro, isbn, situacao, nomeRealizadoPor,
                 dataEmprestimo, nomeConcluidoPor, dataPrazo, dataConclusao);
 
-        // Realiza a consulta paginada
         Page<Emprestimo> emprestimos = emprestimoRepository.findAll(spec, pageable);
 
-        // Mapeia o resultado para DTO
-        return emprestimos.map(emprestimo -> emprestimoResponseMapper.toDto(emprestimo));
+        return emprestimos.map(emprestimoResponseMapper::toDto);
     }
 
-    public Page<EmprestimoResponseDTO> consultarEmprestimosPorAluno(Integer idAluno, Pageable pageable) {
-        // Chamando o repositório para buscar os empréstimos relacionados ao aluno
-        Page<Emprestimo> emprestimos = emprestimoRepository.findByAlunoId(idAluno, pageable);
+    public Page<EmprestimoResponseDTOAluno> consultarEmprestimosPorAluno(Integer idAluno, LocalDate dataEmprestimo, Pageable pageable) {
+        Page<Emprestimo> emprestimos;
 
-        // Convertendo para DTO
-        return emprestimos.map(emprestimo -> emprestimoResponseMapper.toDto(emprestimo));
+        if (dataEmprestimo != null) {
+            emprestimos = emprestimoRepository.findByAlunoIdAndDataEmprestimo(idAluno, dataEmprestimo, pageable);
+        } else {
+            emprestimos = emprestimoRepository.findByAlunoId(idAluno, pageable);
+        }
+
+        return emprestimos.map(emprestimoResponseMapper::toDTOAluno);
+    }
+
+    public Page<EmprestimoResponseDTOLivro> consultarEmprestimosPorLivro(Integer idLivro, LocalDate dataEmprestimo, Pageable pageable) {
+        Page<Emprestimo> emprestimos;
+
+        if (dataEmprestimo != null) {
+            emprestimos = emprestimoRepository.findByExemplar_LivroIdAndDataEmprestimo(idLivro, dataEmprestimo, pageable);
+        } else {
+            emprestimos = emprestimoRepository.findByExemplar_LivroId(idLivro, pageable);
+        }
+
+        return emprestimos.map(emprestimoResponseMapper::toDTOLivro);
     }
 
 }

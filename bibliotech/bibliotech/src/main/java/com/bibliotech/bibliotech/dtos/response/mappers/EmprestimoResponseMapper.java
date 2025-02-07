@@ -1,6 +1,8 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +31,29 @@ public class EmprestimoResponseMapper {
         dto.setDataPrazo(emprestimo.getDataPrazo());
         dto.setDataConclusao(emprestimo.getDataConclusao());
         dto.setQtdRenovacao(emprestimo.getQtdRenovacao());
+        dto.setSituacao(emprestimo.getSituacao());
+
+        return dto;
+    }
+
+    public EmprestimoResponseDTOAluno toDTOAluno(Emprestimo emprestimo) {
+        EmprestimoResponseDTOAluno dto = new EmprestimoResponseDTOAluno();
+        dto.setId(emprestimo.getId());
+        dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
+        dto.setDataConclusao(emprestimo.getDataConclusao());
+        dto.setSituacao(emprestimo.getSituacao());
+
+        return dto;
+    }
+
+    public EmprestimoResponseDTOLivro toDTOLivro(Emprestimo emprestimo) {
+        EmprestimoResponseDTOLivro dto = new EmprestimoResponseDTOLivro();
+        dto.setId(emprestimo.getId());
+        dto.setAlunoId(emprestimo.getAluno().getId());
+        dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
+        dto.setDataConclusao(emprestimo.getDataConclusao());
         dto.setSituacao(emprestimo.getSituacao());
 
         return dto;
