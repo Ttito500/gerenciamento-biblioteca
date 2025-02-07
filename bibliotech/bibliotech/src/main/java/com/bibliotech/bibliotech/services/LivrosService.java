@@ -1,19 +1,12 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.dtos.AutorDTO;
-import com.bibliotech.bibliotech.dtos.GeneroDTO;
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
-import com.bibliotech.bibliotech.dtos.request.LivroRequestDTO;
-import com.bibliotech.bibliotech.dtos.response.EstanteprateleiraResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.mappers.ExemplarResponseMapper;
-import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
+import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.*;
-import com.bibliotech.bibliotech.repositories.AutorRepository;
 import com.bibliotech.bibliotech.repositories.EstanteprateleiraRepository;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.bibliotech.bibliotech.repositories.SecaoRepository;
@@ -21,18 +14,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LivrosService {
 
     private AutorMapper autorMapper;
     private GeneroMapper generoMapper;
-    private LivroResponseMapper livroResponseMapper;
-    private ExemplarResponseMapper exemplarResponseMapper;
 
     @Autowired
     private AutorService autorService;
@@ -46,17 +34,21 @@ public class LivrosService {
     private ExemplaresService exemplaresService;
     @Autowired
     private EstanteprateleiraRepository estanteprateleiraRepository;
+    @Autowired
+    private LivroRequestPostMapper livroRequestPostMapper;
 
     @Transactional
-    public LivroResponseDTO cadastrarLivro(LivroRequestDTO livro){
-        Secao secaoExistente = secaoRepository.findById(livro.getIdSecao()).orElseThrow(() -> new NotFoundException("Seção não encontrada."));
+    public Livro cadastrarLivro(LivroRequestPostDTO livro){
+        Secao secaoExistente = secaoRepository.findById(livro.getIdSecao())
+                .orElseThrow(() -> new NotFoundException("Seção não encontrada."));
 
-        Estanteprateleira estanteprateleiraExistente = estanteprateleiraRepository.findById(livro.getIdEstanteprateleira()).orElseThrow(() -> new NotFoundException("Estante-Pratelerira não encontrada."));
+        Estanteprateleira estanteprateleiraExistente = estanteprateleiraRepository.findById(livro.getIdEstanteprateleira())
+                .orElseThrow(() -> new NotFoundException("Estante-Pratelerira não encontrada."));
 
         if (livroRepository.existsLivroByIsbn(livro.getIsbn())) {
             throw new ValidationException("Já existe um livro com esse isbn: " + livro.getIsbn());
         }
-        if (livro.getIsbn().length() < 13) {
+        if (livro.getIsbn().length() > 13) {
             throw new ValidationException("O tamanho máximo para ISBN é 13 caracteres.");
         }
         if (livro.getTitulo() == null || livro.getTitulo().trim().isEmpty()) {
@@ -75,42 +67,24 @@ public class LivrosService {
            throw new ValidationException("Os generos não podom ser vazios ou nulos.");
         }
 
-        Livro livroSalvo = livroRepository.save(livroToEntity(livro));
+        Livro livroSalvo = livroRepository.save(livroRequestPostMapper.toEntity(livro));
+        livroSalvo.setGeneros(generosService.addGenero(generoMapper.toEntityList(livro.getGeneros()), livroSalvo));
+        livroSalvo.setAutores(autorService.cadastrarAutores(autorMapper.toEntityList(livro.getAutores()), livroSalvo));
+        livroSalvo.setExemplares(exemplaresService.cadastrarExemplares(livroSalvo, secaoExistente, estanteprateleiraExistente, livro.getQtdExemplares()));
 
-        List<Genero> generosSalvos = generosService.addGenero(generoMapper.toEntityList(livro.getGeneros()), livroSalvo);
-
-        List<Autor> autoresSalvos = autorService.cadastrarAutores(autorMapper.toEntityList(livro.getAutores()), livroSalvo);
-
-        List<Exemplar> exemplaresSalvos = exemplaresService.cadastrarExemplares(livro);
-
-        LivroResponseDTO livroResponseDTO;
-
-        livroResponseDTO = livroResponseMapper.toDTO(livroSalvo, autorMapper.toDTOList(autoresSalvos),
-                generoMapper.toDTOList(generosSalvos), exemplarResponseMapper.toDTOList(exemplaresSalvos));
-
-        return livroResponseDTO;
+        return livroSalvo;
     }
 
-    private Livro livroToEntity(LivroRequestDTO livro){
-        Livro livroEntity = new Livro();
-
-        livroEntity.setTitulo(livro.getTitulo());
-        livroEntity.setIsbn(livro.getIsbn());
-        livroEntity.setAtivo(true);
-
-        return livroEntity;
-    }
-
-    public Livro deletarLivro(Integer id){
-        Livro livro = livroRepository.findById(id)
+    public Livro getLivroById(Integer id){
+        Livro livroSalvo = livroRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
+        livroSalvo.setGeneros(generosService.findGenerosByLivroId(id));
+        livroSalvo.setAutores(autorService.findAutorByLivroId(id));
 
-        livroRepository.delete(livro);
-        return livro;
+        return livroSalvo;
     }
 
     public Livro atualizarLivro(Integer id, Livro livro){
-
         Livro livroExistente = livroRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
 
@@ -123,9 +97,5 @@ public class LivrosService {
 
     public List<Livro> getLivros(){
         return livroRepository.findAll();
-    }
-
-    public Optional<Livro> getLivroById(Integer id){
-        return livroRepository.findById(id);
     }
 }

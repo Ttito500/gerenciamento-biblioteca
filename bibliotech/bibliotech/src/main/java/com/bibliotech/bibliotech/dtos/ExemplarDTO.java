@@ -1,14 +1,14 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.dtos;
 
-import jakarta.persistence.Column;
+import com.bibliotech.bibliotech.dtos.response.SecaoResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ExemplarResponseDTO {
+public class ExemplarDTO {
     private Integer id;
-    private EstanteprateleiraResponseDTO estanteprateleira;
+    private EstanteprateleiraDTO estanteprateleira;
     private SecaoResponseDTO secao;
     private String observacao;
     private Integer numero;

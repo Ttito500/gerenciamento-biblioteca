@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
-import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
+import com.bibliotech.bibliotech.dtos.ExemplarDTO;
 import com.bibliotech.bibliotech.models.Exemplar;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class ExemplarResponseMapper {
 
-    public static ExemplarResponseDTO toDTO(Exemplar entity) {
-        ExemplarResponseDTO dto = new ExemplarResponseDTO();
+    public static ExemplarDTO toDTO(Exemplar entity) {
+        ExemplarDTO dto = new ExemplarDTO();
         dto.setId(entity.getId());
         dto.setObservacao(entity.getObservacao());
         dto.setNumero(entity.getNumero());
@@ -20,7 +20,7 @@ public class ExemplarResponseMapper {
         return dto;
     }
 
-    public static Exemplar toEntity(ExemplarResponseDTO dto) {
+    public static Exemplar toEntity(ExemplarDTO dto) {
         Exemplar entity = new Exemplar();
         entity.setId(dto.getId());
         entity.setObservacao(dto.getObservacao());
@@ -32,7 +32,7 @@ public class ExemplarResponseMapper {
         return entity;
     }
 
-    public static List<ExemplarResponseDTO> toDTOList(List<Exemplar> entities) {
+    public static List<ExemplarDTO> toDTOList(List<Exemplar> entities) {
         return entities.stream()
                 .map(ExemplarResponseMapper::toDTO)
                 .collect(Collectors.toList());

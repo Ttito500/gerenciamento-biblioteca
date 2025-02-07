@@ -1,22 +1,22 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
-import com.bibliotech.bibliotech.dtos.response.EstanteprateleiraResponseDTO;
+import com.bibliotech.bibliotech.dtos.EstanteprateleiraDTO;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 
 public class EstanteprateleiraResponseMapper {
 
-    public static EstanteprateleiraResponseDTO toDTO(Estanteprateleira entity) {
+    public static EstanteprateleiraDTO toDTO(Estanteprateleira entity) {
         if (entity == null) {
             return null;
         }
 
-        EstanteprateleiraResponseDTO dto = new EstanteprateleiraResponseDTO();
+        EstanteprateleiraDTO dto = new EstanteprateleiraDTO();
         dto.setEstante(entity.getEstante());
         dto.setPrateleira(entity.getPrateleira());
         return dto;
     }
 
-    public static Estanteprateleira toEntity(EstanteprateleiraResponseDTO dto) {
+    public static Estanteprateleira toEntity(EstanteprateleiraDTO dto) {
         if (dto == null) {
             return null;
         }

@@ -69,9 +69,7 @@ public class GenerosService {
         return generoOptional;
     }
 
-    public List<Genero> getAllGeneros() {
-        return generoRepository.findAll();
+    public List<Genero> findGenerosByLivroId(Integer id) {
+        return generoRepository.findGenerosByLivroId(id);
     }
-
-
 }

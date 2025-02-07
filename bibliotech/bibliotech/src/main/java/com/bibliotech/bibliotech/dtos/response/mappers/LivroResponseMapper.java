@@ -1,35 +1,33 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
-import com.bibliotech.bibliotech.dtos.AutorDTO;
-import com.bibliotech.bibliotech.dtos.GeneroDTO;
-import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
+import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
+import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
 import com.bibliotech.bibliotech.models.Livro;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Component
 public class LivroResponseMapper {
 
-    public static LivroResponseDTO toDTO(Livro livro, List<AutorDTO> autores, List<GeneroDTO> generos, List<ExemplarResponseDTO> exemplares) {
+    private static final AutorMapper autorMapper = new AutorMapper();
+    private static final GeneroMapper generoMapper = new GeneroMapper();
+
+    public static LivroResponseDTO toDTO(Livro livro) {
         LivroResponseDTO dto = new LivroResponseDTO();
         dto.setId(livro.getId());
         dto.setTitulo(livro.getTitulo());
         dto.setIsbn(livro.getIsbn());
         dto.setAtivo(livro.getAtivo());
+        dto.setAutores(autorMapper.toDTOList(livro.getAutores()));
+        dto.setGeneros(generoMapper.toDTOList(livro.getGeneros()));
 
-        dto.setAutores(autores);
-        dto.setGeneros(generos);
-        dto.setExemplares(exemplares);
         return dto;
     }
 
-    public static Livro toEntity(LivroResponseDTO dto) {
-        Livro entity = new Livro();
-        entity.setId(dto.getId());
-        entity.setTitulo(dto.getTitulo());
-        entity.setIsbn(dto.getIsbn());
-        entity.setAtivo(dto.isAtivo());
-
-        return entity;
+    public static List<LivroResponseDTO> toDTOList(List<Livro> livros) {
+        return livros.stream().map(LivroResponseMapper::toDTO).collect(Collectors.toList());
     }
 }

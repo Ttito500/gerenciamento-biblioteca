@@ -14,7 +14,6 @@ public class LivroResponseDTO {
     private String titulo;
     private String isbn;
     private boolean ativo;
-    private List<ExemplarResponseDTO> exemplares;
     private List<AutorDTO> autores;
     private List<GeneroDTO> generos;
 }

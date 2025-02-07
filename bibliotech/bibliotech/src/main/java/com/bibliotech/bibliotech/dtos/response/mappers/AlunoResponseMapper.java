@@ -14,10 +14,6 @@ public class AlunoResponseMapper {
     }
 
     public AlunoResponseDTO toDto(Aluno aluno) {
-        if (aluno == null) {
-            return null;
-        }
-
         AlunoResponseDTO dto = new AlunoResponseDTO();
         dto.setId(aluno.getId());
         dto.setNome(aluno.getNome());

@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Autor;
+import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
@@ -29,17 +30,15 @@ public class AutorService {
                 .filter(nome -> nome != null && !nome.isEmpty())
                 .collect(Collectors.toSet());
 
-        List<Autor> autoresAssociados = new ArrayList<>(); // Lista para autores (novos ou existentes)
+        List<Autor> autoresAssociados = new ArrayList<>();
 
         for (String nome : nomesNovosAutores) {
             Optional<Autor> autorOptional = autorRepository.findFirstByNomeIgnoreCase(nome);
 
             Autor autor;
             if (autorOptional.isPresent()) {
-                // Autor já existe no banco
                 autor = autorOptional.get();
             } else {
-                // Autor não existe, cadastrar
                 Autor novoAutor = new Autor();
                 novoAutor.setNome(nome);
                 autor = autorRepository.save(novoAutor);
@@ -53,10 +52,6 @@ public class AutorService {
         }
 
         return autoresAssociados;
-    }
-
-    public List<Autor> getAll() {
-        return autorRepository.findAll();
     }
 
     public Optional<Autor> buscarPorNome(String nome) {
@@ -73,5 +68,9 @@ public class AutorService {
         System.out.println("Deletando {} autores não associados a livros." + autoresSemLivros.size());
 
         autorRepository.deleteAll(autoresSemLivros);
+    }
+
+    public List<Autor> findAutorByLivroId(Integer id) {
+        return autorRepository.findAutoresByLivroId(id);
     }
 }

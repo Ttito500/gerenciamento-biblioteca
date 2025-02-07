@@ -3,11 +3,9 @@ package com.bibliotech.bibliotech.controllers;
 import com.bibliotech.bibliotech.models.Autor;
 import com.bibliotech.bibliotech.services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,11 +14,6 @@ public class AutorController {
 
     @Autowired
     private AutorService autorService;
-
-    @GetMapping("")
-    public ResponseEntity<List<Autor>> listarAutores() {
-        return ResponseEntity.ok(autorService.getAll());
-    }
 
     @GetMapping("/buscar")
     public ResponseEntity<Optional<Autor>> buscarAutorPorNome(@RequestParam String nome) {

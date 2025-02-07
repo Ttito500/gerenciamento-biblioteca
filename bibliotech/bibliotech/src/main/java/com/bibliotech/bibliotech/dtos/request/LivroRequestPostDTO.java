@@ -9,8 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class LivroRequestDTO {
-    private Integer id;
+public class LivroRequestPostDTO {
     private String titulo;
     private String isbn;
     private boolean ativo;

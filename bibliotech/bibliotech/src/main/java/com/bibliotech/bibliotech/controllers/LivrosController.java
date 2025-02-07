@@ -1,7 +1,8 @@
 package com.bibliotech.bibliotech.controllers;
 
-import com.bibliotech.bibliotech.dtos.request.LivroRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/livros")
@@ -18,31 +18,31 @@ public class LivrosController {
 
     private final LivrosService livrosService;
 
+    private final LivroResponseMapper livroResponseMapper;
+
     @Autowired
-    private LivrosController (LivrosService livrosService) { this.livrosService = livrosService; };
+    public LivrosController(LivrosService livrosService, LivroResponseMapper livroResponseMapper) {
+        this.livrosService = livrosService;
+        this.livroResponseMapper = livroResponseMapper;
+    }
 
     @PostMapping("")
-    public ResponseEntity<LivroResponseDTO> criarLivro (@RequestBody LivroRequestDTO body){
-        LivroResponseDTO livro = livrosService.cadastrarLivro(body);
-        URI location = URI.create("/livros/" + livro.getId());
-        return ResponseEntity.created(location).body(livro);
+    public ResponseEntity<LivroResponseDTO> criarLivro (@RequestBody LivroRequestPostDTO body) {
+        LivroResponseDTO livroResponseDTO = livroResponseMapper.toDTO(livrosService.cadastrarLivro(body));
+        URI location = URI.create("/livros/" + livroResponseDTO.getId());
+        return ResponseEntity.created(location).body(livroResponseDTO);
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Livro>> getLivros(){
-        List<Livro> livros = livrosService.getLivros();
-        return ResponseEntity.ok(livros);
+    public ResponseEntity<List<LivroResponseDTO>> getLivros(){
+        List<LivroResponseDTO> livroResponseDTO = livroResponseMapper.toDTOList(livrosService.getLivros());
+        return ResponseEntity.ok(livroResponseDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Livro>> getLivroById(@PathVariable Integer id){
-        return ResponseEntity.ok(livrosService.getLivroById(id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Livro> deleteLivroById(@PathVariable Integer id){
-        livrosService.deletarLivro(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<LivroResponseDTO> getLivroById(@PathVariable Integer id){
+        LivroResponseDTO livroResponseGetDTO = livroResponseMapper.toDTO(livrosService.getLivroById(id));
+        return ResponseEntity.ok(livroResponseGetDTO);
     }
 
     @PatchMapping("/{id}")
