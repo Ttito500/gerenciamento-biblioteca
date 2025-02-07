@@ -224,7 +224,12 @@ body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  padding-top: 6px;  /* Ajuste o padding superior */
-  padding-bottom: 6px;  /* Ajuste o padding inferior */
+  padding-top: 6px;
+  padding-bottom: 6px;
   transition: padding 0.3s ease;
+}
+
+.no-border-radius-right {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }

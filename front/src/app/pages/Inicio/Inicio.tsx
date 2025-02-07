@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClipboardList, faPlus, faBullhorn} from "@fortawesome/free-solid-svg-icons";
+import {faClipboardList, faPlus, faBullhorn, faCheck, faFileExport} from "@fortawesome/free-solid-svg-icons";
 import Accordion from "react-bootstrap/esm/Accordion";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Spinner from "react-bootstrap/esm/Spinner";
+import Modal from "react-bootstrap/esm/Modal";
+import VerFrequencias from "./templates/VerFrequencias";
 
 const Inicio: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [showToastError, setShowToastError] = useState(false);
   const [showToastSuccess, setShowToastSuccess] = useState(false);
+
+  const [showFrequencia, setFrequencia] = useState(false);
+  const handleCloseFrequencia = () => setFrequencia (false);
+  const handleShowFrequencia = () => setFrequencia(true);
+
+  const [showOcorrencia, setOcorrencia] = useState(false);
+  const handleCloseOcorrencia = () => setOcorrencia (false);
+  const handleShowOcorrencia = () => setOcorrencia(true);
 
   useEffect(() => {
     TelaInicio();
@@ -72,10 +82,13 @@ const Inicio: React.FC = () => {
                                             Atividade <span className="obgr">*</span>
                                         </Form.Label>
                                         <Form.Select aria-label="Selecione" required className="custom-placeholder">
-                                            <option value="" disabled selected hidden>Atividade que o aluno está fazendo</option>
+                                            <option value="" disabled selected hidden>Atividade que o aluno está
+                                                fazendo
+                                            </option>
                                             <option value="1">Estudando</option>
-                                            <option value="2">Dormindo</option>
-                                            <option value="3">Vivendo</option>
+                                            <option value="2">Descansando</option>
+                                            <option value="3">Lendo</option>
+                                            <option value="4">Vivendo</option>
                                         </Form.Select>
                                         <Form.Control.Feedback type="invalid">
                                             Campo obrigatório.
@@ -94,7 +107,7 @@ const Inicio: React.FC = () => {
                                     </Button>
                                 </Col>
                                 <Col xs ={2} className="d-flex justify-content-end">
-                                    <Button variant="info" className="btn-blue resizable-button">
+                                    <Button variant="info" className="btn-blue resizable-button" onClick={handleShowFrequencia}>
                                         <FontAwesomeIcon icon={faClipboardList} /> Ver Frequências
                                     </Button>
                                 </Col>
@@ -103,6 +116,32 @@ const Inicio: React.FC = () => {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
+
+            <Modal
+                show={showFrequencia}
+                onHide={handleCloseFrequencia}
+                size="xl"
+                backdrop="static"
+                centered
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Frequências</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <VerFrequencias />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseFrequencia}>
+                        Voltar
+                    </Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faFileExport} /> Exportar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
 
         <div className="w-100">
