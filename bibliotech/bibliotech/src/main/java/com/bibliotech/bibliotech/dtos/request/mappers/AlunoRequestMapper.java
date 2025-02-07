@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class AlunoRequestMapper {
 
-    private final TurmaRepository turmaRepository;
+    private final TurmaRepository turmaRDepository;
 
     public AlunoRequestMapper(TurmaRepository turmaRepository) {
         this.turmaRepository = turmaRepository;
