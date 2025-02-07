@@ -1,5 +1,9 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.LivroRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponceMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
@@ -18,16 +22,24 @@ public class LivrosService {
     @Autowired
     private LivroRepository livroRepository;
 
+    @Autowired
+    private LivroRequestMapper livroRequestMapper;
 
-    public Livro cadastrarLivro(Livro livro){
+    @Autowired
+    private LivroResponceMapper livroResponceMapper;
+
+
+    public LivroResponseDTO cadastrarLivro(LivroRequestDTO livroRequestDTO) {
+        
+        Livro livro = livroRequestMapper.toEntity(livroRequestDTO);
+        livro.setAtivo(true);
 
         // Autor autor = autorService.addAutor(livro.getAutor()); (refazer devido a lista de autores)
 
-        livroRepository.save(livro);
-
         // livroautorService.cadastrarLivroautor(livro.getId(), autor.getId()); (refazer devido a lista de autores)
 
-        return livro;
+        livroRepository.save(livro);
+        return livroResponceMapper.toDto(livro);
     }
 
     public Livro deletarLivro(Integer id){

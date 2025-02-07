@@ -1,5 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.request.LivroRequestDTO;
+import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,8 @@ public class LivrosController {
     private LivrosController (LivrosService livrosService) { this.livrosService = livrosService; };
 
     @PostMapping("")
-    public ResponseEntity<Livro> criarLivro (@RequestBody Livro body){
-        Livro livro = livrosService.cadastrarLivro(body);
+    public ResponseEntity<LivroResponseDTO> criarLivro (@RequestBody LivroRequestDTO livroRequestDTO){
+        Livro livro = livrosService.cadastrarLivro(livroRequestDTO);
         URI location = URI.create("/livros/" + livro.getId()); // não sei muito bem oq isso faz, to seguindo exemplo do codigo de GC
         return ResponseEntity.created(location).body(livro);
     }
