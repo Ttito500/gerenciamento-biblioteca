@@ -9,6 +9,7 @@ import Col from "react-bootstrap/esm/Col";
 import Spinner from "react-bootstrap/esm/Spinner";
 import Modal from "react-bootstrap/esm/Modal";
 import VerFrequencias from "./templates/VerFrequencias";
+import VerOcorrencias from "./templates/VerOcorrencias";
 
 const Inicio: React.FC = () => {
 
@@ -193,7 +194,8 @@ const Inicio: React.FC = () => {
                                     </Button>
                                 </Col>
                                 <Col xs ={2} className="d-flex justify-content-end">
-                                    <Button variant="info" className="btn-blue resizable-button">
+                                    <Button variant="info" className="btn-blue resizable-button"
+                                            onClick={handleShowOcorrencia}>
                                         <FontAwesomeIcon icon={faBullhorn} /> Ver Ocorrências
                                     </Button>
                                 </Col>
@@ -202,6 +204,31 @@ const Inicio: React.FC = () => {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
+            <Modal
+                show={showOcorrencia}
+                onHide={handleCloseOcorrencia}
+                size="xl"
+                backdrop="static"
+                centered
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Ocorrências</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <VerOcorrencias />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseOcorrencia}>
+                        Voltar
+                    </Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faFileExport} /> Exportar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
       </section>
   );
