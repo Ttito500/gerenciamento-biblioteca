@@ -49,7 +49,7 @@ public class TurmaController {
     @PatchMapping("/{id}/inativar")
     public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
         turmasService.inativarTurma(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

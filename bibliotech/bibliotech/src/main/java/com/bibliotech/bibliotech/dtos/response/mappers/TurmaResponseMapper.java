@@ -16,6 +16,8 @@ public class TurmaResponseMapper {
         dto.setId(turma.getId());
         dto.setSerie(turma.getSerie());
         dto.setTurma(turma.getTurma());
+        dto.setAnoDeEntrada(turma.getAnoDeEntrada());
+        dto.setAtivo(turma.isAtivo());
 
         return dto;
     }
