@@ -192,3 +192,39 @@ body {
   gap: 16px;
 }
 
+.custon-accordion-header-green .accordion-button {
+  background-color: #D1E7DD !important;
+  color: black !important;
+}
+
+.custon-accordion-header-green .accordion-button:not(.collapsed) {
+  background-color: #D1E7DD !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-red .accordion-button {
+  background-color: #F8D7DA !important;
+  color: black !important;
+}
+
+.custon-accordion-header-red .accordion-button:not(.collapsed) {
+  background-color: #F8D7DA !important;
+  box-shadow: none !important;
+}
+
+.custom-placeholder:invalid {
+  color: gray;
+}
+
+.resizable-button {
+  width: 200px;
+  height: 40px;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding-top: 6px;  /* Ajuste o padding superior */
+  padding-bottom: 6px;  /* Ajuste o padding inferior */
+  transition: padding 0.3s ease;
+}
