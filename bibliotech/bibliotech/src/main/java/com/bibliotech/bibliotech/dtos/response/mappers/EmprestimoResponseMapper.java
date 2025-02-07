@@ -9,11 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmprestimoResponseMapper {
     public EmprestimoResponseDTO toDto(Emprestimo emprestimo) {
-
-        if (emprestimo == null) {
-            return null;
-        }
-
         EmprestimoResponseDTO dto = new EmprestimoResponseDTO();
 
         if (emprestimo.getConcluidoPor() != null && emprestimo.getConcluidoPor().getNome() != null) {
@@ -25,6 +20,9 @@ public class EmprestimoResponseMapper {
         dto.setId(emprestimo.getId());
         dto.setAlunoId(emprestimo.getAluno().getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setIsbn(emprestimo.getExemplar().getLivro().getIsbn());
+        dto.setTituloLivro(emprestimo.getExemplar().getLivro().getTitulo());
+        dto.setNomeAluno(emprestimo.getAluno().getNome());
         dto.setRealizadoPor(emprestimo.getRealizadoPor().getNome());
         dto.setObservacao(emprestimo.getObservacao());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
@@ -38,8 +36,11 @@ public class EmprestimoResponseMapper {
 
     public EmprestimoResponseDTOAluno toDTOAluno(Emprestimo emprestimo) {
         EmprestimoResponseDTOAluno dto = new EmprestimoResponseDTOAluno();
+
         dto.setId(emprestimo.getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setTituloLivro(emprestimo.getExemplar().getLivro().getTitulo());
+        dto.setIsbn(emprestimo.getExemplar().getLivro().getIsbn());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
         dto.setDataConclusao(emprestimo.getDataConclusao());
         dto.setSituacao(emprestimo.getSituacao());
@@ -49,9 +50,13 @@ public class EmprestimoResponseMapper {
 
     public EmprestimoResponseDTOLivro toDTOLivro(Emprestimo emprestimo) {
         EmprestimoResponseDTOLivro dto = new EmprestimoResponseDTOLivro();
+
         dto.setId(emprestimo.getId());
         dto.setAlunoId(emprestimo.getAluno().getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setNomeAluno(emprestimo.getAluno().getNome());
+        dto.setSerieAluno(emprestimo.getAluno().getTurma().getSerie());
+        dto.setTurmaAluno(emprestimo.getAluno().getTurma().getTurma());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
         dto.setDataConclusao(emprestimo.getDataConclusao());
         dto.setSituacao(emprestimo.getSituacao());

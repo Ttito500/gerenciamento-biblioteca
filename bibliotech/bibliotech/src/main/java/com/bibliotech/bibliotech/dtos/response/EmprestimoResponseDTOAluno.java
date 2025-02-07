@@ -10,6 +10,8 @@ import java.time.LocalDate;
 public class EmprestimoResponseDTOAluno {
     private Integer id;
     private Integer exemplarId;
+    private String tituloLivro;
+    private String isbn;
     private LocalDate dataEmprestimo;
     private LocalDate dataConclusao;
     private String situacao;

@@ -11,6 +11,9 @@ public class EmprestimoResponseDTOLivro {
     private Integer id;
     private Integer alunoId;
     private Integer exemplarId;
+    private String nomeAluno;
+    private Integer serieAluno;
+    private String turmaAluno;
     private LocalDate dataEmprestimo;
     private LocalDate dataConclusao;
     private String situacao;
