@@ -53,20 +53,34 @@ public class EmprestimosService {
         return emprestimoResponseMapper.toDto(emprestimoSalvo);
     }
 
-    public Emprestimo alterarSituacao(Integer id, String status){
-        Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
+    //CONSERTAR USUARIO DEPOIS
+    public void cancelarEmprestimo(Integer id){
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
-        emprestimoExistente.setSituacao(status);
+        if (emprestimo.getSituacao().equals("cancelado")){
+            throw new ValidationException("Emprestimo ja cancelado");
+        }
 
-        emprestimoRepository.save(emprestimoExistente);
-        return emprestimoExistente;
+        emprestimo.setSituacao("cancelado");
+        emprestimo.getAluno().setSituacao("regular");
+        emprestimo.getExemplar().setSituacao("disponivel");
+
+        emprestimo.setConcluidoPor(emprestimo.getRealizadoPor()); //TEMPORARIO
+
+        emprestimo.setDataConclusao(LocalDate.now());
+
+        emprestimoRepository.save(emprestimo);
     }
 
     @Transactional
-    public Emprestimo renovarPrazo(Integer id){
+    public void renovarPrazo(Integer id){
         Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
+
+        if (emprestimoExistente.getSituacao().equals("cancelado") || emprestimoExistente.getSituacao().equals("entregue") || emprestimoExistente.getSituacao().equals("extraviado")){
+            throw new ValidationException("Situação não renovavel");
+        }
 
         if (ChronoUnit.DAYS.between(emprestimoExistente.getDataEmprestimo(), LocalDate.now()) > 30) {
             throw new ValidationException("Renovação não permitida. O prazo máximo para renovação foi excedido.");
@@ -88,13 +102,9 @@ public class EmprestimosService {
         emprestimoExistente.setQtdRenovacao(emprestimoExistente.getQtdRenovacao() + 1);
 
         emprestimoRepository.save(emprestimoExistente);
-        return emprestimoExistente;
     }
 
-    public Page<EmprestimoResponseDTO> consultarEmprestimos(
-            String nomeAluno, String tituloLivro, String isbn, String situacao,
-            String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor,
-            LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
+    public Page<EmprestimoResponseDTO> consultarEmprestimos(String nomeAluno, String tituloLivro, String isbn, String situacao, String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor, LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
 
         Specification<Emprestimo> spec = emprestimoSpecification.buildSpecification(
                 nomeAluno, tituloLivro, isbn, situacao, nomeRealizadoPor,
@@ -128,5 +138,6 @@ public class EmprestimosService {
 
         return emprestimos.map(emprestimoResponseMapper::toDTOLivro);
     }
+
 
 }

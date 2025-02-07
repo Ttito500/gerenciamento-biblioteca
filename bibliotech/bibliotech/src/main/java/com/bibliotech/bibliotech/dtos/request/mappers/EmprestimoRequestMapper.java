@@ -27,6 +27,7 @@ public class EmprestimoRequestMapper {
         this.usuarioRepository = usuarioRepository;
     }
 
+    //CONSERTAR USUARIO DEPOIS
     public Emprestimo toEntity(EmprestimoRequestDTO EmprestimoDto){
         Aluno aluno = alunoRepository.findById(EmprestimoDto.getIdAluno())
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
@@ -34,12 +35,8 @@ public class EmprestimoRequestMapper {
         Exemplar exemplar = exemplarRepository.findById(EmprestimoDto.getIdExemplar())
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 
-        Usuario usuario = usuarioRepository.findById(Long.valueOf(EmprestimoDto.getIdUsuario())) //TEMPORARIO PARA DEBUG
+        Usuario usuario = usuarioRepository.findById(Long.valueOf(EmprestimoDto.getIdUsuario())) //TEMPORARIO
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
-
-        if (EmprestimoDto == null){
-            return null;
-        }
 
         if(!"regular".equalsIgnoreCase(aluno.getSituacao())){
             throw new ValidationException("O aluno não está com a situação regular");
@@ -56,7 +53,7 @@ public class EmprestimoRequestMapper {
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
         emprestimo.setQtdRenovacao(0);
         emprestimo.setObservacao(EmprestimoDto.getObservacao());
-        emprestimo.setRealizadoPor(usuario); //TEMP PARA DEBUG
+        emprestimo.setRealizadoPor(usuario); //TEMPORARIO
 
         return emprestimo;
     }

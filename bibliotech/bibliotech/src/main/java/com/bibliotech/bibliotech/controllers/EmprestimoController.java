@@ -92,13 +92,13 @@ public class EmprestimoController {
 
     @PatchMapping("/renovarPrazo/{id}")
     public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
-        Emprestimo emprestimo = emprestimosService.renovarPrazo(id);
+        emprestimosService.renovarPrazo(id);
         return ResponseEntity.ok("Prazo renovado com sucesso");
     }
 
-    @PatchMapping("/alterarSituacao/{id}")
-public ResponseEntity<Emprestimo> alterarSituacao(@PathVariable Integer id, @RequestParam String situacao){
-    Emprestimo emprestimo = emprestimosService.alterarSituacao(id, situacao);
-    return ResponseEntity.ok(emprestimo);
-}
+    @PatchMapping("/cancelarEmprestimo/{id}")
+    public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id){
+        emprestimosService.cancelarEmprestimo(id);
+        return ResponseEntity.ok("Emprestimo cancelado com sucesso");
+    }
 }

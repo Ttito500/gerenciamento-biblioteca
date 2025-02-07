@@ -3,6 +3,7 @@ package com.bibliotech.bibliotech.dtos.request;
 import lombok.Getter;
 import lombok.Setter;
 
+//CONSERTAR USUARIO DEPOIS
 @Getter
 @Setter
 public class EmprestimoRequestDTO {
@@ -10,5 +11,5 @@ public class EmprestimoRequestDTO {
     private Integer idExemplar;
     private String observacao;
 
-    private Integer idUsuario; //TEMPORARIO PARA DEBUG
+    private Integer idUsuario; //TEMPORARIO
 }
