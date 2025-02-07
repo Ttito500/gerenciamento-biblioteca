@@ -2,8 +2,6 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
-import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TurmasService {
@@ -26,10 +23,8 @@ public class TurmasService {
     @Autowired
     private TurmaRequestMapper turmaRequestMapper;
 
-    @Autowired
-    private TurmaResponseMapper turmaResponseMapper;
 
-    public TurmaResponseDTO cadastrarTurma(TurmaRequestDTO requestDTO) {
+    public Turma cadastrarTurma(TurmaRequestDTO requestDTO) {
         if (requestDTO.getSerie() == null || requestDTO.getSerie() < 1) {
             throw new ValidationException("Série é obrigatória e deve ser maior que zero.");
         }
@@ -47,28 +42,23 @@ public class TurmasService {
 
         Turma turma = turmaRequestMapper.toEntity(requestDTO);
         turma.setAtivo(true);
-        Turma turmaSalva = turmaRepository.save(turma);
-        return turmaResponseMapper.toDto(turmaSalva);
+        return turmaRepository.save(turma);
     }
 
-    public TurmaResponseDTO getTurmaById(Integer id){
-        Turma turma = turmaRepository.findById(id)
+    public Turma getTurmaById(Integer id){
+        return turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
-        return turmaResponseMapper.toDto(turma);
     }
 
-    public List<TurmaResponseDTO> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
+    public List<Turma> filtrarTurmas(Integer serie, String turma, Integer anoDeEntrada, Boolean ativo) {
         if (turma != null) {
             turma = turma.toUpperCase();
         }
-        
-        List<Turma> turmas = turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
-        return turmas.stream()
-                .map(turmaResponseMapper::toDto)
-                .collect(Collectors.toList());
+
+        return turmaRepository.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
     }
 
-    public TurmaResponseDTO alterarTurma(Integer id, TurmaRequestDTO novaTurmaDTO) {
+    public Turma alterarTurma(Integer id, TurmaRequestDTO novaTurmaDTO) {
         Turma turmaExistente = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
@@ -80,8 +70,7 @@ public class TurmasService {
         turmaExistente.setTurma(novaTurmaDTO.getTurma().toUpperCase());
         turmaExistente.setAnoDeEntrada(novaTurmaDTO.getAnoDeEntrada());
 
-        Turma turmaAtualizada = turmaRepository.save(turmaExistente);
-        return turmaResponseMapper.toDto(turmaAtualizada);
+        return turmaRepository.save(turmaExistente);
     }
 
     public void inativarTurma(Integer id) {
