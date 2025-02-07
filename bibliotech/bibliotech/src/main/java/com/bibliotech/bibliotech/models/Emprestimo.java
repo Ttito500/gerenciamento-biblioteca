@@ -19,11 +19,11 @@ public class Emprestimo {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_aluno", nullable = false)
     private Aluno aluno;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_exemplar", nullable = false)
     private Exemplar exemplar;
 
@@ -43,11 +43,11 @@ public class Emprestimo {
     @Column(name = "observacao", length = 500)
     private String observacao;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "realizado_por", nullable = false)
     private Usuario realizadoPor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "concluido_por")
     private Usuario concluidoPor;
 
