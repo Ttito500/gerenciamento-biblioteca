@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
 import com.bibliotech.bibliotech.dtos.request.mappers.EmprestimoRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
@@ -54,7 +55,7 @@ public class EmprestimosService {
     }
 
     //CONSERTAR USUARIO DEPOIS
-    public void cancelarEmprestimo(Integer id){
+    public String cancelarEmprestimo(Integer id){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
@@ -71,37 +72,70 @@ public class EmprestimosService {
         emprestimo.setDataConclusao(LocalDate.now());
 
         emprestimoRepository.save(emprestimo);
+
+        return "Emprestimo cancelado com sucesso";
+    }
+
+    //CONSERTAR USUARIO DEPOIS
+    public String concluirEmprestimo(Integer id, EmprestimoRequestDTOConcluir DTOConcluir){
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
+
+        if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
+            throw new ValidationException("Emprestimo ja concluido");
+        }
+
+        emprestimo.setObservacao(DTOConcluir.getObservacao());
+        emprestimo.setDataConclusao(LocalDate.now());
+
+        emprestimo.setConcluidoPor(emprestimo.getRealizadoPor()); //TEMPORARIO
+
+        if (!DTOConcluir.isExtraviado()){
+            emprestimo.setSituacao("entregue");
+            emprestimo.getAluno().setSituacao("regular");
+            emprestimo.getExemplar().setSituacao("disponivel");
+        }else {
+            emprestimo.setSituacao("extraviado");
+            emprestimo.getAluno().setSituacao("irregular");
+            emprestimo.getExemplar().setSituacao("extraviado");
+        }
+
+        emprestimoRepository.save(emprestimo);
+
+        return DTOConcluir.isExtraviado() ? "Emprestimo extraviado com sucesso" : "Emprestimo concluido com sucesso";
     }
 
     @Transactional
-    public void renovarPrazo(Integer id){
-        Emprestimo emprestimoExistente = emprestimoRepository.findById(id)
+    public String renovarPrazo(Integer id){
+        Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
 
-        if (emprestimoExistente.getSituacao().equals("cancelado") || emprestimoExistente.getSituacao().equals("entregue") || emprestimoExistente.getSituacao().equals("extraviado")){
-            throw new ValidationException("Situação não renovavel");
+        if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
+            throw new ValidationException("Emprestimo ja concluido");
         }
 
-        if (ChronoUnit.DAYS.between(emprestimoExistente.getDataEmprestimo(), LocalDate.now()) > 30) {
+        if (ChronoUnit.DAYS.between(emprestimo.getDataEmprestimo(), LocalDate.now()) > 30) {
             throw new ValidationException("Renovação não permitida. O prazo máximo para renovação foi excedido.");
         }
 
 
-        if (emprestimoExistente.getQtdRenovacao() >= 3){
+        if (emprestimo.getQtdRenovacao() >= 3){
             throw new ValidationException("Renovação não permitida. O número máximo de renovações foi atingido");
         }
 
-        if (emprestimoExistente.getSituacao().equals("atrasado")){
-            emprestimoExistente.setDataPrazo(LocalDate.now().plusDays(7));
-            emprestimoExistente.setSituacao("pendente");
+        if (emprestimo.getSituacao().equals("atrasado")){
+            emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
+            emprestimo.setSituacao("pendente");
         }
         else {
-            emprestimoExistente.setDataPrazo(emprestimoExistente.getDataPrazo().plusDays(7));
+            emprestimo.setDataPrazo(emprestimo.getDataPrazo().plusDays(7));
         }
 
-        emprestimoExistente.setQtdRenovacao(emprestimoExistente.getQtdRenovacao() + 1);
+        emprestimo.setQtdRenovacao(emprestimo.getQtdRenovacao() + 1);
 
-        emprestimoRepository.save(emprestimoExistente);
+        emprestimoRepository.save(emprestimo);
+
+        return "Prazo renovado com sucesso";
     }
 
     public Page<EmprestimoResponseDTO> consultarEmprestimos(String nomeAluno, String tituloLivro, String isbn, String situacao, String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor, LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {

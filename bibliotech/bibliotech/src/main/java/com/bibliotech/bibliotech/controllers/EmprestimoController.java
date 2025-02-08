@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
@@ -90,15 +91,21 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimosDTO);
     }
 
-    @PatchMapping("/renovarPrazo/{id}")
+    @PatchMapping("/renovar/{id}")
     public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
-        emprestimosService.renovarPrazo(id);
-        return ResponseEntity.ok("Prazo renovado com sucesso");
+        return ResponseEntity.ok(emprestimosService.renovarPrazo(id));
     }
 
-    @PatchMapping("/cancelarEmprestimo/{id}")
+    @PatchMapping("/cancelar/{id}")
     public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id){
-        emprestimosService.cancelarEmprestimo(id);
-        return ResponseEntity.ok("Emprestimo cancelado com sucesso");
+        return ResponseEntity.ok(emprestimosService.cancelarEmprestimo(id));
+    }
+
+    @PatchMapping("/concluir/{id}")
+    public ResponseEntity<String> concluirEmprestimo(
+            @PathVariable Integer id,
+            @RequestBody EmprestimoRequestDTOConcluir DTOConcluir) {
+
+        return ResponseEntity.ok(emprestimosService.concluirEmprestimo(id, DTOConcluir));
     }
 }
