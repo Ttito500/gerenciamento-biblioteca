@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AlunoRequestMapper {
 
-    private final TurmaRepository turmaRDepository;
+    private final TurmaRepository turmaRepository;
 
     public AlunoRequestMapper(TurmaRepository turmaRepository) {
         this.turmaRepository = turmaRepository;

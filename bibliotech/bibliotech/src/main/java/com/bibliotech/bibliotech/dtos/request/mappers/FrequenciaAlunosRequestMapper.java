@@ -26,11 +26,7 @@ public class FrequenciaAlunosRequestMapper {
 
     public FrequenciaAlunos toEntity(FrequenciaAlunosRequestDTO frequenciaAlunosRequestDTO) {
         FrequenciaAlunos frequenciaAlunos = new FrequenciaAlunos();
-        /*Aluno alunoExistente = alunoRepository.findById(frequenciaAlunosRequestDTO.getIdAluno())
-                .orElseThrow(() -> new ValidationException(List.of("Aluno não encontrado")));
-        Usuario usuarioExistente = usuarioRepository.findById(Long.valueOf(frequenciaAlunosRequestDTO.getRegistradaPor()))
-                .orElseThrow(() -> new NotFoundException("Usuario com ID " + frequenciaAlunosRequestDTO.getRegistradaPor() + " não encontrado."));
-        */
+
         Aluno alunoExistente = alunoRepository.buscarAlunoPorId(frequenciaAlunosRequestDTO.getIdAluno());
         Usuario usuarioExistente = usuarioRepository.getUsuarioById(frequenciaAlunosRequestDTO.getRegistradaPor());
 
