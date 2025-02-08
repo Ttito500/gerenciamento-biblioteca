@@ -10,6 +10,7 @@ import Spinner from "react-bootstrap/esm/Spinner";
 import Modal from "react-bootstrap/esm/Modal";
 import VerFrequencias from "./templates/VerFrequencias";
 import VerOcorrencias from "./templates/VerOcorrencias";
+import AlunosCadastrarAluno from "../Alunos/templates/AlunosCadastrarAluno";
 
 const Inicio: React.FC = () => {
 
@@ -25,7 +26,28 @@ const Inicio: React.FC = () => {
   const handleCloseOcorrencia = () => setOcorrencia (false);
   const handleShowOcorrencia = () => setOcorrencia(true);
 
-  useEffect(() => {
+  const [showCadastrar, setShowCadastrar] = useState(false);
+  const handleCloseCadastrar = () => setShowCadastrar(false);
+  const handleShowCadastrar = () => setShowCadastrar(true);
+
+
+    const [formDataCadastrarAluno, setFormDataCadastrarAluno] = useState({
+        nome: "",
+        email: "",
+        telefone: "",
+        endereco: "",
+    });
+
+    const handleChangeCadastrarAluno = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormDataCadastrarAluno((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+
+    useEffect(() => {
     TelaInicio();
   }, []);
 
@@ -103,8 +125,8 @@ const Inicio: React.FC = () => {
                             </Row>
                             <Row>
                                 <Col className="justify-content-start">
-                                    <Button variant="info" className="btn-blue">
-                                    <FontAwesomeIcon icon={faPlus} /> Cadstrar Novo Aluno
+                                    <Button variant="info" className="btn-blue" onClick={handleShowCadastrar}>
+                                    <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Aluno
                                     </Button>
                                 </Col>
                                 <Col xs ={2} className="d-flex justify-content-end">
@@ -189,8 +211,8 @@ const Inicio: React.FC = () => {
                             </Row>
                             <Row>
                                 <Col className="justify-content-start">
-                                    <Button variant="info" className="btn-blue">
-                                        <FontAwesomeIcon icon={faPlus} /> Cadstrar Novo Aluno
+                                    <Button variant="info" className="btn-blue" onClick={handleShowCadastrar}>
+                                        <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Aluno
                                     </Button>
                                 </Col>
                                 <Col xs ={2} className="d-flex justify-content-end">
@@ -227,6 +249,28 @@ const Inicio: React.FC = () => {
                     <Button variant="success">
                         <FontAwesomeIcon icon={faFileExport} /> Exportar
                     </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showCadastrar}
+                onHide={handleCloseCadastrar}
+                size="xl"
+                backdrop="static"
+                centered
+                keyboard={false}>
+
+                <Modal.Header closeButton>
+                    <Modal.Title>Cadastrar Novo Aluno</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <AlunosCadastrarAluno formData={formDataCadastrarAluno} onChange={handleChangeCadastrarAluno} />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseCadastrar}>Cancelar</Button>
+                    <Button variant="success"> <FontAwesomeIcon icon={faCheck} /> Salvar</Button>
                 </Modal.Footer>
             </Modal>
         </div>
