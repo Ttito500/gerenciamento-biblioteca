@@ -32,10 +32,9 @@ const Inicio: React.FC = () => {
 
 
     const [formDataCadastrarAluno, setFormDataCadastrarAluno] = useState({
-        nome: "",
-        email: "",
-        telefone: "",
-        endereco: "",
+        nome: '',
+        email: '',
+        telefone: '',
     });
 
     const handleChangeCadastrarAluno = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -108,10 +107,10 @@ const Inicio: React.FC = () => {
                                             <option value="" disabled selected hidden>Atividade que o aluno está
                                                 fazendo
                                             </option>
-                                            <option value="1">Estudando</option>
-                                            <option value="2">Descansando</option>
-                                            <option value="3">Lendo</option>
-                                            <option value="4">Vivendo</option>
+                                            <option value="1">Lende</option>
+                                            <option value="2">Cèlula de Estudo</option>
+                                            <option value="3">Descansando</option>
+                                            <option value="4">Outros</option>
                                         </Form.Select>
                                         <Form.Control.Feedback type="invalid">
                                             Campo obrigatório.

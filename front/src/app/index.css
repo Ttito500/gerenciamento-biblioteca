@@ -213,7 +213,7 @@ body {
 }
 
 .custom-placeholder:invalid {
-  color: gray;
+  color: #495057
 }
 
 .resizable-button {
