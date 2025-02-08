@@ -233,3 +233,12 @@ body {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 } /*resolvendo conflito*/
+
+.th-center-size-eight {
+  width: 8%;
+  text-align: center;
+}
+
+.th-size-twenty {
+  width: 20%;
+}

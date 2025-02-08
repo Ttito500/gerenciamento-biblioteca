@@ -17,20 +17,20 @@ const ListagemFrequencias: React.FC = () => {
             <Table striped className="tabela">
                 <thead>
                 <tr>
-                    <th>Série</th>
-                    <th>Turma</th>
+                    <th className="th-center-size-eight">Série</th>
+                    <th className="th-center-size-eight">Turma</th>
                     <th>Nome</th>
-                    <th>Atividade</th>
-                    <th>Ações</th>
+                    <th className="th-size-twenty">Atividade</th>
+                    <th className="th-center-size-eight">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr className="tabela-tr">
-                    <td>1</td>
-                    <td>A</td>
+                    <td className="text-center">1</td>
+                    <td className="text-center">A</td>
                     <td>João Silva</td>
-                    <td>Estudando</td>
-                    <td>
+                    <td>Outros</td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red"
                                     onClick={handleShowConfirmar}>
@@ -40,11 +40,11 @@ const ListagemFrequencias: React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>2</td>
-                    <td>B</td>
-                    <td>Ana Oliveira</td>
-                    <td>Descansando</td>
-                    <td>
+                    <td className="text-center">2</td>
+                    <td className="text-center">B</td>
+                    <td >Ana Oliveira</td>
+                    <td>Célula de Estudo</td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red"
                                     onClick={handleShowConfirmar}>
@@ -54,11 +54,11 @@ const ListagemFrequencias: React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>3</td>
-                    <td>C</td>
+                    <td className="text-center">3</td>
+                    <td className="text-center">C</td>
                     <td>Pedro Souza</td>
-                    <td>Vivendo</td>
-                    <td>
+                    <td>Estudo Individual</td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red"
                                     onClick={handleShowConfirmar}>
@@ -68,11 +68,11 @@ const ListagemFrequencias: React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>4</td>
-                    <td>D</td>
+                    <td className="text-center">4</td>
+                    <td className="text-center">D</td>
                     <td>Maria Santos</td>
-                    <td>Estudando</td>
-                    <td>
+                    <td>Descansando</td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red"
                                     onClick={handleShowConfirmar}>

@@ -18,22 +18,22 @@ const ListagemOcorrencia:React.FC = () => {
             <Table striped className="tabela">
                 <thead>
                 <tr>
-                    <th>Série</th>
-                    <th>Turma</th>
+                    <th className="th-center-size-eight">Série</th>
+                    <th className="th-center-size-eight">Turma</th>
                     <th>Nome</th>
-                    <th>Ocorrência</th>
-                    <th>Data</th>
-                    <th>Ações</th>
+                    <th className="th-size-twenty">Ocorrência</th>
+                    <th className="th-center-size-eight">Data</th>
+                    <th className="th-center-size-eight">Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr className="tabela-tr">
-                    <td>1</td>
-                    <td>A</td>
+                    <td className="text-center">1</td>
+                    <td className="text-center">A</td>
                     <td>João Silva</td>
                     <td>Estudando</td>
                     <td>07/02/2025</td>
-                    <td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red" onClick={handleShowConfirmar}>
                                 <FontAwesomeIcon icon={faTrash} />
@@ -42,12 +42,12 @@ const ListagemOcorrencia:React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>2</td>
-                    <td>B</td>
+                    <td className="text-center">2</td>
+                    <td className="text-center">B</td>
                     <td>Ana Oliveira</td>
                     <td>Descansando</td>
                     <td>07/02/2025</td>
-                    <td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red" onClick={handleShowConfirmar}>
                                 <FontAwesomeIcon icon={faTrash} />
@@ -56,12 +56,12 @@ const ListagemOcorrencia:React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>3</td>
-                    <td>C</td>
+                    <td className="text-center">3</td>
+                    <td className="text-center">C</td>
                     <td>Pedro Souza</td>
                     <td>Vivendo</td>
                     <td>07/02/2025</td>
-                    <td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red" onClick={handleShowConfirmar}>
                                 <FontAwesomeIcon icon={faTrash} />
@@ -70,12 +70,12 @@ const ListagemOcorrencia:React.FC = () => {
                     </td>
                 </tr>
                 <tr className="tabela-tr">
-                    <td>4</td>
-                    <td>D</td>
+                    <td className="text-center">4</td>
+                    <td className="text-center">D</td>
                     <td>Maria Santos</td>
                     <td>Estudando</td>
                     <td>07/02/2025</td>
-                    <td>
+                    <td className="text-center">
                         <ButtonGroup aria-label="Ações" className="tabela-acoes">
                             <Button variant="btn-outline-secondary" className="color-red" onClick={handleShowConfirmar}>
                                 <FontAwesomeIcon icon={faTrash} />
