@@ -38,7 +38,7 @@ const VerFrequencias: React.FC = () => {
                 <Form className="mt-0">
                     <Row>
                         <Col xs={4}>
-                            <Form.Group controlId="formData">
+                            <Form.Group controlId="formData" className="mb-3">
                                 <Form.Label>
                                     Data da Frequência <span className="obgr">*</span>
                                 </Form.Label>
