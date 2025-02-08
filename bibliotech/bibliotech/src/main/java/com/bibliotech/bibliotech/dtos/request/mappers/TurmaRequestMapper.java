@@ -17,6 +17,7 @@ public class TurmaRequestMapper {
         turma.setSerie(turmaRequestDTO.getSerie());
         turma.setTurma(turmaRequestDTO.getTurma());
         turma.setAnoDeEntrada(turmaRequestDTO.getAnoDeEntrada());
+        turma.setAtivo(turmaRequestDTO.isAtivo());
 
         return turma;
     }

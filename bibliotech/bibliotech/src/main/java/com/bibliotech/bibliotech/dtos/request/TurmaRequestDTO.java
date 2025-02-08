@@ -10,4 +10,5 @@ public class TurmaRequestDTO {
     private Integer serie;
     private String turma;
     private Integer AnoDeEntrada;
+    private boolean ativo;
 }
