@@ -3,7 +3,6 @@ import { Table, Button, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/esm/Modal";
-import ConfirmacaoFrequencia from "./ConfirmacaoFrequencia";
 import ConfirmacaoOcorrencia from "./ConfirmacaoOcorrencia";
 
 const ListagemOcorrencia:React.FC = () => {

@@ -184,7 +184,7 @@ const Inicio: React.FC = () => {
                                 </Col>
                                 <Col xs={2} className="d-flex justify-content-end" style={{ marginTop: "30px" }}>
                                     <Button variant="info" className="btn-danger resizable-button">
-                                        <FontAwesomeIcon icon={faPlus} /> Ocorrência</Button>
+                                        <FontAwesomeIcon icon={faPlus} /> Registrar Ocorrência</Button>
                                 </Col>
                             </Row>
                             <Row>

@@ -30,7 +30,7 @@ const VerOcorrencias:React.FC = () => {
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={6}>
+                        <Col xs={5}>
                             <Form.Group className="mb-3">
                                 <Form.Label>
                                     Nome <span className="obgr">*</span>
@@ -60,9 +60,9 @@ const VerOcorrencias:React.FC = () => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Col>
-                        <Col xs={2} className="d-flex justify-content-end" style={{marginTop: "30px"}}>
+                        <Col xs={3} className="d-flex justify-content-end" style={{marginTop: "30px"}}>
                             <Button variant="info" className="btn-danger resizable-button">
-                                <FontAwesomeIcon icon={faPlus}/> Ocorrência</Button>
+                                <FontAwesomeIcon icon={faPlus}/> Registrar Ocorrência</Button>
                         </Col>
                     </Row>
                 </Form>
