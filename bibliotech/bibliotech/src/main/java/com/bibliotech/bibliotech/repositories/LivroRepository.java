@@ -12,6 +12,9 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
     Livro findLivroById(Integer id);
     boolean existsLivroByIsbn(String isbn);
 
+    @Query("SELECT CASE WHEN EXISTS (SELECT 1 FROM Exemplar e WHERE e.id = :idLivro AND e.situacao = 'emprestado') THEN true ELSE false END")
+    boolean existsExemplarEmprestado(@Param("id") Integer id);
+
     @Query("SELECT l FROM Livro l " +
             "LEFT JOIN Livroautor la ON l.id = la.id " +
             "LEFT JOIN Autor a ON la.id = a.id " +

@@ -55,4 +55,10 @@ public class LivrosController {
         Livro livro = livrosService.atualizarLivro(id, body);
         return ResponseEntity.ok(livro);
     }
+
+    @PatchMapping("/inativar/{id}")
+    public ResponseEntity<Livro> inativarLivro(@PathVariable Integer id){
+        livrosService.inativarLivro(id);
+        return ResponseEntity.noContent().build();
+    }
 }

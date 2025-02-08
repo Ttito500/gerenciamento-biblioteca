@@ -77,6 +77,17 @@ public class LivrosService {
         return livroSalvo;
     }
 
+    public List<Livro> getLivros(String titulo, String isbn, String autor, String generos, Boolean ativo){
+        List<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, generos, ativo);
+
+        for (int i = 0; i < livrosSalvos.size(); i++) {
+            livrosSalvos.get(i).setGeneros(generosService.findGenerosByLivroId(livrosSalvos.get(i).getId()));
+            livrosSalvos.get(i).setAutores(autorService.findAutorByLivroId(livrosSalvos.get(i).getId()));
+        }
+
+        return livrosSalvos;
+    }
+
     public Livro getLivroById(Integer id){
         Livro livroSalvo = livroRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
@@ -97,14 +108,15 @@ public class LivrosService {
         return livroExistente;
     }
 
-    public List<Livro> getLivros(String titulo, String isbn, String autor, String generos, Boolean ativo){
-        List<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, generos, ativo);
+    public void inativarLivro(Integer id) {
+        Livro livroExistente = livroRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Livro com ID: "+ id +" não encontrado."));
 
-        for (int i = 0; i < livrosSalvos.size(); i++) {
-            livrosSalvos.get(i).setGeneros(generosService.findGenerosByLivroId(livrosSalvos.get(i).getId()));
-            livrosSalvos.get(i).setAutores(autorService.findAutorByLivroId(livrosSalvos.get(i).getId()));
+        if (livroRepository.existsExemplarEmprestado(id)) {
+            throw new ValidationException("O livro não pode ser emprestado pois possui exemplares emprestados");
         }
 
-        return livrosSalvos;
+        livroExistente.setAtivo(false);
+        livroRepository.save(livroExistente);
     }
 }
