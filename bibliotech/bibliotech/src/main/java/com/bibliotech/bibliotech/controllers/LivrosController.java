@@ -33,9 +33,14 @@ public class LivrosController {
         return ResponseEntity.created(location).body(livroResponseDTO);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<LivroResponseDTO>> getLivros(){
-        List<LivroResponseDTO> livroResponseDTO = livroResponseMapper.toDTOList(livrosService.getLivros());
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<LivroResponseDTO>> getLivros(
+            @RequestParam(value = "titulo", required = false) String titulo,
+            @RequestParam(value = "isbn", required = false) String isbn,
+            @RequestParam(value = "autor", required = false) String autor,
+            @RequestParam(value = "genero", required = false) String genero,
+            @RequestParam(value = "ativo", required = false) Boolean ativo) {
+        List<LivroResponseDTO> livroResponseDTO = livroResponseMapper.toDTOList(livrosService.getLivros(titulo, isbn, autor, genero, ativo));
         return ResponseEntity.ok(livroResponseDTO);
     }
 

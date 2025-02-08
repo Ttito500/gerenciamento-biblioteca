@@ -6,7 +6,9 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.*;
+import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.models.Livro;
+import com.bibliotech.bibliotech.models.Secao;
 import com.bibliotech.bibliotech.repositories.EstanteprateleiraRepository;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.bibliotech.bibliotech.repositories.SecaoRepository;
@@ -95,7 +97,14 @@ public class LivrosService {
         return livroExistente;
     }
 
-    public List<Livro> getLivros(){
-        return livroRepository.findAll();
+    public List<Livro> getLivros(String titulo, String isbn, String autor, String generos, Boolean ativo){
+        List<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, generos, ativo);
+
+        for (int i = 0; i < livrosSalvos.size(); i++) {
+            livrosSalvos.get(i).setGeneros(generosService.findGenerosByLivroId(livrosSalvos.get(i).getId()));
+            livrosSalvos.get(i).setAutores(autorService.findAutorByLivroId(livrosSalvos.get(i).getId()));
+        }
+
+        return livrosSalvos;
     }
 }
