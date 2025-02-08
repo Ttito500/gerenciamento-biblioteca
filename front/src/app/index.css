@@ -239,6 +239,11 @@ body {
   text-align: center;
 }
 
+.th-center-size-twelve {
+  width: 12%;
+  text-align: center;
+}
+
 .th-center-size-fifteen {
   width: 15%;
   text-align: center;
