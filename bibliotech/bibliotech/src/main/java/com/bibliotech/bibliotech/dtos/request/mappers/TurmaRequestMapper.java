@@ -12,10 +12,6 @@ public class TurmaRequestMapper {
     public TurmaRequestMapper(TurmaRepository turmaRepository) {this.turmaRepository = turmaRepository;}
 
     public Turma toEntity(TurmaRequestDTO turmaRequestDTO) {
-        if (turmaRequestDTO == null) {
-            return null;
-        }
-
         Turma turma = new Turma();
         turma.setId(turmaRequestDTO.getId());
         turma.setSerie(turmaRequestDTO.getSerie());

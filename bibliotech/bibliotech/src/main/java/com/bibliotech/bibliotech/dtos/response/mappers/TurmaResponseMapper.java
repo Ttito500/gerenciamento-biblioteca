@@ -8,10 +8,6 @@ import org.springframework.stereotype.Component;
 public class TurmaResponseMapper {
 
     public TurmaResponseDTO toDto(Turma turma) {
-        if (turma == null) {
-            return null;
-        }
-
         TurmaResponseDTO dto = new TurmaResponseDTO();
         dto.setId(turma.getId());
         dto.setSerie(turma.getSerie());
