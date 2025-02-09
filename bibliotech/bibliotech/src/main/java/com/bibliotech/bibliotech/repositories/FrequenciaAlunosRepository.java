@@ -11,6 +11,15 @@ import java.util.List;
 
 @Repository
 public interface FrequenciaAlunosRepository extends JpaRepository<FrequenciaAlunos, Integer> {
+
     @Query("SELECT f FROM FrequenciaAlunos f WHERE f.data = :data")
-    List<FrequenciaAlunos> filtrarFrequencias(@Param("data") LocalDate data);
+    List<FrequenciaAlunos> findByData(@Param("data") LocalDate data);
+
+    default List<FrequenciaAlunos> filtrarFrequencias(LocalDate data) {
+        if (data == null) {
+            return findAll(); // Return all records if data is null
+        } else {
+            return findByData(data); // Filter by date if data is not null
+        }
+    }
 }

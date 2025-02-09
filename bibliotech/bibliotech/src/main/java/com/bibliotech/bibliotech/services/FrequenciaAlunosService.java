@@ -5,10 +5,12 @@ import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.repositories.FrequenciaAlunosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class FrequenciaAlunosService {
     private final FrequenciaAlunosRepository frequenciaAlunosRepository;
     private final AlunosService alunosService;

@@ -2,10 +2,12 @@ package com.bibliotech.bibliotech.dtos.response.mappers;
 
 import com.bibliotech.bibliotech.dtos.response.FrequenciaAlunosResponceDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class FrequenciaAlunosResponceMapper {
 
     private final AlunoResponseMapper alunoResponseMapper;
