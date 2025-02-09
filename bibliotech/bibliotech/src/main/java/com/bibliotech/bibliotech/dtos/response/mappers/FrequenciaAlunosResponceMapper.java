@@ -3,6 +3,9 @@ package com.bibliotech.bibliotech.dtos.response.mappers;
 import com.bibliotech.bibliotech.dtos.response.FrequenciaAlunosResponceDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class FrequenciaAlunosResponceMapper {
 
     private final AlunoResponseMapper alunoResponseMapper;
@@ -26,5 +29,11 @@ public class FrequenciaAlunosResponceMapper {
         dto.setData(frequenciaAlunos.getData());
 
         return dto;
+    }
+
+    public List<FrequenciaAlunosResponceDTO> toDtoList(List<FrequenciaAlunos> frequenciaAlunos) {
+        return frequenciaAlunos.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }
