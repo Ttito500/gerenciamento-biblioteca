@@ -2,7 +2,7 @@ import { Button, Form, Row, Col, Accordion } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
-const ListagemTurma: React.FC = () => {
+const FiltrosTurma: React.FC = () => {
   return (
     <>
       <Accordion defaultActiveKey="0">
@@ -106,4 +106,4 @@ const ListagemTurma: React.FC = () => {
   );
 };
 
-export default ListagemTurma;
+export default FiltrosTurma;
