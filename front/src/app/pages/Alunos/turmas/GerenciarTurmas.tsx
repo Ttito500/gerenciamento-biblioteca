@@ -43,8 +43,8 @@ const GerenciarTurmas: React.FC = () => {
   const handleShowInativar = () => setShowInativar(true);
 
   return (
-    <section className="emprestimos">
-      <div className="emprestimos-acoes">
+    <section className="indentacaoPadrao">
+      <div className="indentacaoPadrao-acoes">
         <ToastContainer
           className="p-3"
           position="bottom-center"

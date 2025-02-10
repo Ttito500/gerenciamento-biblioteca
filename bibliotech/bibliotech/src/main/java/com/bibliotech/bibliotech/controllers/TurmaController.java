@@ -2,6 +2,8 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
+import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.services.TurmasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,13 @@ public class TurmaController {
     @Autowired
     private TurmasService turmasService;
 
+    @Autowired
+    private TurmaResponseMapper turmaResponseMapper;
+
     @PostMapping("")
     public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody TurmaRequestDTO requestDTO){
 
-        TurmaResponseDTO turmaResponseDTO = turmasService.cadastrarTurma(requestDTO);
+        TurmaResponseDTO turmaResponseDTO = turmaResponseMapper.toDto(turmasService.cadastrarTurma(requestDTO));
         URI location = URI.create("/turmas/" + turmaResponseDTO.getId());
         return ResponseEntity.created(location).body(turmaResponseDTO);
     }
@@ -28,7 +33,7 @@ public class TurmaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TurmaResponseDTO> getTurmaById(@PathVariable Integer id){
-        return ResponseEntity.ok(turmasService.getTurmaById(id));
+        return ResponseEntity.ok(turmaResponseMapper.toDto(turmasService.getTurmaById(id)));
     }
 
     @GetMapping("/filtrar")
@@ -36,20 +41,22 @@ public class TurmaController {
                                                                 @RequestParam(required = false) String turma,
                                                                 @RequestParam(required = false) Integer anoDeEntrada,
                                                                 @RequestParam(required = false) Boolean ativo) {
-        List<TurmaResponseDTO> turmasResponseDTO = turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
-        return ResponseEntity.ok(turmasResponseDTO);
+        List<Turma> turmas = turmasService.filtrarTurmas(serie, turma, anoDeEntrada, ativo);
+        return ResponseEntity.ok(turmas.stream()
+                .map(turmaResponseMapper::toDto)
+                .toList());
     }
 
     @PutMapping ("/{id}")
     public ResponseEntity<TurmaResponseDTO> alterarTurma(@PathVariable Integer id, @RequestBody TurmaRequestDTO requestDTO) {
-        TurmaResponseDTO turmaAtualizadaResponseDTO = turmasService.alterarTurma(id, requestDTO);
+        TurmaResponseDTO turmaAtualizadaResponseDTO = turmaResponseMapper.toDto(turmasService.alterarTurma(id, requestDTO));
         return ResponseEntity.ok(turmaAtualizadaResponseDTO);
     }
 
     @PatchMapping("/{id}/inativar")
     public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
         turmasService.inativarTurma(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }
