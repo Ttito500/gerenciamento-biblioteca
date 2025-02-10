@@ -14,6 +14,8 @@ import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.bibliotech.bibliotech.repositories.SecaoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,12 +79,12 @@ public class LivrosService {
         return livroSalvo;
     }
 
-    public List<Livro> getLivros(String titulo, String isbn, String autor, String generos, Boolean ativo){
-        List<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, generos, ativo);
+    public Page<Livro> getLivros(String titulo, String isbn, String autor, String genero, Boolean ativo, Pageable pageable){
+        Page<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, genero, ativo, pageable);
 
-        for (int i = 0; i < livrosSalvos.size(); i++) {
-            livrosSalvos.get(i).setGeneros(generosService.findGenerosByLivroId(livrosSalvos.get(i).getId()));
-            livrosSalvos.get(i).setAutores(autorService.findAutorByLivroId(livrosSalvos.get(i).getId()));
+        for (Livro livro : livrosSalvos.getContent()) {
+            livro.setGeneros(generosService.findGenerosByLivroId(livro.getId()));
+            livro.setAutores(autorService.findAutorByLivroId(livro.getId()));
         }
 
         return livrosSalvos;

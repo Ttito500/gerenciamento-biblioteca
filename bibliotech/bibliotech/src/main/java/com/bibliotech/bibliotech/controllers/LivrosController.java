@@ -6,6 +6,9 @@ import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,14 +37,18 @@ public class LivrosController {
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<List<LivroResponseDTO>> getLivros(
+    public ResponseEntity<Page<LivroResponseDTO>> getLivros(
             @RequestParam(value = "titulo", required = false) String titulo,
             @RequestParam(value = "isbn", required = false) String isbn,
             @RequestParam(value = "autor", required = false) String autor,
             @RequestParam(value = "genero", required = false) String genero,
-            @RequestParam(value = "ativo", required = false) Boolean ativo) {
-        List<LivroResponseDTO> livroResponseDTO = livroResponseMapper.toDTOList(livrosService.getLivros(titulo, isbn, autor, genero, ativo));
-        return ResponseEntity.ok(livroResponseDTO);
+            @RequestParam(value = "ativo", required = false) Boolean ativo,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+
+        Page<LivroResponseDTO> livroResponseDTOPage = livrosService.getLivros(titulo, isbn, autor, genero, ativo, pageable)
+                .map(livroResponseMapper::toDTO);
+
+        return ResponseEntity.ok(livroResponseDTOPage);
     }
 
     @GetMapping("/{id}")
