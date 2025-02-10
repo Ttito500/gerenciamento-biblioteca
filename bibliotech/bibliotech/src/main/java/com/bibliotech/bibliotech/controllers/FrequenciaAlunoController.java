@@ -1,8 +1,8 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.FrequenciaAlunosRequestDTO;
-import com.bibliotech.bibliotech.dtos.response.FrequenciaAlunosResponceDTO;
-import com.bibliotech.bibliotech.dtos.response.mappers.FrequenciaAlunosResponceMapper;
+import com.bibliotech.bibliotech.dtos.response.FrequenciaAlunosResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.FrequenciaAlunosResponseMapper;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.services.FrequenciaAlunosService;
 import com.bibliotech.bibliotech.services.PdfExportService;
@@ -22,17 +22,17 @@ import java.util.List;
 @RequestMapping("/frequencia-alunos")
 public class FrequenciaAlunoController {
     private final FrequenciaAlunosService frequenciaAlunosService;
-    private final FrequenciaAlunosResponceMapper frequenciaAlunosResponceMapper;
+    private final FrequenciaAlunosResponseMapper frequenciaAlunosResponceMapper;
     private final PdfExportService pdfExportService;
 
-    public FrequenciaAlunoController(FrequenciaAlunosService frequenciaAlunosService, FrequenciaAlunosResponceMapper frequenciaAlunosResponceMapper, PdfExportService pdfExportService) {
+    public FrequenciaAlunoController(FrequenciaAlunosService frequenciaAlunosService, FrequenciaAlunosResponseMapper frequenciaAlunosResponceMapper, PdfExportService pdfExportService) {
         this.frequenciaAlunosService = frequenciaAlunosService;
         this.frequenciaAlunosResponceMapper = frequenciaAlunosResponceMapper;
         this.pdfExportService = pdfExportService;
     }
 
     @PostMapping
-    public ResponseEntity<FrequenciaAlunosResponceDTO> registrarFrequencia(@RequestBody @Valid FrequenciaAlunosRequestDTO requestDTO, BindingResult bindingResult) {
+    public ResponseEntity<FrequenciaAlunosResponseDTO> registrarFrequencia(@RequestBody @Valid FrequenciaAlunosRequestDTO requestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Erros de validação encontrados: " + bindingResult.getAllErrors());
         }
@@ -40,7 +40,7 @@ public class FrequenciaAlunoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FrequenciaAlunosResponceDTO>> filtrarFrequencias(@RequestParam(value = "data", required = false) LocalDate data) {
+    public ResponseEntity<List<FrequenciaAlunosResponseDTO>> filtrarFrequencias(@RequestParam(value = "data", required = false) LocalDate data) {
         return ResponseEntity.ok(frequenciaAlunosResponceMapper.toDtoList(frequenciaAlunosService.filtrarFrequencias(data)));
     }
 

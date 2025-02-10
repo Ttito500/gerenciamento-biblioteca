@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class FrequenciaAlunosResponceDTO {
+public class FrequenciaAlunosResponseDTO {
     private Integer id;
     private AlunoResponseDTO aluno;
     private UsuarioResponseDTO registradaPor;
