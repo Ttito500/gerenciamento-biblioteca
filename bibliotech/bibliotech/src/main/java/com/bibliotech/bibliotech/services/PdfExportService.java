@@ -1,0 +1,115 @@
+package com.bibliotech.bibliotech.services;
+
+import com.bibliotech.bibliotech.models.FrequenciaAlunos;
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.*;
+import org.springframework.stereotype.Service;
+
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+@Service
+public class PdfExportService {
+
+    public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+
+        //fonte em negrito para o título, tamanho 18
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Frequência de Alunos", fontBold18));
+        cell.setColspan(3);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        //fonte em negrito para os headers da tabela, tamanho 12
+        Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Aluno", FontBold12));
+        table.addCell(new Phrase("Atividade", FontBold12));
+        table.addCell(new Phrase("Data", FontBold12));
+
+        for (FrequenciaAlunos frequenciaAlunos : frequenciaAlunosList) {
+            table.addCell(frequenciaAlunos.getAluno().getNome());
+
+            // Replace underscores with spaces in the atividade field
+            String atividade = frequenciaAlunos.getAtividade().replace("_", " ");
+            table.addCell(atividade);
+
+            table.addCell(frequenciaAlunos.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    private void addHeader(Document document, PdfWriter writer) throws DocumentException {
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 10);
+        Font subHeaderFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+
+        // Criar um parágrafo para o cabeçalho
+        Paragraph headerContent = new Paragraph();
+        headerContent.setLeading(12); // Set line spacing
+        headerContent.add(new Chunk("E.E.M.T.I. ADELINO CUNHA ALCÂNTARA\n", headerFont));
+        headerContent.add(new Chunk("Av. Cel. Neco Martins, 317, Centro – CEP: 62670-000 – Telefone (85)3315-7014\n", subHeaderFont));
+        headerContent.add(new Chunk("Email: eemtadelinoaicantara@escola.ce.gov.br\n", subHeaderFont));
+        headerContent.add(new Chunk("São Gonçalo do Amarante – Ce\n", subHeaderFont));
+        headerContent.add(new Chunk("CNPJ: 079545140295-30\n", subHeaderFont));
+        headerContent.add(new Chunk("NEP: 23269014\n", subHeaderFont));
+
+
+        headerContent.setAlignment(Element.ALIGN_CENTER);
+        document.add(headerContent);
+
+        // Desenhar um retângulo ao redor do cabeçalho
+        PdfContentByte canvas = writer.getDirectContent();
+        canvas.saveState();
+        canvas.setLineWidth(1f);
+        canvas.setColorStroke(Color.BLACK);
+
+        float x = document.left() - 10; // X position (left margin)
+        float y = document.top() - 75; // Y position (adjusted to fit content)
+        float width = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() + 20; // Width
+        float height = 80; // Height
+        float radius = 10; // Corner radius
+
+        canvas.roundRectangle(x, y, width, height, radius);
+        canvas.stroke();
+        canvas.restoreState();
+
+        // adcicionando o resto do cabeçalho entre o retangulo e o conteúdo
+        Font boldSubHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
+        Font regularSubHeaderFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+
+        //  Cria um parágrafo para "Entidade/Escola" com rótulo em negrito
+        Paragraph entity = new Paragraph();
+        entity.add(new Chunk("Entidade/Escola: ", boldSubHeaderFont)); // Bold label
+        entity.add(new Chunk("EEMTI ADELINO CUNHA ALCÂNTARA", regularSubHeaderFont)); // Regular text
+        entity.setAlignment(Element.ALIGN_LEFT);
+        document.add(entity);
+
+        // Cria um parágrafo para "Município" com rótulo em negrito
+        Paragraph municipality = new Paragraph();
+        municipality.add(new Chunk("Município: ", boldSubHeaderFont)); // Bold label
+        municipality.add(new Chunk("SÃO GONÇALO DO AMARANTE – CE   CREDE:02", regularSubHeaderFont)); // Regular text
+        municipality.setAlignment(Element.ALIGN_LEFT);
+        document.add(municipality);
+    }
+}
