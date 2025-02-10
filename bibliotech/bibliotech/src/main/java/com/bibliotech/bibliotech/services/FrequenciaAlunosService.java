@@ -1,10 +1,10 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.FrequenciaAlunosRequestDTO;
+import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.repositories.FrequenciaAlunosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,6 +48,9 @@ public class FrequenciaAlunosService {
     }
 
     public void deletarFrequencia(Integer id){
+        if (frequenciaAlunosRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Frequência não encontrada.");
+        }
         frequenciaAlunosRepository.deleteById(id);
     }
 

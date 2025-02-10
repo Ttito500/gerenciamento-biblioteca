@@ -6,10 +6,12 @@ import com.bibliotech.bibliotech.dtos.response.mappers.FrequenciaAlunosResponceM
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.services.FrequenciaAlunosService;
 import com.bibliotech.bibliotech.services.PdfExportService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,7 +32,10 @@ public class FrequenciaAlunoController {
     }
 
     @PostMapping
-    public ResponseEntity<FrequenciaAlunosResponceDTO> registrarFrequencia(@RequestBody FrequenciaAlunosRequestDTO requestDTO) {
+    public ResponseEntity<FrequenciaAlunosResponceDTO> registrarFrequencia(@RequestBody @Valid FrequenciaAlunosRequestDTO requestDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Erros de validação encontrados: " + bindingResult.getAllErrors());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(frequenciaAlunosResponceMapper.toDto(frequenciaAlunosService.registrarFrequencia(requestDTO)));
     }
 
@@ -40,8 +45,16 @@ public class FrequenciaAlunoController {
     }
 
     @GetMapping("/export/pdf")
-    public ResponseEntity<byte[]> exportFrequenciasPdf(@RequestParam LocalDate data) {
+    public ResponseEntity<byte[]> exportFrequenciasPdf(@RequestParam(value = "data", required = false) LocalDate data) {
+        if (data == null) {
+            throw new IllegalArgumentException("Data não pode ser nula.");
+        }
+
         List<FrequenciaAlunos> frequencias = frequenciaAlunosService.filtrarFrequencias(data);
+
+        if (frequencias.isEmpty()) {
+            throw new IllegalArgumentException("Não há frequências registradas para a data informada.");
+        }
 
         byte[] pdfBytes = pdfExportService.exportFrequenciaAlunosToPdf(frequencias);
 
@@ -52,5 +65,11 @@ public class FrequenciaAlunoController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(pdfBytes);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarFrequencia(@PathVariable Integer id) {
+        frequenciaAlunosService.deletarFrequencia(id);
+        return ResponseEntity.noContent().build();
     }
 }
