@@ -6,6 +6,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import CadastrarUsuarios from "./Templates/CadastrarUsuarios";
 import FiltrosUsuarios from "./Templates/FiltrosUsuarios";
+import ListagemUsuarios from "./Templates/ListagemUsuarios";
 
 
 const Usuarios: React.FC = () =>{
@@ -17,10 +18,6 @@ const Usuarios: React.FC = () =>{
     const [showFrequencia, setFrequencia] = useState(false);
     const handleCloseFrequencia = () => setFrequencia(false);
     const handleShowFrequencia = () => setFrequencia(true);
-
-    const [showOcorrencia, setOcorrencia] = useState(false);
-    const handleCloseOcorrencia = () => setOcorrencia(false);
-    const handleShowOcorrencia = () => setOcorrencia(true);
 
     const [showCadastrar, setShowCadastrar] = useState(false);
     const handleCloseCadastrar = () => setShowCadastrar(false);
@@ -93,7 +90,7 @@ const Usuarios: React.FC = () =>{
             </div>
 
             <div className="w-100">
-
+                <ListagemUsuarios />
             </div>
         </section>
     );

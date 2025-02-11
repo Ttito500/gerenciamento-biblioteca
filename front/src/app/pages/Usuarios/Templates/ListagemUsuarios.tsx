@@ -1,0 +1,125 @@
+import React, { useState } from "react";
+import { Table, Badge, Button, ButtonGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+
+const ListagemUsuarios: React.FC = () => {
+
+    const [showEditar, setShowEditar] = useState(false);
+    const handleCloseEditar = () => setShowEditar(false);
+    const handleShowEditar = () => setShowEditar(true);
+
+    const [showInativar, setShowInativar] = useState(false);
+    const handleCloseInativar = () => setShowInativar(false);
+    const handleShowInativar = () => setShowInativar(true);
+
+    return (
+        <>
+            <Table striped className="tabela">
+                <thead>
+                <tr>
+                    <th className="th-size-ten">Cargo</th>
+                    <th className="th-size-fifteen">Nome</th>
+                    <th className="th-size-ten text-center">Data de Último Acesso</th>
+                    <th>Email</th>
+                    <th className="th-center-size-eight">Ativo</th>
+                    <th className="th-center-size-eight">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr className="tabela-tr">
+                    <td className="th-size-ten">Bibliotecária(o)</td>
+                    <td className="th-size-fifteen">Pedro Rivaldo</td>
+                    <td className="text-center">10/02/2025 12:53:99</td>
+                    <td>pr@email.com</td>
+                    <td className="th-center-size-eight">
+                        <Badge className="bibliotech-badge" bg="green">
+                            Ativo
+                        </Badge>
+                    </td>
+                    <td className="text-center">
+                        <ButtonGroup aria-label="Ações" className="tabela-acoes">
+                            <Button
+                                onClick={handleShowEditar}
+                                variant="btn-outline-secondary"
+                                className="color-green"
+                            >
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
+                            <Button
+                                onClick={handleShowInativar}
+                                variant="btn-outline-secondary"
+                                className="color-red"
+                            >
+                                <FontAwesomeIcon icon={faPowerOff} />
+                            </Button>
+                        </ButtonGroup>
+                    </td>
+                </tr>
+                <tr className="tabela-tr">
+                    <td className="th-size-ten">Aluno Monitor</td>
+                    <td className="th-size-fifteen">Kauan tanannananaanannana</td>
+                    <td className="th-center-size-fifteen">09/14/2025 12:83:20</td>
+                    <td>kauan@email.com</td>
+                    <td className="th-center-size-eight">
+                        <Badge className="bibliotech-badge" bg="green">
+                            Ativo
+                        </Badge>
+                    </td>
+                    <td className="text-center">
+                        <ButtonGroup aria-label="Ações" className="tabela-acoes">
+                            <Button
+                                onClick={handleShowEditar}
+                                variant="btn-outline-secondary"
+                                className="color-green"
+                            >
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
+                            <Button
+                                onClick={handleShowInativar}
+                                variant="btn-outline-secondary"
+                                className="color-red"
+                            >
+                                <FontAwesomeIcon icon={faPowerOff} />
+                            </Button>
+                        </ButtonGroup>
+                    </td>
+                </tr>
+                <tr className="tabela-tr">
+                    <td className="th-size-ten">Aluno Monitor</td>
+                    <td className="th-size-fifteen">Gabriel Alves</td>
+                    <td className="th-center-size-fifteen">05/02/2025 12:53:40</td>
+                    <td>gabrielalvestananananananananananaan@email.com</td>
+                    <td className="th-center-size-eight">
+                        <Badge className="bibliotech-badge" bg="red">
+                            Inativo
+                        </Badge>
+                    </td>
+                    <td className="text-center">
+                        <ButtonGroup aria-label="Ações" className="tabela-acoes">
+                            <Button
+                                onClick={handleShowEditar}
+                                variant="btn-outline-secondary"
+                                className="color-green"
+                            >
+                                <FontAwesomeIcon icon={faEdit} />
+                            </Button>
+                            <Button
+                                onClick={handleShowInativar}
+                                variant="btn-outline-secondary"
+                                className="color-red"
+                            >
+                                <FontAwesomeIcon icon={faPowerOff} />
+                            </Button>
+                        </ButtonGroup>
+                    </td>
+                </tr>
+                </tbody>
+            </Table>
+
+        </>
+    );
+
+};
+
+export default ListagemUsuarios;

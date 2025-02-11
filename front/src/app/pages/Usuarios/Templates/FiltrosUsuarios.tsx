@@ -21,7 +21,7 @@ const FiltrosUsuarios: React.FC = () => {
                                     <Form.Select aria-label="Selecione um cargo">
                                         <option>Selecione</option>
                                         <option value="1">Aluno Monitor</option>
-                                        <option value="2">Bibliotecário</option>
+                                        <option value="2">Bibliotecária(o)</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
