@@ -8,6 +8,7 @@ import Secoes from "./pages/Secoes/Secoes";
 import Menu from "./pages/Menu/Menu";
 import Estantes from "./pages/Estantes/Estantes";
 import Inicio from "./pages/Inicio/Inicio";
+import Usuarios from "./pages/Usuarios/Usuarios";
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Route path="/alunos" element={<Alunos />} />
           <Route path="/secoes" element={<Secoes />} />
           <Route path="/estantes" element={<Estantes />} />
+          <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/relatorios" />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
