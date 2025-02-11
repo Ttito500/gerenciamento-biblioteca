@@ -5,6 +5,7 @@ import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import CadastrarUsuarios from "./Templates/CadastrarUsuarios";
+import FiltrosUsuarios from "./Templates/FiltrosUsuarios";
 
 
 const Usuarios: React.FC = () =>{
@@ -88,7 +89,7 @@ const Usuarios: React.FC = () =>{
             </div>
 
             <div className="w-100">
-
+                <FiltrosUsuarios />
             </div>
 
             <div className="w-100">
