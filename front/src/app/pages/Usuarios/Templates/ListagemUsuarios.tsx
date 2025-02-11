@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Table, Badge, Button, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import Modal from "react-bootstrap/esm/Modal";
+import CadastrarUsuarios from "./CadastrarUsuarios";
+import EditarUsuario from "./EditarUsuario";
+import InativarUsuario from "./InativarUsuario";
+import AtivarUsuario from "./AtivarUsuario";
 
 const ListagemUsuarios: React.FC = () => {
 
@@ -12,6 +17,10 @@ const ListagemUsuarios: React.FC = () => {
     const [showInativar, setShowInativar] = useState(false);
     const handleCloseInativar = () => setShowInativar(false);
     const handleShowInativar = () => setShowInativar(true);
+
+    const [showAtivar, setShowAtivar] = useState(false);
+    const handleCloseAtivar = () => setShowAtivar(false);
+    const handleShowAtivar = () => setShowAtivar(true);
 
     return (
         <>
@@ -47,7 +56,7 @@ const ListagemUsuarios: React.FC = () => {
                                 <FontAwesomeIcon icon={faEdit} />
                             </Button>
                             <Button
-                                onClick={handleShowInativar}
+                                onClick={handleShowAtivar}
                                 variant="btn-outline-secondary"
                                 className="color-red"
                             >
@@ -58,7 +67,7 @@ const ListagemUsuarios: React.FC = () => {
                 </tr>
                 <tr className="tabela-tr">
                     <td className="th-size-ten">Aluno Monitor</td>
-                    <td className="th-size-fifteen">Kauan tanannananaanannana</td>
+                    <td className="th-size-fifteen">Kauan</td>
                     <td className="th-center-size-fifteen">09/14/2025 12:83:20</td>
                     <td>kauan@email.com</td>
                     <td className="th-center-size-eight">
@@ -76,7 +85,7 @@ const ListagemUsuarios: React.FC = () => {
                                 <FontAwesomeIcon icon={faEdit} />
                             </Button>
                             <Button
-                                onClick={handleShowInativar}
+                                onClick={handleShowAtivar}
                                 variant="btn-outline-secondary"
                                 className="color-red"
                             >
@@ -89,7 +98,7 @@ const ListagemUsuarios: React.FC = () => {
                     <td className="th-size-ten">Aluno Monitor</td>
                     <td className="th-size-fifteen">Gabriel Alves</td>
                     <td className="th-center-size-fifteen">05/02/2025 12:53:40</td>
-                    <td>gabrielalvestananananananananananaan@email.com</td>
+                    <td>gabrielalves@email.com</td>
                     <td className="th-center-size-eight">
                         <Badge className="bibliotech-badge" bg="red">
                             Inativo
@@ -107,7 +116,7 @@ const ListagemUsuarios: React.FC = () => {
                             <Button
                                 onClick={handleShowInativar}
                                 variant="btn-outline-secondary"
-                                className="color-red"
+                                className="color-green"
                             >
                                 <FontAwesomeIcon icon={faPowerOff} />
                             </Button>
@@ -117,6 +126,83 @@ const ListagemUsuarios: React.FC = () => {
                 </tbody>
             </Table>
 
+            <Modal
+                show={showEditar}
+                onHide={handleCloseEditar}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Usuário</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <EditarUsuario />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseEditar}>
+                        Cancelar
+                    </Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faCheck} /> Salvar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showInativar}
+                onHide={handleCloseInativar}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmação</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <InativarUsuario />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseInativar}>
+                        Cancelar
+                    </Button>
+                    <Button variant="danger">
+                        <FontAwesomeIcon icon={faCheck} /> Inativar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showAtivar}
+                onHide={handleCloseAtivar}
+                size="lg"
+                backdrop="static"
+                centered
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmação</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <AtivarUsuario />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAtivar}>
+                        Cancelar
+                    </Button>
+                    <Button variant="success">
+                        <FontAwesomeIcon icon={faCheck} /> Ativar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 
