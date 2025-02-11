@@ -59,4 +59,9 @@ public class TurmaController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{id}/ativar")
+    public ResponseEntity<Void> ativarTurma(@PathVariable Integer id) {
+        turmasService.ativarTurma(id);
+        return ResponseEntity.ok().build();
+    }
 }
