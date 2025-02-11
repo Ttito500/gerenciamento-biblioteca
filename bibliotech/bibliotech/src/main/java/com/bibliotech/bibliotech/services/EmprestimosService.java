@@ -19,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 public class EmprestimosService {
@@ -38,10 +37,10 @@ public class EmprestimosService {
 
     public EmprestimoResponseDTO realizarEmprestimo (EmprestimoRequestDTO requestDTO) {
         if (requestDTO.getIdAluno() == null) {
-            throw new ValidationException("O aluno não pode ser nulo");
+            throw new ValidationException("O aluno não pode ser nulo.");
         }
         if (requestDTO.getIdExemplar() == null) {
-            throw new ValidationException("O exemplar não pode ser nulo");
+            throw new ValidationException("O exemplar não pode ser nulo.");
         }
 
         Emprestimo emprestimo = emprestimoRequestMapper.toEntity(requestDTO);
@@ -60,7 +59,7 @@ public class EmprestimosService {
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado")){
-            throw new ValidationException("Emprestimo ja cancelado");
+            throw new ValidationException("Emprestimo ja cancelado;");
         }
 
         emprestimo.setSituacao("cancelado");
@@ -73,7 +72,7 @@ public class EmprestimosService {
 
         emprestimoRepository.save(emprestimo);
 
-        return "Emprestimo cancelado com sucesso";
+        return "Emprestimo cancelado com sucesso;";
     }
 
     //CONSERTAR USUARIO DEPOIS
@@ -102,7 +101,7 @@ public class EmprestimosService {
 
         emprestimoRepository.save(emprestimo);
 
-        return DTOConcluir.isExtraviado() ? "Emprestimo extraviado com sucesso" : "Emprestimo concluido com sucesso";
+        return DTOConcluir.isExtraviado() ? "Emprestimo extraviado com sucesso." : "Emprestimo concluido com sucesso.";
     }
 
     @Transactional
@@ -111,7 +110,7 @@ public class EmprestimosService {
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
-            throw new ValidationException("Emprestimo ja concluido");
+            throw new ValidationException("Emprestimo ja concluido.");
         }
 
         if (ChronoUnit.DAYS.between(emprestimo.getDataEmprestimo(), LocalDate.now()) > 30) {
@@ -120,7 +119,7 @@ public class EmprestimosService {
 
 
         if (emprestimo.getQtdRenovacao() >= 3){
-            throw new ValidationException("Renovação não permitida. O número máximo de renovações foi atingido");
+            throw new ValidationException("Renovação não permitida. O número máximo de renovações foi atingido.");
         }
 
         if (emprestimo.getSituacao().equals("atrasado")){
@@ -135,7 +134,7 @@ public class EmprestimosService {
 
         emprestimoRepository.save(emprestimo);
 
-        return "Prazo renovado com sucesso";
+        return "Prazo renovado com sucesso.";
     }
 
     public Page<EmprestimoResponseDTO> consultarEmprestimos(String nomeAluno, String tituloLivro, String isbn, String situacao, String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor, LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
