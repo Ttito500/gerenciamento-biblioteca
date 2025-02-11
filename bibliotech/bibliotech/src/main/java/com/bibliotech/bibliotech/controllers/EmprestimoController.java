@@ -5,7 +5,6 @@ import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
-import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

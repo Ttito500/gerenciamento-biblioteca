@@ -79,7 +79,7 @@ public class EmprestimosService {
     //CONSERTAR USUARIO DEPOIS
     public String concluirEmprestimo(Integer id, EmprestimoRequestDTOConcluir DTOConcluir){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
             throw new ValidationException("Emprestimo ja concluido");
