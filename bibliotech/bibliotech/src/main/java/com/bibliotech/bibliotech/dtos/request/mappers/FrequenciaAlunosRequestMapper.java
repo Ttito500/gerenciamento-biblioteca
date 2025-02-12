@@ -1,34 +1,28 @@
 package com.bibliotech.bibliotech.dtos.request.mappers;
 
 import com.bibliotech.bibliotech.dtos.request.FrequenciaAlunosRequestDTO;
-import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Usuario;
-import com.bibliotech.bibliotech.repositories.AlunoRepository;
-import com.bibliotech.bibliotech.repositories.UsuarioRepository;
 import com.bibliotech.bibliotech.services.AlunosService;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class FrequenciaAlunosRequestMapper {
-    private final AlunosService alunoRepository;
-    private final UsuarioService usuarioRepository;
+    private final AlunosService alunosService;
+    private final UsuarioService usuarioService;
 
     public FrequenciaAlunosRequestMapper(AlunosService alunoRepository, UsuarioService usuarioRepository) {
-        this.alunoRepository = alunoRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.alunosService = alunoRepository;
+        this.usuarioService = usuarioRepository;
     }
 
     public FrequenciaAlunos toEntity(FrequenciaAlunosRequestDTO frequenciaAlunosRequestDTO) {
         FrequenciaAlunos frequenciaAlunos = new FrequenciaAlunos();
 
-        Aluno alunoExistente = alunoRepository.buscarAlunoPorId(frequenciaAlunosRequestDTO.getIdAluno());
-        Usuario usuarioExistente = usuarioRepository.getUsuarioById(frequenciaAlunosRequestDTO.getRegistradaPor());
+        Aluno alunoExistente = alunosService.buscarAlunoPorId(frequenciaAlunosRequestDTO.getIdAluno());
+        Usuario usuarioExistente = usuarioService.getUsuarioById(frequenciaAlunosRequestDTO.getRegistradaPor());
 
 
         if (frequenciaAlunosRequestDTO == null) {
