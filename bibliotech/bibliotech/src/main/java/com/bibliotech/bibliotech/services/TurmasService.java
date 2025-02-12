@@ -82,4 +82,13 @@ public class TurmasService {
         turmaExistente.setAtivo(false);
         turmaRepository.save(turmaExistente);
     }
+
+    public void ativarTurma(Integer id) {
+        Turma turmaExistente = turmaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
+
+        alunosService.ativarAlunosPorTurma(turmaExistente);
+        turmaExistente.setAtivo(true);
+        turmaRepository.save(turmaExistente);
+    }
 }
