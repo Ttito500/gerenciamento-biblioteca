@@ -1,10 +1,13 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
+import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -14,6 +17,8 @@ import java.util.List;
 
 @Service
 public class PdfExportService {
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
@@ -96,6 +101,49 @@ public class PdfExportService {
             table.addCell(ocorrencia.getAluno().getNome());
             table.addCell(ocorrencia.getRegistradaPor().getNome());
             table.addCell(ocorrencia.getDetalhes());
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportAlunosMaisLeitores(){
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+        table.setWidths(new float[]{2, 2, 5});
+
+        //fonte em negrito para o título, tamanho 18
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Alunos Mais Leitores", fontBold18));
+        cell.setColspan(3);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        //fonte em negrito para os headers da tabela, tamanho 12
+        Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Aluno", FontBold12));
+        table.addCell(new Phrase("Turma", FontBold12));
+        table.addCell(new Phrase("Quantidade de empréstimos", FontBold12));
+
+        for (Aluno aluno : emprestimoRepository.findTopLeitores()) {
+            table.addCell(aluno.getNome());
+            table.addCell(aluno.getTurma());
+            table.addCell(String.valueOf(aluno.getQtdEmprestimos()));
         }
 
         document.add(table);
