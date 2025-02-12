@@ -96,10 +96,27 @@ public class AlunosService {
         alunoRepository.save(alunoExistente);
     }
 
+    @Transactional
+    public void ativarAluno(Integer id) {
+        Aluno alunoExistente = alunoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+
+        alunoExistente.setAtivo(true);
+        alunoRepository.save(alunoExistente);
+    }
+
     public void inativarAlunosPorTurma(Turma turma) {
         List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null);
         for (Aluno aluno : alunos) {
             aluno.setAtivo(false);
+        }
+        alunoRepository.saveAll(alunos);
+    }
+
+    public void ativarAlunosPorTurma(Turma turma) {
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, false, null);
+        for (Aluno aluno : alunos) {
+            aluno.setAtivo(true);
         }
         alunoRepository.saveAll(alunos);
     }
