@@ -24,6 +24,9 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
                               @Param("ativo") Boolean ativo,
                               @Param("situacao") String situacao);
 
+    @Query("SELECT CASE WHEN a.situacao <> 'regular' THEN true ELSE false END FROM Aluno a WHERE a.id = :id")
+    boolean temSituacaoIrregular(@Param("id") Integer id);
+
     boolean existsByEmail(String email);
     boolean existsById(Integer id);
 }

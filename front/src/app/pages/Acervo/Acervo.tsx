@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheck, faTrash, faTableList } from '@fortawesome/free-solid-svg-icons';
 import AcervoListagem from './templates/AcervoListagem';
 import AcervoFiltros from "./templates/AcervoFiltros";
 import Modal from 'react-bootstrap/Modal';
@@ -14,6 +14,8 @@ import AcervoEmprestimosLivro from "./templates/AcervoEmprestimosLivro";
 import AcervoRealizarEmprestimo from "./templates/AcervoRealizarEmprestimo";
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import GerenciarTurmas from "../Alunos/turmas/GerenciarTurmas";
+import Exemplares from "./Exemplares/Exemplares";
 
 const Acervo: React.FC = () => {
 
@@ -46,6 +48,10 @@ const Acervo: React.FC = () => {
 	const [deletingLivro, setDeletingLivro] = useState<number | null>(null);
 	const [showToastError, setShowToastError] = useState(false);
 	const [showToastSuccess, setShowToastSuccess] = useState(false);
+
+	const [showExemplares, setShowExemplares] = useState(false);
+	const handleCloseExemplares = () => setShowExemplares(false);
+	const handleShowExemplares = () => setShowExemplares(true);
 
   useEffect(() => {
     listarLivros();
@@ -165,8 +171,8 @@ const Acervo: React.FC = () => {
   }
 
 	return (
-		<section className="acervo">
-			<div className="acervo-acoes">
+		<section className="indentacaoPadrao">
+			<div className="indentacaoPadrao-acoes">
 
 				<ToastContainer
           className="p-3"
@@ -324,6 +330,34 @@ const Acervo: React.FC = () => {
 						</Button>
 					</Modal.Footer>
 				</Modal>
+
+				{/*botap para teste de exemplares(LEMBRAR DE APAGAR)*/}
+				<Button variant="info" className="btn-orange" onClick={handleShowExemplares	}>
+					<FontAwesomeIcon icon={faTableList} />
+				</Button>
+
+				<Modal
+					show={showExemplares}
+					onHide={handleCloseExemplares}
+					size="xl"
+					backdrop="static"
+					centered
+					keyboard={false}>
+
+					<Modal.Header closeButton>
+						<Modal.Title>Gerenciar Exemplares</Modal.Title>
+					</Modal.Header>
+
+					<Modal.Body>
+						<Exemplares/>
+					</Modal.Body>
+
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleCloseExemplares}>Ok</Button>
+
+					</Modal.Footer>
+				</Modal>
+
 			</div>
 
 			<div className="w-100">

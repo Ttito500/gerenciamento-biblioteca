@@ -1,14 +1,14 @@
-package com.bibliotech.bibliotech.dtos.response;
+package com.bibliotech.bibliotech.dtos.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TurmaResponseDTO {
+public class TurmaRequestDTO {
     private Integer id;
     private Integer serie;
     private String turma;
-    private Integer anoDeEntrada;
+    private Integer AnoDeEntrada;
     private boolean ativo;
 }
