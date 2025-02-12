@@ -7,7 +7,7 @@ const API_URL = "http://localhost:8090/turmas";
 export const getTurmas = async (filtros: TurmaFiltros): Promise<GetTurmaResponse[]> => {
   try {
     const queryString = getQueryString(filtros);
-    const url = queryString ? `${API_URL}/filtros?${queryString}` : `${API_URL}/filtros`;
+    const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtrar`;
     
     const response = await axios.get<GetTurmaResponse[]>(url);
     return response.data;
