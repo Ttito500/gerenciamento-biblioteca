@@ -131,9 +131,8 @@ body {
   font-weight: bold;
   font-size: 1rem;
   text-decoration: none;
-  color: var(--color-orange);
+  color: var(--color-white);
 
-  background-color: var(--color-white);
   padding: 4px 8px 4px 8px;
   margin-right: 8px;
   border-radius: 6px;
@@ -151,6 +150,11 @@ body {
 
 .navbar-nav .navbar-link:hover {
   color: var(--color-white);
+}
+
+.navbar-nav-custom {
+  display: flex;
+  gap: 30px;
 }
 
 .alunos {
@@ -232,7 +236,7 @@ body {
 .no-border-radius-right {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-} /*resolvendo conflito*/
+}
 
 .th-center-size-eight {
   width: 8%;

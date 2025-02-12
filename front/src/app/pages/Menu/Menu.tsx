@@ -1,9 +1,20 @@
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from 'react-router-dom';
+import Button from "react-bootstrap/esm/Button";
+import Modal from "react-bootstrap/esm/Modal";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faRightFromBracket, faCircleUser} from "@fortawesome/free-solid-svg-icons";
+import Perfil from "./templates/Perfil";
 
 const Menu: React.FC = () => {
+
+  const [showPerfil, setShowPerfil] = useState(false);
+  const handleClosePerfil = () => setShowPerfil(false);
+  const handleShowPerfil = () => setShowPerfil(true);
+
   return (
       <>
         <Navbar className="bg-green navbar">
@@ -11,7 +22,7 @@ const Menu: React.FC = () => {
           <span className="navbar-brand-bibliotech">
             Acervo Bibliotech
           </span>
-          <Nav className="me-auto">
+          <Nav className="me-auto navbar-nav-custom">
             <Nav.Link as={NavLink} to="/inicio" className="navbar-link color-white">
               Início
             </Nav.Link>
@@ -40,8 +51,46 @@ const Menu: React.FC = () => {
               Relatórios
             </Nav.Link>
           </Nav>
-        </Container>
-      </Navbar>
+            <div
+                onClick={handleShowPerfil}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "2rem",
+                  position: "absolute",
+                  right: "20px",
+                  color: "white"
+                }}
+            >
+              <FontAwesomeIcon icon={faCircleUser}/> {/*nao achei o icone exato do prototipo*/}
+            </div>
+          </Container>
+        </Navbar>
+
+        <Modal
+            show={showPerfil}
+            onHide={handleClosePerfil}
+            size="lg"
+            backdrop="static"
+            centered
+            keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Perfil</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Perfil />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClosePerfil}>
+              Voltar
+            </Button>
+            <Button variant="danger">
+              <FontAwesomeIcon icon={faRightFromBracket} /> Sair
+            </Button>
+          </Modal.Footer>
+        </Modal>
     </>
   );
 };

@@ -3,7 +3,6 @@ import { Table, Badge, Button, ButtonGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faEdit, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/esm/Modal";
-import CadastrarUsuarios from "./CadastrarUsuarios";
 import EditarUsuario from "./EditarUsuario";
 import InativarUsuario from "./InativarUsuario";
 import AtivarUsuario from "./AtivarUsuario";
