@@ -23,16 +23,8 @@ public class FrequenciaAlunosService {
     }
 
     public FrequenciaAlunos registrarFrequencia(FrequenciaAlunosRequestDTO requestDTO) {
-        if (requestDTO.getIdAluno() == null) {
-            throw new ValidationException("O aluno não pode ser nulo.");
-        }
-        if (requestDTO.getRegistradaPor() == null) {
-            throw new ValidationException("O usuário que registrou a frequência não pode ser nulo.");
-        }
-        if (requestDTO.getAtividade() == null || requestDTO.getAtividade().isEmpty()) {
-            throw new ValidationException("A atividade não pode ser nula ou vazia.");
-        }
 
+        //validaçoes feitas no controller com o jakarta
         FrequenciaAlunos frequenciaAlunos = new FrequenciaAlunos();
         frequenciaAlunos.setAluno(alunosService.buscarAlunoPorId(requestDTO.getIdAluno()));
         frequenciaAlunos.setRegistradaPor(usuarioService.getUsuarioById(requestDTO.getRegistradaPor()));
