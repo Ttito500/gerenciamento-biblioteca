@@ -94,7 +94,7 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
                 <option value="">Selecione</option>
                 {turmas.map((turma) => (
                   <option key={turma.id} value={turma.id}>
-                    Série: {turma.serie} / Turma: {turma.turma}
+                    Série: {turma.serie}ª / Turma: {turma.turma}
                   </option>
                 ))}
               </Form.Select>
@@ -130,7 +130,7 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
           <Col xs={6}>
             <Form.Group className="mb-3">
               <Form.Label>
-                Email
+                Email <span className="obgr">*</span>
               </Form.Label>
               <Form.Control 
                 type="email" 
@@ -140,6 +140,10 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
                 value={formData.email} 
                 onChange={onChange} 
               />
+
+            <Form.Control.Feedback type="invalid">
+                Campo obrigatório.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
 

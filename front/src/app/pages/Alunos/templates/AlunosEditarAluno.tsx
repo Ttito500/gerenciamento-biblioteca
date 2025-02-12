@@ -96,7 +96,7 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
                 <option value="">Selecione</option>
                 {turmas.map((turma) => (
                   <option key={turma.id} value={turma.id}>
-                    Série: {turma.serie} / Turma: {turma.turma}
+                    Série: {turma.serie}ª / Turma: {turma.turma}
                   </option>
                 ))}
               </Form.Select>
@@ -133,7 +133,7 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
           <Col>
             <Form.Group className="mb-3">
               <Form.Label>
-                Email
+                Email <span className="obgr">*</span>
               </Form.Label>
               <Form.Control 
                 type="email" 
@@ -143,6 +143,10 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
                 value={formData.email} 
                 onChange={onChange} 
               />
+
+            <Form.Control.Feedback type="invalid">
+                Campo obrigatório.
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
 
@@ -164,25 +168,25 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
 
           <Col>
             <Form.Group className="mb-3">
-                <Form.Label>
-                  Situação <span className="obgr">*</span>
-                </Form.Label>
-                <Form.Select 
-                  aria-label="Selecione" 
-                  name="situacao" 
-                  value={formData.situacao} 
-                  required
-                  onChange={onChange}
-                >
-                  <option value="regular">Regular</option>
-                  <option value="irregular">Irregular</option>
-                  <option value="debito">Em Débito</option>
-                </Form.Select>
+              <Form.Label>
+                Situação <span className="obgr">*</span>
+              </Form.Label>
+              <Form.Select 
+                aria-label="Selecione" 
+                name="situacao" 
+                value={formData.situacao} 
+                required
+                onChange={onChange}
+              >
+                <option value="regular">Regular</option>
+                <option value="irregular">Irregular</option>
+                <option value="debito">Em Débito</option>
+              </Form.Select>
 
-                <Form.Control.Feedback type="invalid">
-                  Campo obrigatório.
-                </Form.Control.Feedback>
-              </Form.Group>
+              <Form.Control.Feedback type="invalid">
+                Campo obrigatório.
+              </Form.Control.Feedback>
+            </Form.Group>
           </Col>
         </Row>
       </Form>

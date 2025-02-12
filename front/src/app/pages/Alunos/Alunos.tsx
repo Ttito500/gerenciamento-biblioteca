@@ -158,7 +158,7 @@ const Alunos: React.FC = () => {
 			const body: UpdateAlunoRequest = {
 				email: formDataEditarAluno.email,
 				situacao: formDataEditarAluno.situacao,
-				idTurma: Number(formDataCadastrarAluno.idTurma),
+				idTurma: Number(formDataEditarAluno.idTurma),
 				nome: formDataEditarAluno.nome,
 				telefone: formDataEditarAluno.telefone
 			}
