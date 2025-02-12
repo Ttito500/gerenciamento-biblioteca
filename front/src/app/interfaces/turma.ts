@@ -36,8 +36,8 @@ export interface GetTurmaResponse {
 }
 
 export interface TurmaFiltros {
-  serie: number
-  turma: string
-  anoDeEntrada: number
-  ativo: boolean
+  serie?: number
+  turma?: string
+  anoDeEntrada?: number
+  ativo?: boolean
 }

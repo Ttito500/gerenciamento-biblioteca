@@ -4,10 +4,10 @@ import { getQueryString } from '../shared/utils';
 
 const API_URL = 'http://localhost:8090/alunos';
 
-export const getAlunos = async (filtros: AlunoFiltros): Promise<GetAlunoResponse[]> => {
+export const getAlunos = async (filtros?: AlunoFiltros): Promise<GetAlunoResponse[]> => {
   try {
     const queryString = getQueryString(filtros);
-    const url = queryString ? `${API_URL}/?${queryString}` : `${API_URL}`;
+    const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;
 
     const response = await axios.get<GetAlunoResponse[]>(url);
     return response.data;
@@ -39,9 +39,18 @@ export const updateAluno = async (id: number, aluno: UpdateAlunoRequest): Promis
 
 export const inativarAluno = async (id: number): Promise<void> => {
   try {
-    await axios.patch(`${API_URL}/${id}/inativar`);
+    await axios.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
     console.error('Erro ao inativar aluno:', error);
+    throw error;
+  }
+};
+
+export const ativarAluno = async (id: number): Promise<void> => {
+  try {
+    await axios.patch(`${API_URL}/ativar/${id}`);
+  } catch (error) {
+    console.error('Erro ao ativar aluno:', error);
     throw error;
   }
 };
