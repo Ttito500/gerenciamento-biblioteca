@@ -55,13 +55,20 @@ const Menu: React.FC = () => {
                 onClick={handleShowPerfil}
                 style={{
                   cursor: "pointer",
-                  fontSize: "2rem",
+                  fontSize: "1.75rem",
                   position: "absolute",
                   right: "20px",
-                  color: "white"
+                  color: "white",
+                  backgroundColor: "#75B798",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
             >
-              <FontAwesomeIcon icon={faCircleUser}/> {/*nao achei o icone exato do prototipo*/}
+              <FontAwesomeIcon icon={faCircleUser}/>
             </div>
           </Container>
         </Navbar>
