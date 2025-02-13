@@ -258,10 +258,11 @@ const GerenciarTurmas: React.FC = () => {
       <Modal
         show={showAtivar}
         onHide={handleCloseAtivar}
-        size="sm"
+        size="lg"
         backdrop="static"
         centered
         keyboard={false}
+        className="Modais-Confirmacao-Custon"
       >
         <Modal.Header closeButton>
           <Modal.Title>Confirmação</Modal.Title>
@@ -282,10 +283,11 @@ const GerenciarTurmas: React.FC = () => {
       <Modal
         show={showInativar}
         onHide={handleCloseInativar}
-        size="sm"
+        size="lg"
         backdrop="static"
         centered
         keyboard={false}
+        className="Modais-Confirmacao-Custon"
       >
         <Modal.Header closeButton>
           <Modal.Title>Confirmação</Modal.Title>

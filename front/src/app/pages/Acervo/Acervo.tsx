@@ -314,6 +314,7 @@ const Acervo: React.FC = () => {
 					backdrop="static"
 					centered
 					keyboard={false}
+					className="Modais-Confirmacao-Custon"
 				>
 					<Modal.Header closeButton>
 						<Modal.Title>Confirmação</Modal.Title>
@@ -335,6 +336,7 @@ const Acervo: React.FC = () => {
 				<Button variant="info" className="btn-orange" onClick={handleShowExemplares	}>
 					<FontAwesomeIcon icon={faTableList} />
 				</Button>
+
 
 				<Modal
 					show={showExemplares}
