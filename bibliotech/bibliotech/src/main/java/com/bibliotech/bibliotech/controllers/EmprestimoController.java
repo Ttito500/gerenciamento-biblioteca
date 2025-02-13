@@ -2,9 +2,11 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
+import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/emprestimos")
@@ -106,5 +109,10 @@ public class EmprestimoController {
             @RequestBody EmprestimoRequestDTOConcluir DTOConcluir) {
 
         return ResponseEntity.ok(emprestimosService.concluirEmprestimo(id, DTOConcluir));
+    }
+
+    @PostMapping("/verificar-atrasos")
+    public ResponseEntity<List<EmprestimoNotificacaoDTO>> verificarAtrasos() {
+        return ResponseEntity.ok(emprestimosService.enviarEmailAtrasadosEPresteAAtrasar());
     }
 }
