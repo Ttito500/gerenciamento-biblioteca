@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class AlunoLeiturasDTO {
     private String nome;
-    private Integer idTurma;
+    private Integer serie;
+    private String turma;
     private Long quantidade_leituras;
 }

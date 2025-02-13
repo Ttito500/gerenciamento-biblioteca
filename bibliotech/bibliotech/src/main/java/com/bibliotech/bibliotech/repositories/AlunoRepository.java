@@ -29,11 +29,11 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
     boolean temSituacaoIrregular(@Param("id") Integer id);
 
 
-    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(a.nome, t.id, COUNT(e)) " +
+    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(a.nome, t.serie, t.turma, COUNT(e)) " +
             "FROM Aluno a " +
             "JOIN a.turma t " +
-            "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " + // Use e.aluno.id here
-            "GROUP BY a.nome, t.id")
+            "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " +
+            "GROUP BY a.nome, t.serie, t.turma") // Group by serie and turma as well
     List<AlunoLeiturasDTO> obterAlunosComQuantidadeLeituras();
 
     boolean existsByEmail(String email);

@@ -27,9 +27,6 @@ public class PdfExportService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    @Autowired
-    private TurmasService turmasService;
-
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -153,9 +150,8 @@ public class PdfExportService {
             table.addCell(new Phrase("Leituras", FontBold12));
 
             for (AlunoLeiturasDTO aluno : alunos) {
-                Turma turma = turmasService.getTurmaById(aluno.getIdTurma());
                 table.addCell(aluno.getNome());
-                table.addCell(turma.getSerie() + " " + turma.getTurma());
+                table.addCell(aluno.getSerie() + " " + aluno.getTurma());
                 table.addCell(aluno.getQuantidade_leituras().toString());
             }
 
