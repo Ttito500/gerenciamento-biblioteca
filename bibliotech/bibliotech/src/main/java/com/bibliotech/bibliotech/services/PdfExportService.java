@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
+import com.bibliotech.bibliotech.models.Ocorrencia;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
@@ -52,6 +53,49 @@ public class PdfExportService {
             table.addCell(atividade);
 
             table.addCell(frequenciaAlunos.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportOcorrenciasToPdf(List<Ocorrencia> ocorrenciasList) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+        table.setWidths(new float[]{2, 2, 5});
+
+        //fonte em negrito para o título, tamanho 18
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Ocorrências", fontBold18));
+        cell.setColspan(3);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        //fonte em negrito para os headers da tabela, tamanho 12
+        Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Aluno", FontBold12));
+        table.addCell(new Phrase("Registrada por", FontBold12));
+        table.addCell(new Phrase("Detalhes", FontBold12));
+
+        for (Ocorrencia ocorrencia : ocorrenciasList) {
+            table.addCell(ocorrencia.getAluno().getNome());
+            table.addCell(ocorrencia.getRegistradaPor().getNome());
+            table.addCell(ocorrencia.getDetalhes());
         }
 
         document.add(table);

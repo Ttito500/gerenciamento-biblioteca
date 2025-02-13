@@ -1,11 +1,15 @@
 import axios from 'axios';
-import { CreateAlunoRequest, CreateAlunoResponse, GetAlunoResponse, UpdateAlunoRequest, UpdateAlunoResponse } from '../interfaces/aluno';
+import { AlunoFiltros, CreateAlunoRequest, CreateAlunoResponse, GetAlunoResponse, UpdateAlunoRequest, UpdateAlunoResponse } from '../interfaces/aluno';
+import { getQueryString } from '../shared/utils';
 
 const API_URL = 'http://localhost:8090/alunos';
 
-export const getAlunos = async (): Promise<GetAlunoResponse[]> => {
+export const getAlunos = async (filtros?: AlunoFiltros): Promise<GetAlunoResponse[]> => {
   try {
-    const response = await axios.get<GetAlunoResponse[]>(API_URL);
+    const queryString = getQueryString(filtros);
+    const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;
+
+    const response = await axios.get<GetAlunoResponse[]>(url);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);
@@ -33,11 +37,20 @@ export const updateAluno = async (id: number, aluno: UpdateAlunoRequest): Promis
   }
 };
 
-export const deleteAluno = async (id: number): Promise<void> => {
+export const inativarAluno = async (id: number): Promise<void> => {
   try {
-    await axios.delete(`${API_URL}/${id}`);
+    await axios.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
-    console.error('Erro ao deletar aluno:', error);
+    console.error('Erro ao inativar aluno:', error);
+    throw error;
+  }
+};
+
+export const ativarAluno = async (id: number): Promise<void> => {
+  try {
+    await axios.patch(`${API_URL}/ativar/${id}`);
+  } catch (error) {
+    console.error('Erro ao ativar aluno:', error);
     throw error;
   }
 };

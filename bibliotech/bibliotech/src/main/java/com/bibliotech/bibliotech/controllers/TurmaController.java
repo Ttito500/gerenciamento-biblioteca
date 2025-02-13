@@ -53,10 +53,15 @@ public class TurmaController {
         return ResponseEntity.ok(turmaAtualizadaResponseDTO);
     }
 
-    @PatchMapping("/{id}/inativar")
+    @PatchMapping("/inativar/{id}")
     public ResponseEntity<Void> inativarTurma(@PathVariable Integer id) {
         turmasService.inativarTurma(id);
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<Void> ativarTurma(@PathVariable Integer id) {
+        turmasService.ativarTurma(id);
+        return ResponseEntity.ok().build();
+    }
 }
