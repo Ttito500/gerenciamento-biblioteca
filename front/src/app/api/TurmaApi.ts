@@ -54,3 +54,12 @@ export const inativarTurma = async (id: number): Promise<void> => {
   }
 };
 
+export const ativarTurma = async (id: number): Promise<void> => {
+  try {
+    await axios.patch(`${API_URL}/ativar/${id}`);
+  } catch (error) {
+    console.error("Erro ao ativar turma:", error);
+    throw error;
+  }
+};
+

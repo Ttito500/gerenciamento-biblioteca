@@ -36,9 +36,7 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
     setLoading(true);
 
     try {
-      const filtros: TurmaFiltros = {
-        ativo: true
-      }
+      const filtros: TurmaFiltros = {}
       const data = await getTurmas(filtros);
       setTurmas(data);
     } catch (err) {
@@ -96,7 +94,7 @@ const AlunosEditarAluno: React.FC<AlunosEditarAlunoProps> = ({ formData, onChang
                 <option value="">Selecione</option>
                 {turmas.map((turma) => (
                   <option key={turma.id} value={turma.id}>
-                    Série: {turma.serie}ª / Turma: {turma.turma}
+                    Série: {turma.serie}ª / Turma: {turma.turma} / Ano de Entrada: {turma.anoDeEntrada}
                   </option>
                 ))}
               </Form.Select>

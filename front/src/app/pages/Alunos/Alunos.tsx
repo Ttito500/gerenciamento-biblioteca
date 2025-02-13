@@ -133,7 +133,12 @@ const Alunos: React.FC = () => {
 
       listarAlunos();
 			setShowToastSuccess(true);
-			setFormDataCadastrarAluno(null);
+			setFormDataCadastrarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+      });
       handleCloseCadastrar();
     } catch (err) {
 			setShowToastError(true);
@@ -166,7 +171,13 @@ const Alunos: React.FC = () => {
 
       listarAlunos();
 			setShowToastSuccess(true);
-			setFormDataEditarAluno(null);
+			setFormDataEditarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+        situacao: ''
+      });
       handleCloseEditar();
     } catch (err) {
       setShowToastError(true);
@@ -345,7 +356,7 @@ const Alunos: React.FC = () => {
         <Modal
           show={showGerenciarTurmas}
           onHide={handleCloseGerenciarTurmas}
-          size="lg"
+          size="xl"
           backdrop="static"
           centered
           keyboard={false}>

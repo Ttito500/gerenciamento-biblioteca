@@ -94,7 +94,7 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
                 <option value="">Selecione</option>
                 {turmas.map((turma) => (
                   <option key={turma.id} value={turma.id}>
-                    Série: {turma.serie}ª / Turma: {turma.turma}
+                    Série: {turma.serie}ª / Turma: {turma.turma} / Ano de Entrada: {turma.anoDeEntrada}
                   </option>
                 ))}
               </Form.Select>

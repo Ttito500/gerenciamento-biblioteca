@@ -16,7 +16,6 @@ export interface UpdateTurmaRequest {
   serie: number
   turma: string
   anoDeEntrada: number
-  ativo: boolean
 }
 
 export interface UpdateTurmaResponse {
