@@ -26,7 +26,7 @@ jobs:
         PGADMIN_LISTEN_PORT: ${{ vars.PGADMIN_LISTEN_PORT }}
         PGADMIN_PORT: ${{ vars.PGADMIN_PORT }}
 
-        EMAIL_SMT: ${{ vars.EMAIL_SMT }}
+        EMAIL_SMTP: ${{ vars.EMAIL_SMTP }}
         SENHA_EMAIL_SMTP: ${{ secrets.SENHA_EMAIL_SMTP }}
     defaults:
       run:
