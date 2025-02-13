@@ -240,6 +240,7 @@ public class EmprestimosService {
 
             emailSend.sendEmail(emailRequestDTO);
             return true;
+
         } catch (Exception e) {
             throw new RuntimeException("Erro ao enviar e-mail para: " + emprestimo.getAluno().getEmail(), e);
         }
@@ -280,6 +281,7 @@ public class EmprestimosService {
 
             emailSend.sendEmail(emailRequestDTO);
             return true;
+
         } catch (Exception e) {
             throw new RuntimeException("Erro ao enviar e-mail para: " + emprestimo.getAluno().getEmail(), e);
         }
