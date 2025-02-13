@@ -65,7 +65,7 @@ public class EmprestimosService {
     //CONSERTAR USUARIO DEPOIS
     public String cancelarEmprestimo(Integer id){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + "não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado")){
             throw new ValidationException("Emprestimo ja cancelado.");
@@ -87,7 +87,7 @@ public class EmprestimosService {
     //CONSERTAR USUARIO DEPOIS
     public String concluirEmprestimo(Integer id, EmprestimoRequestDTOConcluir DTOConcluir){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
             throw new ValidationException("Emprestimo ja concluido.");
@@ -116,7 +116,7 @@ public class EmprestimosService {
     @Transactional
     public String renovarPrazo(Integer id){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID" + id + " não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
 
         if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
             throw new ValidationException("Emprestimo ja concluido.");
@@ -185,6 +185,8 @@ public class EmprestimosService {
         LocalDate hoje = LocalDate.now();
         List<EmprestimoNotificacaoDTO> emprestimosNotificados = new ArrayList<>(); // Lista para armazenar os empréstimos notificados
 
+        verificarAtrasados();
+
         List<Emprestimo> emprestimosAtrasados = emprestimoRepository.findBySituacao("atrasado");
         for (Emprestimo emprestimo : emprestimosAtrasados) {
             if (enviarNotificacaoAtraso(emprestimo)) {
@@ -192,15 +194,6 @@ public class EmprestimosService {
             }
         }
 
-        // Empréstimos atrasados de hoje
-        List<Emprestimo> emprestimosAtrasadosHoje = emprestimoRepository.findBySituacaoAndDataPrazo("pendente", hoje);
-        for (Emprestimo emprestimo : emprestimosAtrasadosHoje) {
-            if (enviarNotificacaoAtraso(emprestimo)) {
-                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo)); // Adiciona à lista de notificados
-            }
-        }
-
-        // Empréstimos prestes a atrasar (1 dia antes da data de prazo)
         LocalDate amanha = hoje.plusDays(1);
         List<Emprestimo> emprestimosPrestesAAtasar = emprestimoRepository.findBySituacaoAndDataPrazo("pendente", amanha);
         for (Emprestimo emprestimo : emprestimosPrestesAAtasar) {
@@ -209,7 +202,7 @@ public class EmprestimosService {
             }
         }
 
-        return emprestimosNotificados; // Retorna a lista de empréstimos notificados
+        return emprestimosNotificados;
     }
 
     private boolean enviarNotificacaoAtraso(Emprestimo emprestimo) {
@@ -290,5 +283,18 @@ public class EmprestimosService {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao enviar e-mail para: " + emprestimo.getAluno().getEmail(), e);
         }
+    }
+
+    private void verificarAtrasados(){
+        LocalDate hoje = LocalDate.now();
+        List<Emprestimo> emprestimosPendentes = emprestimoRepository.findBySituacao("pendente");
+
+        for (Emprestimo emprestimo : emprestimosPendentes) {
+            if (!emprestimo.getDataPrazo().isAfter(hoje)) { // Se a data prazo já passou ou é hoje
+                emprestimo.setSituacao("atrasado");
+            }
+        }
+
+        emprestimoRepository.saveAll(emprestimosPendentes);
     }
 }

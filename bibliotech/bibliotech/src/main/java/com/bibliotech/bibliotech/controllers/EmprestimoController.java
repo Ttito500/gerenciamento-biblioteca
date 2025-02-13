@@ -32,7 +32,7 @@ public class EmprestimoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO){
+    public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO) {
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimosService.realizarEmprestimo(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoResponseDTO);
     }
@@ -94,12 +94,12 @@ public class EmprestimoController {
     }
 
     @PatchMapping("/renovar/{id}")
-    public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
+    public ResponseEntity<String> renovarPrazo(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimosService.renovarPrazo(id));
     }
 
     @PatchMapping("/cancelar/{id}")
-    public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id){
+    public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimosService.cancelarEmprestimo(id));
     }
 
@@ -111,7 +111,7 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimosService.concluirEmprestimo(id, DTOConcluir));
     }
 
-    @PostMapping("/verificar-atrasos")
+    @PostMapping("/enviar-email")
     public ResponseEntity<List<EmprestimoNotificacaoDTO>> verificarAtrasos() {
         return ResponseEntity.ok(emprestimosService.enviarEmailAtrasadosEPresteAAtrasar());
     }
