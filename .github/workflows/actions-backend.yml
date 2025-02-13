@@ -25,6 +25,9 @@ jobs:
         PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
         PGADMIN_LISTEN_PORT: ${{ vars.PGADMIN_LISTEN_PORT }}
         PGADMIN_PORT: ${{ vars.PGADMIN_PORT }}
+
+        EMAIL_SMT: ${{ vars.EMAIL_SMT }}
+        SENHA_EMAIL_SMTP: ${{ secrets.SENHA_EMAIL_SMTP }}
     defaults:
       run:
         working-directory: ./bibliotech/bibliotech/
