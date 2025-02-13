@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faTrash, faTableList } from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faCheck, faTrash, faTableList, faClipboardList} from '@fortawesome/free-solid-svg-icons';
 import AcervoListagem from './templates/AcervoListagem';
 import AcervoFiltros from "./templates/AcervoFiltros";
 import Modal from 'react-bootstrap/Modal';
@@ -14,8 +14,8 @@ import AcervoEmprestimosLivro from "./templates/AcervoEmprestimosLivro";
 import AcervoRealizarEmprestimo from "./templates/AcervoRealizarEmprestimo";
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import GerenciarTurmas from "../Alunos/turmas/GerenciarTurmas";
 import Exemplares from "./Exemplares/Exemplares";
+import EmprestimosLivro from "./templates/EmprestimosLivro";
 
 const Acervo: React.FC = () => {
 
@@ -52,6 +52,10 @@ const Acervo: React.FC = () => {
 	const [showExemplares, setShowExemplares] = useState(false);
 	const handleCloseExemplares = () => setShowExemplares(false);
 	const handleShowExemplares = () => setShowExemplares(true);
+
+	const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
+	const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
+	const handleShowVerEmprestimos = () => setShowVerEmprestimos(true);
 
   useEffect(() => {
     listarLivros();
@@ -337,6 +341,34 @@ const Acervo: React.FC = () => {
 					<FontAwesomeIcon icon={faTableList} />
 				</Button>
 
+				{/*botap para teste(LEMBRAR DE APAGAR)*/}
+				<Button variant="info" className="btn-blue" onClick={handleShowVerEmprestimos	}>
+					<FontAwesomeIcon icon={faClipboardList} />
+				</Button>
+
+				<Modal
+					show={showVerEmprestimos}
+					onHide={handleCloseVerEmprestimos}
+					size="xl"
+					backdrop="static"
+					centered
+					keyboard={false}
+					className="Modais-VerEmprestimos-Custon"
+				>
+
+					<Modal.Header closeButton>
+						<Modal.Title>Emprestimos do Livro: Integrar o nome do livro</Modal.Title>
+					</Modal.Header>
+
+					<Modal.Body>
+						<EmprestimosLivro/>
+					</Modal.Body>
+
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+
+					</Modal.Footer>
+				</Modal>
 
 				<Modal
 					show={showExemplares}
