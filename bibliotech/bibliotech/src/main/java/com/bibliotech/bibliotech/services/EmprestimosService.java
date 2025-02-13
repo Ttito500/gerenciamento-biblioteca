@@ -1,6 +1,5 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.dtos.request.EmailRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
 import com.bibliotech.bibliotech.dtos.request.mappers.EmprestimoRequestMapper;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -183,14 +181,14 @@ public class EmprestimosService {
 
     public List<EmprestimoNotificacaoDTO> enviarEmailAtrasadosEPresteAAtrasar() {
         LocalDate hoje = LocalDate.now();
-        List<EmprestimoNotificacaoDTO> emprestimosNotificados = new ArrayList<>(); // Lista para armazenar os empréstimos notificados
+        List<EmprestimoNotificacaoDTO> emprestimosNotificados = new ArrayList<>();
 
         verificarAtrasados();
 
         List<Emprestimo> emprestimosAtrasados = emprestimoRepository.findBySituacao("atrasado");
         for (Emprestimo emprestimo : emprestimosAtrasados) {
             if (enviarNotificacaoAtraso(emprestimo)) {
-                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo)); // Adiciona à lista de notificados
+                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
             }
         }
 
@@ -198,7 +196,7 @@ public class EmprestimosService {
         List<Emprestimo> emprestimosPrestesAAtasar = emprestimoRepository.findBySituacaoAndDataPrazo("pendente", amanha);
         for (Emprestimo emprestimo : emprestimosPrestesAAtasar) {
             if (enviarNotificacaoPreAtraso(emprestimo)) {
-                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo)); // Adiciona à lista de notificados
+                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
             }
         }
 
@@ -233,12 +231,7 @@ public class EmprestimosService {
                     dataPrazoFormatada
             );
 
-            EmailRequestDTO emailRequestDTO = new EmailRequestDTO();
-            emailRequestDTO.setTo(emprestimo.getAluno().getEmail());
-            emailRequestDTO.setSubject(assunto);
-            emailRequestDTO.setText(mensagem);
-
-            emailSend.sendEmail(emailRequestDTO);
+            emailSend.sendEmail(emprestimo.getAluno().getEmail(), assunto, mensagem);
             return true;
 
         } catch (Exception e) {
@@ -274,12 +267,7 @@ public class EmprestimosService {
                     dataPrazoFormatada
             );
 
-            EmailRequestDTO emailRequestDTO = new EmailRequestDTO();
-            emailRequestDTO.setTo(emprestimo.getAluno().getEmail());
-            emailRequestDTO.setSubject(assunto);
-            emailRequestDTO.setText(mensagem);
-
-            emailSend.sendEmail(emailRequestDTO);
+            emailSend.sendEmail(emprestimo.getAluno().getEmail(), assunto, mensagem);
             return true;
 
         } catch (Exception e) {
