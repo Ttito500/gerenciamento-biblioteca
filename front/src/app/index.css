@@ -264,3 +264,20 @@ body {
 .th-size-twenty {
   width: 20%;
 }
+
+.Login{
+  width: 100vw;
+  height: 100vh;
+  background-color: #D1E7DD;
+}
+
+.Login-acoes{
+  background-color: #00A54F;
+  color: white;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 27%;
+  border-radius: 12px;
+}
