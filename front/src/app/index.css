@@ -65,6 +65,11 @@ body {
   color: var(--color-red);
 }
 
+.list-scroll {
+  height: 400px;
+  overflow-y: auto;
+}
+
 .accordion-button:not(.collapsed) {
   background-color: var(--color-white);
 }
