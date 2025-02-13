@@ -1,6 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.models.Aluno;
+import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
@@ -8,6 +8,8 @@ import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -110,44 +112,51 @@ public class PdfExportService {
     }
 
     public byte[] exportAlunosMaisLeitores(){
+        Page<AlunoResponseDTO> alunos = emprestimoRepository.findTopLeitores(PageRequest.of(0, 50));
+
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        PdfWriter writer = PdfWriter.getInstance(document, out);
-        document.open();
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, out);
+            document.open();
 
-        addHeader(document, writer);
+            addHeader(document, writer);
 
-        PdfPTable table = new PdfPTable(3);
-        table.setWidthPercentage(100);
-        table.setSpacingBefore(10f);
-        table.setSpacingAfter(10f);
-        table.setWidths(new float[]{2, 2, 5});
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+            table.setWidths(new float[]{2, 2, 5});
 
-        //fonte em negrito para o título, tamanho 18
-        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+            //fonte em negrito para o título, tamanho 18
+            Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
 
-        PdfPCell cell = new PdfPCell(new Phrase("Alunos Mais Leitores", fontBold18));
-        cell.setColspan(3);
-        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setPadding(8.0f);
-        table.addCell(cell);
+            PdfPCell cell = new PdfPCell(new Phrase("Alunos Mais Leitores", fontBold18));
+            cell.setColspan(3);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(8.0f);
+            table.addCell(cell);
 
-        //fonte em negrito para os headers da tabela, tamanho 12
-        Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            //fonte em negrito para os headers da tabela, tamanho 12
+            Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
 
-        table.addCell(new Phrase("Aluno", FontBold12));
-        table.addCell(new Phrase("Turma", FontBold12));
-        table.addCell(new Phrase("Quantidade de empréstimos", FontBold12));
+            table.addCell(new Phrase("Nome", FontBold12));
+            table.addCell(new Phrase("Turma", FontBold12));
+            table.addCell(new Phrase("Quantidade de Empréstimos", FontBold12));
 
-        for (Aluno aluno : emprestimoRepository.findTopLeitores()) {
-            table.addCell(aluno.getNome());
-            table.addCell(aluno.getTurma());
-            table.addCell(String.valueOf(aluno.getQtdEmprestimos()));
+            for (AlunoResponseDTO alunoResponseDTO : alunos) {
+
+                table.addCell(alunoResponseDTO.getNome());
+                table.addCell(alunoResponseDTO.getTurma().getTurma() + " - " + alunoResponseDTO.getTurma().getSerie());
+                table.addCell(String.valueOf(alunoResponseDTO.getQuantidadeEmprestimos()));
+            }
+
+            document.add(table);
+            document.close();
+        } catch (DocumentException e) {
+            e.printStackTrace();
         }
-
-        document.add(table);
-        document.close();
 
         return out.toByteArray();
     }

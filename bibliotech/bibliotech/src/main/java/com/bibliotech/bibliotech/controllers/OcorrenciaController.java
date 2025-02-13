@@ -22,10 +22,10 @@ public class OcorrenciaController {
     private final OcorrenciaResponseMapper ocorrenciaResponseMapper;
     private final PdfExportService pdfExportService;
 
-    public OcorrenciaController(OcorrenciaService ocorrenciaService, OcorrenciaResponseMapper ocorrenciaResponseMapper) {
+    public OcorrenciaController(OcorrenciaService ocorrenciaService, OcorrenciaResponseMapper ocorrenciaResponseMapper, PdfExportService pdfExportService) {
         this.ocorrenciaService = ocorrenciaService;
         this.ocorrenciaResponseMapper = ocorrenciaResponseMapper;
-        this.pdfExportService = new PdfExportService();
+        this.pdfExportService = pdfExportService;
     }
 
     @PostMapping
