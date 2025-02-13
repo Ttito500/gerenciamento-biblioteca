@@ -1,8 +1,12 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
+import com.bibliotech.bibliotech.models.Turma;
+import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
@@ -16,11 +20,15 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PdfExportService {
     @Autowired
-    private EmprestimoRepository emprestimoRepository;
+    private AlunoRepository alunoRepository;
+
+    @Autowired
+    private TurmasService turmasService;
 
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
@@ -112,12 +120,11 @@ public class PdfExportService {
     }
 
     public byte[] exportAlunosMaisLeitores(){
-        Page<AlunoResponseDTO> alunos = emprestimoRepository.findTopLeitores(PageRequest.of(0, 50));
+        List<AlunoLeiturasDTO> alunos = alunoRepository.obterAlunosComQuantidadeLeituras();
 
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        try {
             PdfWriter writer = PdfWriter.getInstance(document, out);
             document.open();
 
@@ -127,12 +134,12 @@ public class PdfExportService {
             table.setWidthPercentage(100);
             table.setSpacingBefore(10f);
             table.setSpacingAfter(10f);
-            table.setWidths(new float[]{2, 2, 5});
+            table.setWidths(new float[]{2, 1, 1});
 
             //fonte em negrito para o título, tamanho 18
             Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
 
-            PdfPCell cell = new PdfPCell(new Phrase("Alunos Mais Leitores", fontBold18));
+            PdfPCell cell = new PdfPCell(new Phrase("Alunos Leitores", fontBold18));
             cell.setColspan(3);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setPadding(8.0f);
@@ -143,20 +150,17 @@ public class PdfExportService {
 
             table.addCell(new Phrase("Nome", FontBold12));
             table.addCell(new Phrase("Turma", FontBold12));
-            table.addCell(new Phrase("Quantidade de Empréstimos", FontBold12));
+            table.addCell(new Phrase("Leituras", FontBold12));
 
-            for (AlunoResponseDTO alunoResponseDTO : alunos) {
-
-                table.addCell(alunoResponseDTO.getNome());
-                table.addCell(alunoResponseDTO.getTurma().getTurma() + " - " + alunoResponseDTO.getTurma().getSerie());
-                table.addCell(String.valueOf(alunoResponseDTO.getQuantidadeEmprestimos()));
+            for (AlunoLeiturasDTO aluno : alunos) {
+                Turma turma = turmasService.getTurmaById(aluno.getIdTurma());
+                table.addCell(aluno.getNome());
+                table.addCell(turma.getSerie() + " " + turma.getTurma());
+                table.addCell(aluno.getQuantidade_leituras().toString());
             }
 
             document.add(table);
             document.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
 
         return out.toByteArray();
     }

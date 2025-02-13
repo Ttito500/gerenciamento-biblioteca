@@ -5,7 +5,9 @@ import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
 import com.bibliotech.bibliotech.services.AlunosService;
 import com.bibliotech.bibliotech.services.PdfExportService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,8 +69,13 @@ public class AlunoController {
     @GetMapping("/top-leitores/export/pdf")
     public ResponseEntity<byte[]> exportTopLeitoresPdf() {
         byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "top-leitores.pdf");
+
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=top-leitores.pdf")
+                .headers(headers)
                 .body(pdfBytes);
     }
 }

@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.repositories;
 
+import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -20,12 +22,4 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer>
 
     Page<Emprestimo> findByExemplar_LivroId(Integer idExemplar, Pageable pageable);
     Page<Emprestimo> findByExemplar_LivroIdAndDataEmprestimo(Integer idExemplar, LocalDate dataEmprestimo, Pageable pageable);
-
-    @Query("SELECT new com.bibliotech.bibliotech.dto.AlunoResponseDTO(a.nome, a.turma, COUNT(e)) " +
-            "FROM Emprestimo e JOIN e.aluno a " +
-            "WHERE e.situacao = 'entregue' " +
-            "GROUP BY a.nome, a.turma " +
-            "ORDER BY COUNT(e) DESC")
-    Page<AlunoResponseDTO> findTopLeitores(Pageable pageable);
-
 }

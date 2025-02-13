@@ -2,16 +2,20 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
+import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AlunosService {
@@ -19,11 +23,13 @@ public class AlunosService {
     private final AlunoRepository alunoRepository;
     private final AlunoRequestMapper alunoRequestMapper;
     private final TurmaRepository turmaRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
-    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, TurmaRepository turmaRepository) {
+    public AlunosService(AlunoRepository alunoRepository, AlunoRequestMapper alunoRequestMapper, TurmaRepository turmaRepository, EmprestimoRepository emprestimoRepository) {
         this.alunoRepository = alunoRepository;
         this.alunoRequestMapper = alunoRequestMapper;
         this.turmaRepository = turmaRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
     public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo) {
