@@ -220,7 +220,7 @@ public class EmprestimosService {
                             "Detalhes do empréstimo:\n" +
                             "- Livro: %s\n" +
                             "- Data do empréstimo: %s\n" +
-                            "- Data de devolução prevista: %s\n" +
+                            "- Data para devolução: %s\n" +
                             "- Situação atual: Atrasado\n\n" +
                             "Caso você já tenha devolvido o livro, por favor, entre em contato conosco para atualizarmos nossos registros.\n\n" +
                             "Atenciosamente, \n" +
@@ -260,7 +260,7 @@ public class EmprestimosService {
                             "Detalhes do empréstimo:\n" +
                             "- Livro: %s\n" +
                             "- Data do empréstimo: %s\n" +
-                            "- Data de devolução prevista: %s\n" +
+                            "- Data para devolução: %s\n" +
                             "- Situação atual: Pendente\n\n" +
                             "Caso você já tenha devolvido o livro, por favor, entre em contato conosco para atualizarmos nossos registros.\n\n" +
                             "Atenciosamente, \n" +
