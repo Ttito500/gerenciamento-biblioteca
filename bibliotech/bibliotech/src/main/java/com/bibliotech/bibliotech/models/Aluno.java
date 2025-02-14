@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +25,7 @@ public class Aluno {
     @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
