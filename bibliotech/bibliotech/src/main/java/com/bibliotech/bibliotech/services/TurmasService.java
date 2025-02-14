@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
@@ -90,5 +91,9 @@ public class TurmasService {
         alunosService.ativarAlunosPorTurma(turmaExistente);
         turmaExistente.setAtivo(true);
         turmaRepository.save(turmaExistente);
+    }
+
+    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras() {
+        return turmaRepository.obterTurmasMaisLeitoras();
     }
 }
