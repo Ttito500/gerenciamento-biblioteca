@@ -357,7 +357,7 @@ const Acervo: React.FC = () => {
 				>
 
 					<Modal.Header closeButton>
-						<Modal.Title>Emprestimos do Livro: Integrar o nome do livro</Modal.Title>
+						<Modal.Title>Emprestimos do Livro: <span className="custom-variavel">Titulo do Livro</span></Modal.Title>
 					</Modal.Header>
 
 					<Modal.Body>

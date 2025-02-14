@@ -1,10 +1,10 @@
-import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
-import AcervoEmprestimosLivro from "./AcervoEmprestimosLivro";
+import Col from "react-bootstrap/esm/Col";
+import AlunosEmprestimosAluno from "./AlunosEmprestimosAluno";
 
-const EmprestimosLivro: React.FC = () => {
-    return (
+const EmprestimosAluno: React.FC = () =>{
+    return(
         <section className="Exemplar">
             <div>
                 <Form className="mt-0">
@@ -27,10 +27,10 @@ const EmprestimosLivro: React.FC = () => {
                 </Form>
             </div>
             <div className="w-100 mt-0">
-                <AcervoEmprestimosLivro/>
+                <AlunosEmprestimosAluno/>
             </div>
         </section>
     );
 };
 
-export default EmprestimosLivro;
+export default EmprestimosAluno;

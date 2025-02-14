@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCheck, faUsersRectangle } from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faCheck, faUsersRectangle, faClipboardList} from '@fortawesome/free-solid-svg-icons';
 import AlunosListagem from './templates/AlunosListagem';
 import AlunosFiltros from "./templates/AlunosFiltros";
 import Modal from 'react-bootstrap/Modal';
@@ -14,12 +14,19 @@ import Toast from "react-bootstrap/Toast";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
 import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
 import GerenciarTurmas from "./turmas/GerenciarTurmas";
+import EmprestimosLivro from "../Acervo/templates/EmprestimosLivro";
+import EmprestimosAluno from "./templates/EmprestimosAluno";
 
 const Alunos: React.FC = () => {
 
   const[showGerenciarTurmas, setShowGerenciarTurmas] = useState(false)
   const handleCloseGerenciarTurmas = () => setShowGerenciarTurmas(false);
   const handleShowGerenciarTurmas = () => setShowGerenciarTurmas(true);
+
+  const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
+  const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
+  const handleShowVerEmprestimos = () => setShowVerEmprestimos(true);
+
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
@@ -375,6 +382,35 @@ const Alunos: React.FC = () => {
             <Button variant="secondary" onClick={handleCloseGerenciarTurmas}>Ok</Button>
           </Modal.Footer>
         </Modal>
+
+                {/*botap para teste(LEMBRAR DE APAGAR)*/}
+        <Button variant="info" className="btn-blue" onClick={handleShowVerEmprestimos	}>
+            <FontAwesomeIcon icon={faClipboardList} />
+        </Button>
+
+                <Modal
+                    show={showVerEmprestimos}
+                    onHide={handleCloseVerEmprestimos}
+                    size="xl"
+                    backdrop="static"
+                    centered
+                    keyboard={false}
+                >
+
+                    <Modal.Header closeButton>
+                        <Modal.Title>Emprestimos do Aluno: <span className="custom-variavel">Nome do Aluno - SªT</span></Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <EmprestimosAluno/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+
+                    </Modal.Footer>
+                </Modal>
+
 
 			</div>
 
