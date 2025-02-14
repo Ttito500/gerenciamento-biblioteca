@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,4 +23,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer>
 
     Page<Emprestimo> findByExemplar_LivroId(Integer idExemplar, Pageable pageable);
     Page<Emprestimo> findByExemplar_LivroIdAndDataEmprestimo(Integer idExemplar, LocalDate dataEmprestimo, Pageable pageable);
+
+    List<Emprestimo> findBySituacao(String situacao);
+    List<Emprestimo> findBySituacaoAndDataPrazo(String situacao, LocalDate data);
 }
