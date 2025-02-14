@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
@@ -125,5 +126,9 @@ public class AlunosService {
             aluno.setAtivo(true);
         }
         alunoRepository.saveAll(alunos);
+    }
+
+    public List<AlunoLeiturasDTO> obterAlunosComQuantidadeLeituras() {
+        return alunoRepository.obterAlunosComQuantidadeLeituras();
     }
 }

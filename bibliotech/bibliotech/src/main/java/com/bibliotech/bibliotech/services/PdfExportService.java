@@ -24,9 +24,6 @@ import java.util.Map;
 
 @Service
 public class PdfExportService {
-    @Autowired
-    private AlunoRepository alunoRepository;
-
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -116,9 +113,7 @@ public class PdfExportService {
         return out.toByteArray();
     }
 
-    public byte[] exportAlunosMaisLeitores(){
-        List<AlunoLeiturasDTO> alunos = alunoRepository.obterAlunosComQuantidadeLeituras();
-
+    public byte[] exportAlunosMaisLeitores(List<AlunoLeiturasDTO> alunos) throws DocumentException {
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 

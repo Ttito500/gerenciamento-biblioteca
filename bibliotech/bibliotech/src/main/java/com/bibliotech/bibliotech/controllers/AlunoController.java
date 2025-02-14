@@ -68,7 +68,7 @@ public class AlunoController {
 
     @GetMapping("/top-leitores/export/pdf")
     public ResponseEntity<byte[]> exportTopLeitoresPdf() {
-        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores();
+        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores(alunosService.obterAlunosComQuantidadeLeituras());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
