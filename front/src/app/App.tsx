@@ -12,7 +12,7 @@ import Usuarios from "./pages/Usuarios/Usuarios";
 import Login from "./pages/Autenticacao/Login";
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = (email: string, senha: string) => {
     if (email === "adelino@email.com" && senha === "cunha") {
