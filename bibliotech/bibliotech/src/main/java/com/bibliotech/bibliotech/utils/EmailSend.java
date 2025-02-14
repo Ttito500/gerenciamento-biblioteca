@@ -13,18 +13,11 @@ public class EmailSend {
         this.mailSender = mailSender;
     }
 
-    public String sendEmail(String to, String subject, String text) {
-        try {
+    public void sendEmail(String to, String subject, String text) {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text);
             mailSender.send(message);
-
-            return "E-mail enviado com sucesso!";
-        } catch (Exception e) {
-            e.printStackTrace(); // Adicione logs para depuração
-            return "Erro ao enviar e-mail: " + e.getMessage();
         }
     }
-}

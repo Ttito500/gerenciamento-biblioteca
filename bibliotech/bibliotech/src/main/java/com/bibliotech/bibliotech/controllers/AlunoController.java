@@ -4,6 +4,7 @@ import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
 import com.bibliotech.bibliotech.services.AlunosService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

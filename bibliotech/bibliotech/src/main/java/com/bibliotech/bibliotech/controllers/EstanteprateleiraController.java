@@ -16,26 +16,22 @@ public class EstanteprateleiraController {
     private EstanteprateleiraService estateprateleiraService;
 
     @PostMapping
-    public ResponseEntity<Estanteprateleira> criarEstanteprateleira(@RequestBody Estanteprateleira body) {
-        Estanteprateleira estateprateleira = estateprateleiraService.adicionarEstanteprateleira(body);
-        return ResponseEntity.ok(estateprateleira);
+    public ResponseEntity<Estanteprateleira> criarEstanteprateleira(@RequestBody Estanteprateleira request) {
+        return ResponseEntity.ok(estateprateleiraService.adicionarEstanteprateleira(request));
     }
 
     @GetMapping
     public ResponseEntity<List<Estanteprateleira>> listarEstanteprateleira() {
-        List<Estanteprateleira> ep = estateprateleiraService.listarEstanteprateleiras();
-        return ResponseEntity.ok(ep);
+        return ResponseEntity.ok(estateprateleiraService.listarEstanteprateleiras());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Estanteprateleira> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
-        Estanteprateleira ep = estateprateleiraService.atualizarEstanteprateleira(id, body);
-        return ResponseEntity.ok(ep);
+        return ResponseEntity.ok(estateprateleiraService.atualizarEstanteprateleira(id, body));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Estanteprateleira> deletarEstanteprateleira(@PathVariable Integer id) {
-        estateprateleiraService.deletarEstanteprateleira(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletarEstanteprateleira(@PathVariable Integer id) {
+        return ResponseEntity.ok(estateprateleiraService.deletarEstanteprateleira(id));
     }
 }

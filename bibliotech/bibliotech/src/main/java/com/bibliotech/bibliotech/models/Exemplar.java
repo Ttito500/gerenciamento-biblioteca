@@ -22,6 +22,10 @@ public class Exemplar {
     @JoinColumn(name = "id_estante_prateleira")
     private Estanteprateleira estanteprateleira;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_secao")
+    private Secao secao;
+
     @Column(name = "observacao", length = 500)
     private String observacao;
 
