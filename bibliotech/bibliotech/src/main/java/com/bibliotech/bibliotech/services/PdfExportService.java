@@ -1,26 +1,21 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
-import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
-import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
+
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
-import com.bibliotech.bibliotech.models.Turma;
-import com.bibliotech.bibliotech.repositories.AlunoRepository;
-import com.bibliotech.bibliotech.repositories.EmprestimoRepository;
+
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 public class PdfExportService {
