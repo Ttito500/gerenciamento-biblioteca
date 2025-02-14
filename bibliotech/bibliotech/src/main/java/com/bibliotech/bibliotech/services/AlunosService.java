@@ -9,6 +9,8 @@ import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import com.bibliotech.bibliotech.utils.EmailValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,8 @@ public class AlunosService {
         this.turmaRepository = turmaRepository;
     }
 
-    public List<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo) {
-        return  alunoRepository.filtrarAlunos(serie, turma, nome, ativo, situacao);
+    public Page<Aluno> filtrarAlunos(Integer serie, String turma, String nome, String situacao, Boolean ativo, Pageable pageable) {
+        return alunoRepository.filtrarAlunos(serie, turma, nome, ativo, situacao, pageable);
     }
 
     public Aluno buscarAlunoPorId(Integer id) {
@@ -107,7 +109,7 @@ public class AlunosService {
     }
 
     public void inativarAlunosPorTurma(Turma turma) {
-        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null);
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, true, null, Pageable.unpaged()).getContent();
         for (Aluno aluno : alunos) {
             aluno.setAtivo(false);
         }
@@ -115,7 +117,7 @@ public class AlunosService {
     }
 
     public void ativarAlunosPorTurma(Turma turma) {
-        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, false, null);
+        List<Aluno> alunos = alunoRepository.filtrarAlunos(turma.getSerie(), turma.getTurma(), null, false, null, Pageable.unpaged()).getContent();
         for (Aluno aluno : alunos) {
             aluno.setAtivo(true);
         }
