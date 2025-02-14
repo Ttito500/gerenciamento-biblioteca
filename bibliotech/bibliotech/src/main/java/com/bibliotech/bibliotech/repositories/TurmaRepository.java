@@ -23,12 +23,12 @@ public interface TurmaRepository extends JpaRepository<Turma, Integer> {
 
     @Query("SELECT new com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO(" +
             "t.serie, t.turma, COUNT(e), " +
-            "(SELECT a.nome FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1), " + // Group by a.nome
-            "(SELECT COUNT(e2) FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1)) " + // Group by a.nome
+            "(SELECT a.nome FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1), " +
+            "(SELECT COUNT(e2) FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1)) " +
             "FROM Turma t " +
             "LEFT JOIN Aluno a ON t.id = a.turma.id " +
             "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " +
-            "GROUP BY t.serie, t.turma " +
+            "GROUP BY t.id, t.serie, t.turma " +
             "ORDER BY COUNT(e) DESC")
     List<TurmaLeiturasDTO> obterTurmasMaisLeitoras();
 }

@@ -114,7 +114,7 @@ public class PdfExportService {
 
         addHeader(document, writer);
 
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
         table.setSpacingBefore(10f);
         table.setSpacingAfter(10f);
@@ -132,9 +132,9 @@ public class PdfExportService {
         Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
 
         table.addCell(new Phrase("Turma", FontBold12));
-        table.addCell(new Phrase("Quantidade de Leituras da Turma", FontBold12));
-        table.addCell(new Phrase("Nome do Aluno Mais Leitor", FontBold12));
-        table.addCell(new Phrase("Quantidade de Leituras do Aluno", FontBold12));
+        table.addCell(new Phrase("Leituras da Turma", FontBold12));
+        table.addCell(new Phrase("Aluno Destaque", FontBold12));
+        table.addCell(new Phrase("Leituras do Aluno", FontBold12));
 
         for (TurmaLeiturasDTO turmaLeiturasDTO : turmasMaisLeitoras) {
             table.addCell(turmaLeiturasDTO.getSerie() + " " + turmaLeiturasDTO.getTurma());
