@@ -1,7 +1,7 @@
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.models.Estanteprateleira;
-import com.bibliotech.bibliotech.services.EstanteprateleiraService;
+import com.bibliotech.bibliotech.services.EstantePrateleiraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estanteprateleira")
-public class EstanteprateleiraController {
+public class EstantePrateleiraController {
 
     @Autowired
-    private EstanteprateleiraService estateprateleiraService;
+    private EstantePrateleiraService estateprateleiraService;
 
     @PostMapping
     public ResponseEntity<Estanteprateleira> criarEstanteprateleira(@RequestBody Estanteprateleira request) {
