@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
+import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
@@ -9,11 +10,10 @@ import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.models.Secao;
-import com.bibliotech.bibliotech.repositories.EstanteprateleiraRepository;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
-import com.bibliotech.bibliotech.repositories.SecaoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -146,5 +146,17 @@ public class LivrosService {
 
         livroExistente.setAtivo(true);
         livroRepository.save(livroExistente);
+    }
+
+    public List<Exemplar> cadastrarExemplaresDeUmLivro(ExemplarRequestPostDTO exemplarRequestPostDTO) {
+        Livro livroExistente = getLivroById(exemplarRequestPostDTO.getIdLivro());
+        Secao secaoExistente = secoesService.getSecaoById(exemplarRequestPostDTO.getIdSecao());
+        Estanteprateleira estanteprateleiraExistente = estanteprateleiraService.getEstantePrateleiraById(exemplarRequestPostDTO.getIdEstanteprateleira());
+
+        return exemplaresService.cadastrarExemplares(livroExistente, secaoExistente, estanteprateleiraExistente, exemplarRequestPostDTO.getQtdExemplares());
+    }
+
+    public List<Exemplar> listarExemplaresDeUmLivro(Integer id) {
+        return exemplaresService.listarExemplaresDeUmLivro(id);
     }
 }

@@ -17,6 +17,9 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
     @Query("SELECT CASE WHEN EXISTS (SELECT 1 FROM Exemplar e WHERE e.id = :id AND e.situacao = 'emprestado') THEN true ELSE false END")
     boolean existsExemplarEmprestado(@Param("id") Integer id);
 
+    @Query("SELECT COALESCE(MAX(e.numero), 0) FROM Exemplar e WHERE e.livro.id = :idLivro AND e.situacao = 'emprestado'")
+    int findMaxNumeroExemplarEmprestado(@Param("idLivro") Integer idLivro);
+
     @Query("SELECT l FROM Livro l " +
             "LEFT JOIN Livroautor la ON l.id = la.livro.id " +
             "LEFT JOIN Autor a ON la.autor.id = a.id " +
@@ -34,4 +37,6 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
             @Param("genero") @Nullable String genero,
             @Param("ativo") @Nullable Boolean ativo,
             Pageable pageable); // Adicione o Pageable
+
+    Integer id(Integer id);
 }

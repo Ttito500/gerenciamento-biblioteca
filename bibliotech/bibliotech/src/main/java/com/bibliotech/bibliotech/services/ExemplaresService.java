@@ -1,6 +1,5 @@
 package com.bibliotech.bibliotech.services;
 
-import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Livro;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExemplaresService {
@@ -33,11 +31,14 @@ public class ExemplaresService {
     private EstanteprateleiraRepository estanteprateleiraRepository;
 
     @Transactional
-    public List<Exemplar> cadastrarExemplares(Livro livro, Secao secao, Estanteprateleira estanteprateleira, Integer qtdExemplares) {
+    public List<Exemplar> cadastrarExemplares(Livro livro, Secao secao, Estanteprateleira estanteprateleira, Integer qtdExemplaresNovos) {
         Livro livroCadastrado = livroRepository.findLivroById(livro.getId());
         List<Exemplar> exemplaresSalvos = new ArrayList<>();
 
-        for (int i = 0; i < qtdExemplares; i++) {
+        int qtd_exemplares_ja_existente = livroCadastrado.getExemplares().size();
+        int qtd_exemplares_final = qtd_exemplares_ja_existente + qtdExemplaresNovos;
+
+        for (int i = qtd_exemplares_ja_existente; i < qtd_exemplares_final; i++) {
             Exemplar exemplar = new Exemplar();
             exemplar.setLivro(livroCadastrado);
             exemplar.setSecao(secao);
@@ -48,5 +49,9 @@ public class ExemplaresService {
         }
 
         return exemplaresSalvos;
+    }
+
+    public List<Exemplar> listarExemplaresDeUmLivro(Integer id) {
+        return exemplarRepository.findExemplarByLivro_Id(id);
     }
 }

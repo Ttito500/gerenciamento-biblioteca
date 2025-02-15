@@ -1,12 +1,16 @@
-package com.bibliotech.bibliotech.dtos.response.mappers;
+package com.bibliotech.bibliotech.dtos.mappers;
 
 import com.bibliotech.bibliotech.dtos.ExemplarDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.EstanteprateleiraResponseMapper;
+import com.bibliotech.bibliotech.dtos.response.mappers.SecaoResponseMapper;
 import com.bibliotech.bibliotech.models.Exemplar;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ExemplarResponseMapper {
+@Component
+public class ExemplarMapper {
 
     public static ExemplarDTO toDTO(Exemplar entity) {
         ExemplarDTO dto = new ExemplarDTO();
@@ -34,7 +38,7 @@ public class ExemplarResponseMapper {
 
     public static List<ExemplarDTO> toDTOList(List<Exemplar> entities) {
         return entities.stream()
-                .map(ExemplarResponseMapper::toDTO)
+                .map(com.bibliotech.bibliotech.dtos.mappers.ExemplarMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
