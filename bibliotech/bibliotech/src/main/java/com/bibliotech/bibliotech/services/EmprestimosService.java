@@ -194,11 +194,16 @@ public class EmprestimosService {
         return emprestimos.map(emprestimoResponseMapper::toDto);
     }
 
-    public Page<EmprestimoResponseDTOAluno> consultarEmprestimosPorAluno(Integer idAluno, LocalDate dataEmprestimo, Pageable pageable) {
+    public Page<EmprestimoResponseDTOAluno> consultarEmprestimosPorAlunoEPeriodo(
+            Integer idAluno,
+            LocalDate dataEmprestimoInicio,
+            LocalDate dataEmprestimoFim,
+            Pageable pageable
+    ) {
         Page<Emprestimo> emprestimos;
 
-        if (dataEmprestimo != null) {
-            emprestimos = emprestimoRepository.findByAlunoIdAndDataEmprestimo(idAluno, dataEmprestimo, pageable);
+        if (dataEmprestimoInicio != null && dataEmprestimoFim != null) {
+            emprestimos = emprestimoRepository.findByAlunoIdAndDataEmprestimoBetween(idAluno, dataEmprestimoInicio, dataEmprestimoFim, pageable);
         } else {
             emprestimos = emprestimoRepository.findByAlunoId(idAluno, pageable);
         }
@@ -206,11 +211,16 @@ public class EmprestimosService {
         return emprestimos.map(emprestimoResponseMapper::toDTOAluno);
     }
 
-    public Page<EmprestimoResponseDTOLivro> consultarEmprestimosPorLivro(Integer idLivro, LocalDate dataEmprestimo, Pageable pageable) {
+    public Page<EmprestimoResponseDTOLivro> consultarEmprestimosPorLivroEPeriodo(
+            Integer idLivro,
+            LocalDate dataEmprestimoInicio,
+            LocalDate dataEmprestimoFim,
+            Pageable pageable
+    ) {
         Page<Emprestimo> emprestimos;
 
-        if (dataEmprestimo != null) {
-            emprestimos = emprestimoRepository.findByExemplar_LivroIdAndDataEmprestimo(idLivro, dataEmprestimo, pageable);
+        if (dataEmprestimoInicio != null && dataEmprestimoFim != null) {
+            emprestimos = emprestimoRepository.findByExemplar_LivroIdAndDataEmprestimoBetween(idLivro, dataEmprestimoInicio, dataEmprestimoFim, pageable);
         } else {
             emprestimos = emprestimoRepository.findByExemplar_LivroId(idLivro, pageable);
         }

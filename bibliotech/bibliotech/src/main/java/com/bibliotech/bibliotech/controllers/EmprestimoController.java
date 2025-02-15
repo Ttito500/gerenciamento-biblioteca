@@ -6,6 +6,7 @@ import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +71,17 @@ public class EmprestimoController {
     @GetMapping("/aluno/{idAluno}")
     public ResponseEntity<Page<EmprestimoResponseDTOAluno>> consultarEmprestimosPorAluno(
             @PathVariable Integer idAluno,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimo,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimoInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimoFim,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        if (dataEmprestimoInicio.isAfter(dataEmprestimoFim)) {
+            throw new ValidationException("A data de início deve ser anterior ou igual à data de fim.");
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmprestimoResponseDTOAluno> emprestimosDTO = emprestimosService.consultarEmprestimosPorAluno(idAluno, dataEmprestimo, pageable);
+        Page<EmprestimoResponseDTOAluno> emprestimosDTO = emprestimosService.consultarEmprestimosPorAlunoEPeriodo(idAluno, dataEmprestimoInicio, dataEmprestimoFim, pageable);
 
         return ResponseEntity.ok(emprestimosDTO);
     }
@@ -83,12 +89,17 @@ public class EmprestimoController {
     @GetMapping("/livro/{idLivro}")
     public ResponseEntity<Page<EmprestimoResponseDTOLivro>> consultarEmprestimosPorLivro(
             @PathVariable Integer idLivro,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimo,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimoInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataEmprestimoFim,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        if (dataEmprestimoInicio.isAfter(dataEmprestimoFim)) {
+            throw new ValidationException("A data de início deve ser anterior ou igual à data de fim.");
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<EmprestimoResponseDTOLivro> emprestimosDTO = emprestimosService.consultarEmprestimosPorLivro(idLivro, dataEmprestimo, pageable);
+        Page<EmprestimoResponseDTOLivro> emprestimosDTO = emprestimosService.consultarEmprestimosPorLivroEPeriodo(idLivro, dataEmprestimoInicio, dataEmprestimoFim, pageable);
 
         return ResponseEntity.ok(emprestimosDTO);
     }
