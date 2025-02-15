@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.repositories;
 
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.Turma;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,15 @@ public interface TurmaRepository extends JpaRepository<Turma, Integer> {
                               @Param("ativo") Boolean ativo);
 
     boolean existsBySerieAndTurmaAndAnoDeEntrada(Integer serie, String turma, Integer anoDeEntrada);
+
+    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO(" +
+            "t.serie, t.turma, COUNT(e), " +
+            "(SELECT a.nome FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1), " +
+            "(SELECT COUNT(e2) FROM Aluno a LEFT JOIN Emprestimo e2 ON a.id = e2.aluno.id WHERE a.turma.id = t.id GROUP BY a.nome ORDER BY COUNT(e2) DESC LIMIT 1)) " +
+            "FROM Turma t " +
+            "LEFT JOIN Aluno a ON t.id = a.turma.id " +
+            "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " +
+            "GROUP BY t.id, t.serie, t.turma " +
+            "ORDER BY COUNT(e) DESC")
+    List<TurmaLeiturasDTO> obterTurmasMaisLeitoras();
 }
