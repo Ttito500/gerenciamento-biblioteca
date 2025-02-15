@@ -2,7 +2,9 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
+import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
@@ -31,23 +33,22 @@ public class LivrosService {
     @Autowired
     private GenerosService generosService;
     @Autowired
-    private SecaoRepository secaoRepository;
+    private SecoesService secoesService;
     @Autowired
     private LivroRepository livroRepository;
     @Autowired
     private ExemplaresService exemplaresService;
     @Autowired
-    private EstanteprateleiraRepository estanteprateleiraRepository;
-    @Autowired
     private LivroRequestPostMapper livroRequestPostMapper;
+    @Autowired
+    private LivroRequestPatchMapper livroRequestPatchMapper;
+    @Autowired
+    private EstanteprateleiraService estanteprateleiraService;
 
     @Transactional
     public Livro cadastrarLivro(LivroRequestPostDTO livro){
-        Secao secaoExistente = secaoRepository.findById(livro.getIdSecao())
-                .orElseThrow(() -> new NotFoundException("Seção não encontrada."));
-
-        Estanteprateleira estanteprateleiraExistente = estanteprateleiraRepository.findById(livro.getIdEstanteprateleira())
-                .orElseThrow(() -> new NotFoundException("Estante-Pratelerira não encontrada."));
+        Secao secaoExistente = secoesService.getSecaoById(livro.getIdSecao());
+        Estanteprateleira estanteprateleiraExistente = estanteprateleiraService.getEstantePrateleiraById(livro.getIdEstanteprateleira());
 
         if (livroRepository.existsLivroByIsbn(livro.getIsbn())) {
             throw new ValidationException("Já existe um livro com esse isbn: " + livro.getIsbn());
@@ -99,15 +100,37 @@ public class LivrosService {
         return livroSalvo;
     }
 
-    public Livro atualizarLivro(Integer id, Livro livro){
-        Livro livroExistente = livroRepository.findById(id)
+    public Livro atualizarLivro(Integer id, LivroRequestPatchDTO livroRequest){
+        Livro livro = livroRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
 
-        livroExistente.setIsbn(livro.getIsbn());
-        livroExistente.setTitulo(livro.getTitulo());
+        if (livroRequest.getIsbn() != null && !livroRequest.getIsbn().isEmpty()) {
+            if (livroRequest.getIsbn().length() > 13) {
+                throw new ValidationException("O tamanho máximo para ISBN é 13 caracteres.");
+            }
+            if (livroRepository.existsLivroByIsbn(livroRequest.getIsbn()) && !livroRequest.getIsbn().equals(livro.getIsbn())) {
+                throw new ValidationException("Já existe um livro com esse ISBN: " + livroRequest.getIsbn());
+            }
+            livro.setIsbn(livroRequest.getIsbn());
+        }
 
-        livroRepository.save(livroExistente);
-        return livroExistente;
+        if (livroRequest.getAutores().isEmpty()) {
+            throw new ValidationException("Os nomes autores não podom ser vazios ou nulos.");
+        }
+        if (livroRequest.getGeneros().isEmpty()) {
+            throw new ValidationException("Os generos não podom ser vazios ou nulos.");
+        }
+        if (livroRequest.getTitulo() != null && !livroRequest.getTitulo().isEmpty()) {
+            livro.setTitulo(livroRequest.getTitulo());
+        }
+
+        livro.setAtivo(livroRequest.getAtivo());
+        livro.setAutores(autorService.cadastrarNovosAutores(autorMapper.toEntityList(livroRequest.getAutores()), livro));
+        livro.setGeneros(generosService.cadastrarNovosGeneros(generoMapper.toEntityList(livroRequest.getGeneros()), livro));
+
+        livroRepository.save(livro);
+
+        return livro;
     }
 
     public void inativarLivro(Integer id) {

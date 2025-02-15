@@ -5,7 +5,6 @@ import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.models.Livrogenero;
 import com.bibliotech.bibliotech.repositories.GeneroRepository;
-import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.bibliotech.bibliotech.repositories.LivrogeneroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,5 +70,11 @@ public class GenerosService {
 
     public List<Genero> findGenerosByLivroId(Integer id) {
         return generoRepository.findGenerosByLivroId(id);
+    }
+
+    public List<Genero> cadastrarNovosGeneros(List<Genero> novosGeneros, Livro livro) {
+        livrogeneroRepository.deleteByLivroId(livro.getId());
+
+        return addGenero(novosGeneros, livro);
     }
 }

@@ -22,8 +22,8 @@ public class LivroResponseMapper {
         dto.setTitulo(livro.getTitulo());
         dto.setIsbn(livro.getIsbn());
         dto.setAtivo(livro.getAtivo());
-        dto.setAutores(livro.getAutores() != null ? autorMapper.toDTOList(livro.getAutores()) : Collections.emptyList());
-        dto.setGeneros(livro.getGeneros() != null ? generoMapper.toDTOList(livro.getGeneros()) : Collections.emptyList());
+        dto.setAutores(AutorMapper.toDTOList(livro.getAutores()));
+        dto.setGeneros(GeneroMapper.toDTOList(livro.getGeneros()));
 
         return dto;
     }

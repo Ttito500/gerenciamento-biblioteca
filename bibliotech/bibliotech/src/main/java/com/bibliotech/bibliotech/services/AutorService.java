@@ -2,7 +2,6 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Autor;
-import com.bibliotech.bibliotech.models.Genero;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
@@ -72,5 +71,10 @@ public class AutorService {
 
     public List<Autor> findAutorByLivroId(Integer id) {
         return autorRepository.findAutoresByLivroId(id);
+    }
+
+    public List<Autor> cadastrarNovosAutores(List<Autor> autores, Livro livro) {
+        livroautorRepository.deleteByLivroId(livro.getId());
+        return cadastrarAutores(autores, livro);
     }
 }

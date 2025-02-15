@@ -54,4 +54,8 @@ public class EstanteprateleiraService {
         estateprateleiraRepository.delete(estanteprateleira);
     }
 
+    public Estanteprateleira getEstantePrateleiraById(Integer id) {
+        return estateprateleiraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com id: " + id + " não encontrada."));
+    }
 }

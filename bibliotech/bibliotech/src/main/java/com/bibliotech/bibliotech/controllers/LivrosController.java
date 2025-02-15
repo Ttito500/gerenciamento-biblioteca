@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
@@ -58,13 +59,13 @@ public class LivrosController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Livro> atualizarLivro(@PathVariable Integer id, @RequestBody Livro body){
-        Livro livro = livrosService.atualizarLivro(id, body);
+    public ResponseEntity<LivroResponseDTO> atualizarLivro(@PathVariable Integer id, @RequestBody LivroRequestPatchDTO body){
+        LivroResponseDTO livro = livroResponseMapper.toDTO(livrosService.atualizarLivro(id, body));
         return ResponseEntity.ok(livro);
     }
 
     @PatchMapping("/inativar/{id}")
-    public ResponseEntity<Livro> inativarLivro(@PathVariable Integer id){
+    public ResponseEntity<LivroResponseDTO> inativarLivro(@PathVariable Integer id){
         livrosService.inativarLivro(id);
         return ResponseEntity.noContent().build();
     }
