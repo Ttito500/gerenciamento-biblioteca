@@ -10,6 +10,7 @@ import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -93,7 +94,7 @@ public class TurmasService {
         turmaRepository.save(turmaExistente);
     }
 
-    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras() {
-        return turmaRepository.obterTurmasMaisLeitoras();
+    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras(LocalDate dataInicio, LocalDate dataFim) {
+        return turmaRepository.obterTurmasMaisLeitoras(dataInicio, dataFim);
     }
 }

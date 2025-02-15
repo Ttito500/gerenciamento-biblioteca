@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -72,8 +73,8 @@ public class TurmaController {
     }
 
     @GetMapping("/mais-leitoras/export/pdf")
-    public ResponseEntity<byte[]> exportTopLeitoresPdf() {
-        byte[] pdfBytes = pdfExportService.exportTurmasMaisLeitoras(turmasService.obterTurmasMaisLeitoras());
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        byte[] pdfBytes = pdfExportService.exportTurmasMaisLeitoras(turmasService.obterTurmasMaisLeitoras(dataInicio, dataFim));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

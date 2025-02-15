@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 
