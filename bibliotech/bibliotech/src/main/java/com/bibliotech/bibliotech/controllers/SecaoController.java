@@ -38,7 +38,7 @@ public class SecaoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Secao> getSecaoById(@PathVariable Integer id) {
-        return ResponseEntity.ok(secaoService.getSecao(id));
+        return ResponseEntity.ok(secaoService.getSecaoById(id));
     }
 
     @PatchMapping("/{id}")

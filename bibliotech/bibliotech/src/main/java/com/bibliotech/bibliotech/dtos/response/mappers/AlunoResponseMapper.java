@@ -22,7 +22,11 @@ public class AlunoResponseMapper {
         dto.setNome(aluno.getNome());
         dto.setEmail(aluno.getEmail());
         dto.setTelefone(aluno.getTelefone());
-        dto.setTurma(turmaResponseMapper.toDto(aluno.getTurma()));
+
+        if (aluno.getTurma() != null) {
+            dto.setTurma(turmaResponseMapper.toDto(aluno.getTurma()));
+        }
+
         dto.setSituacao(aluno.getSituacao());
         dto.setAtivo(aluno.getAtivo());
 
