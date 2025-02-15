@@ -230,10 +230,11 @@ const Estantes: React.FC = () => {
       <Modal
         show={showExcluirEstantePrateleira}
         onHide={handleCloseExcluirEstantePrateleira}
-        size="sm"
+        size="lg"
         backdrop="static"
         centered
         keyboard={false}
+        className="Modais-Confirmacao-Custon"
       >
         <Modal.Header closeButton>
           <Modal.Title>Confirmação</Modal.Title>
