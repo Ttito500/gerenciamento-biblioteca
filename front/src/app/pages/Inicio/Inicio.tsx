@@ -311,10 +311,10 @@ const Inicio: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <AlunosCadastrarAluno
+            {/* <AlunosCadastrarAluno
               formData={formDataCadastrarAluno}
               onChange={handleChangeCadastrarAluno}
-            />
+            /> */}
           </Modal.Body>
 
           <Modal.Footer>
