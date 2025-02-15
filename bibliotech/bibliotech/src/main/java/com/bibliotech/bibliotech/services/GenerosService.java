@@ -2,10 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Genero;
-import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Livrogenero;
 import com.bibliotech.bibliotech.repositories.GeneroRepository;
-import com.bibliotech.bibliotech.repositories.LivrogeneroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,37 +16,30 @@ import java.util.stream.Collectors;
 public class GenerosService {
     @Autowired
     private GeneroRepository generoRepository;
-    @Autowired
-    private LivrogeneroRepository livrogeneroRepository;
 
-    public List<Genero> addGenero(List<Genero> generos, Livro livro) {
+    public List<Genero> addGenero(List<Genero> generos) {
         Set<String> nomesNovosGeneros = generos.stream()
                 .map(Genero::getGenero)
                 .filter(genero -> genero != null && !genero.isEmpty())
                 .collect(Collectors.toSet());
 
-        List<Genero> generosAssociados = new ArrayList<>();
+        List<Genero> novosGeneros = new ArrayList<>();
 
-        for (String genero : nomesNovosGeneros) {
+        nomesNovosGeneros.forEach(genero -> {
             Optional<Genero> generoOptional = generoRepository.findFirstByGeneroIgnoreCase(genero);
-
-            Genero genero1;
-            if (generoOptional.isPresent()) {
-                genero1 = generoOptional.get();
-            } else {
+            Genero generoParaSalvar = generoOptional.orElseGet(() -> {
                 Genero novoGenero = new Genero();
                 novoGenero.setGenero(genero);
-                genero1 = generoRepository.save(novoGenero);
+                return novoGenero;
+            });
+
+            if (generoOptional.isEmpty()) {
+                generoRepository.save(generoParaSalvar);
+                novosGeneros.add(generoParaSalvar);
             }
+        });
 
-            Livrogenero livroGenero = new Livrogenero();
-            livroGenero.setLivro(livro);
-            livroGenero.setGenero(genero1);
-            livrogeneroRepository.save(livroGenero);
-            generosAssociados.add(genero1);
-        }
-
-        return generosAssociados;
+        return novosGeneros;
     }
 
     public void removeGenerosWithNoAssociation() {
@@ -68,13 +58,9 @@ public class GenerosService {
         return generoOptional;
     }
 
-    public List<Genero> findGenerosByLivroId(Integer id) {
-        return generoRepository.findGenerosByLivroId(id);
+    public List<Genero> getAllGeneros() {
+        return generoRepository.findAll();
     }
 
-    public List<Genero> cadastrarNovosGeneros(List<Genero> novosGeneros, Livro livro) {
-        livrogeneroRepository.deleteByLivroId(livro.getId());
 
-        return addGenero(novosGeneros, livro);
-    }
 }

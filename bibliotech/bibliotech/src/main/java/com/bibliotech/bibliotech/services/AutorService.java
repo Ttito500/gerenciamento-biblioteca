@@ -2,10 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.models.Autor;
-import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Livroautor;
 import com.bibliotech.bibliotech.repositories.AutorRepository;
-import com.bibliotech.bibliotech.repositories.LivroautorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,37 +17,35 @@ public class AutorService {
 
     @Autowired
     private AutorRepository autorRepository;
-    @Autowired
-    private LivroautorRepository livroautorRepository;
 
-    public List<Autor> cadastrarAutores(List<Autor> autores, Livro livro) {
+    public List<Autor> cadastrarAutores(List<Autor> autores) {
+
+        // Coleta os nomes dos autores em um Set para remover duplicados
         Set<String> nomesNovosAutores = autores.stream()
                 .map(Autor::getNome)
                 .filter(nome -> nome != null && !nome.isEmpty())
                 .collect(Collectors.toSet());
 
-        List<Autor> autoresAssociados = new ArrayList<>();
+        // Cria uma lista para armazenar os novos autores
+        List<Autor> novosAutores = new ArrayList<>();
 
-        for (String nome : nomesNovosAutores) {
+        // Itera sobre cada nome único e cadastra o autor se ele não existir
+        nomesNovosAutores.forEach(nome -> {
             Optional<Autor> autorOptional = autorRepository.findFirstByNomeIgnoreCase(nome);
-
-            Autor autor;
-            if (autorOptional.isPresent()) {
-                autor = autorOptional.get();
-            } else {
+            autorOptional.orElseGet(() -> {
                 Autor novoAutor = new Autor();
                 novoAutor.setNome(nome);
-                autor = autorRepository.save(novoAutor);
-            }
+                novoAutor = autorRepository.save(novoAutor);
+                novosAutores.add(novoAutor);
+                return novoAutor;
+            });
+        });
 
-            Livroautor livroAutor = new Livroautor();
-            livroAutor.setLivro(livro);
-            livroAutor.setAutor(autor);
-            livroautorRepository.save(livroAutor);
-            autoresAssociados.add(autor);
-        }
+        return novosAutores;
+    }
 
-        return autoresAssociados;
+    public List<Autor> getAll() {
+        return autorRepository.findAll();
     }
 
     public Optional<Autor> buscarPorNome(String nome) {
@@ -67,14 +62,5 @@ public class AutorService {
         System.out.println("Deletando {} autores não associados a livros." + autoresSemLivros.size());
 
         autorRepository.deleteAll(autoresSemLivros);
-    }
-
-    public List<Autor> findAutorByLivroId(Integer id) {
-        return autorRepository.findAutoresByLivroId(id);
-    }
-
-    public List<Autor> cadastrarNovosAutores(List<Autor> autores, Livro livro) {
-        livroautorRepository.deleteByLivroId(livro.getId());
-        return cadastrarAutores(autores, livro);
     }
 }

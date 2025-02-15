@@ -67,7 +67,7 @@ public class SecoesService {
 
     public List<Secao> getSecoes(){ return secaoRepository.findAll(); }
 
-    public Secao getSecaoById(Integer id){
+    public Secao getSecao(Integer id){
         return secaoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Seção com ID " + id + " não encontrada"));
     }
