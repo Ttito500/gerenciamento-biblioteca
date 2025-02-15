@@ -10,12 +10,16 @@ import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.dtos.response.mappers.EmprestimoResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
+import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Emprestimo;
+import com.bibliotech.bibliotech.models.Exemplar;
+import com.bibliotech.bibliotech.models.Usuario;
 import com.bibliotech.bibliotech.repositories.*;
 import com.bibliotech.bibliotech.specifications.EmprestimoSpecification;
 import com.bibliotech.bibliotech.utils.EmailSend;
 import com.bibliotech.bibliotech.utils.FormatarData;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,35 +32,70 @@ import java.util.List;
 @Service
 public class EmprestimosService {
 
-    private final EmprestimoRepository emprestimoRepository;
-    private final EmprestimoRequestMapper emprestimoRequestMapper;
-    private final EmprestimoResponseMapper emprestimoResponseMapper;
-    private final EmprestimoSpecification emprestimoSpecification;
-    private final EmailSend emailSend;
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
-    public EmprestimosService(EmprestimoRepository emprestimoRepository, EmprestimoRequestMapper emprestimoRequestMapper, EmprestimoSpecification emprestimoSpecification, EmprestimoResponseMapper emprestimoResponseMapper, EmailSend emailSend) {
-        this.emprestimoRepository = emprestimoRepository;
-        this.emprestimoRequestMapper = emprestimoRequestMapper;
-        this.emprestimoResponseMapper = emprestimoResponseMapper;
-        this.emprestimoSpecification = emprestimoSpecification;
-        this.emailSend = emailSend;
-    }
+    @Autowired
+    private EmprestimoRequestMapper emprestimoRequestMapper;
 
-    public EmprestimoResponseDTO realizarEmprestimo (EmprestimoRequestDTO requestDTO) {
+    @Autowired
+    private EmprestimoResponseMapper emprestimoResponseMapper;
+
+    @Autowired
+    private EmprestimoSpecification emprestimoSpecification;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
+
+    @Autowired
+    private ExemplarRepository exemplarRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EmailSend emailSend;
+
+    public EmprestimoResponseDTO realizarEmprestimo(EmprestimoRequestDTO requestDTO) {
         if (requestDTO.getIdAluno() == null) {
-            throw new ValidationException("O aluno não pode ser nulo.");
+            throw new ValidationException("O ID do aluno não pode ser nulo.");
         }
         if (requestDTO.getIdExemplar() == null) {
-            throw new ValidationException("O exemplar não pode ser nulo.");
+            throw new ValidationException("O ID do exemplar não pode ser nulo.");
         }
+        if (requestDTO.getIdUsuario() == null) {
+            throw new ValidationException("O ID do usuário não pode ser nulo.");
+        }
+
+        Aluno aluno = alunoRepository.findById(requestDTO.getIdAluno())
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
+        if (!"regular".equalsIgnoreCase(aluno.getSituacao())) {
+            throw new ValidationException("O aluno não está com a situação regular");
+        }
+
+        Exemplar exemplar = exemplarRepository.findById(requestDTO.getIdExemplar())
+                .orElseThrow(() -> new NotFoundException("Exemplar não encontrado"));
+
+        if (!"disponivel".equalsIgnoreCase(exemplar.getSituacao())) {
+            throw new ValidationException("O exemplar não está disponível");
+        }
+
+        Usuario usuario = usuarioRepository.findById(requestDTO.getIdUsuario())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         Emprestimo emprestimo = emprestimoRequestMapper.toEntity(requestDTO);
 
+        emprestimo.setAluno(aluno);
+        emprestimo.setExemplar(exemplar);
+        emprestimo.setRealizadoPor(usuario);
         emprestimo.setSituacao("pendente");
-        emprestimo.getAluno().setSituacao("debito");
-        emprestimo.getExemplar().setSituacao("emprestado");
+
+        aluno.setSituacao("debito");
+        exemplar.setSituacao("emprestado");
 
         Emprestimo emprestimoSalvo = emprestimoRepository.save(emprestimo);
+
         return emprestimoResponseMapper.toDto(emprestimoSalvo);
     }
 

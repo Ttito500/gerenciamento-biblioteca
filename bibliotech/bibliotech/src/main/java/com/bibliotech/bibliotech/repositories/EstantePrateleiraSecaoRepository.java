@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface EstantePrateleiraSecaoRepository extends JpaRepository<Estanteprateleirasecao, Integer> {
     List<Estanteprateleirasecao> findBySecaoId(Integer idSecao);
     Optional<Estanteprateleirasecao> findByEstanteprateleiraIdAndSecaoId(Integer idEstantePrateleira, Integer idSecao);
-    boolean existsByEstanteprateleiraId(Integer idEstantePrateleira);
 }
