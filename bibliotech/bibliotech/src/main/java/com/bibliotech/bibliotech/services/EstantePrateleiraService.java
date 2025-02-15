@@ -1,14 +1,18 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.ExemplarResponseMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
+import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.repositories.EstantePrateleiraRepository;
 import com.bibliotech.bibliotech.repositories.ExemplarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EstantePrateleiraService {
@@ -18,6 +22,9 @@ public class EstantePrateleiraService {
 
     @Autowired
     private ExemplarRepository exemplarRepository;
+
+    @Autowired
+    private ExemplarResponseMapper exemplarResponseMapper;
 
     public Estanteprateleira adicionarEstanteprateleira(Estanteprateleira ep) {
 
@@ -42,6 +49,20 @@ public class EstantePrateleiraService {
 
     public List<Estanteprateleira> listarEstanteprateleiras() {
         return estantePrateleiraRepository.findAll();
+    }
+
+    public List<ExemplarResponseDTO> listarExemplaresPorEstantePrateleira(Integer idEstantePrateleira) {
+        Estanteprateleira estanteprateleira = estantePrateleiraRepository.findById(idEstantePrateleira)
+                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + idEstantePrateleira + " não encontrada."));
+
+        List<Exemplar> exemplares = exemplarRepository.findByEstanteprateleira(estanteprateleira);
+
+        if (exemplares.isEmpty()) {
+            throw new NotFoundException("Nenhum exemplar encontrado para a Estante-Prateleira com ID " + idEstantePrateleira);
+        }
+
+        return exemplares.stream().map(exemplarResponseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public Estanteprateleira atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
@@ -79,5 +100,4 @@ public class EstantePrateleiraService {
 
         return "Estante-Prateleira deletada com sucesso";
     }
-
 }

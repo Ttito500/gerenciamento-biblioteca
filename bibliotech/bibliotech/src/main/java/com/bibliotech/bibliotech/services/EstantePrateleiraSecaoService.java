@@ -2,7 +2,6 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.EstantePrateleiraSecaoDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
-import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Estanteprateleirasecao;
 import com.bibliotech.bibliotech.models.Secao;
@@ -33,10 +32,6 @@ public class EstantePrateleiraSecaoService {
 
         Secao secao = secaoRepository.findById(dto.getIdSecao())
                 .orElseThrow(() -> new NotFoundException("Seção com ID " + dto.getIdSecao() + " não encontrada."));
-
-        if (estantePrateleiraSecaoRepository.existsByEstanteprateleiraId(dto.getIdEstantePrateleira())) {
-            throw new ValidationException("A Estante-Prateleira com ID " + dto.getIdEstantePrateleira() + " já está vinculada a outra Seção.");
-        }
 
         Estanteprateleirasecao estanteprateleirasecao = new Estanteprateleirasecao();
         estanteprateleirasecao.setEstanteprateleira(estantePrateleira);

@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.response.ExemplarResponseDTO;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.services.EstantePrateleiraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +14,30 @@ import java.util.List;
 public class EstantePrateleiraController {
 
     @Autowired
-    private EstantePrateleiraService estateprateleiraService;
+    private EstantePrateleiraService estantePrateleiraService;
 
     @PostMapping
     public ResponseEntity<Estanteprateleira> criarEstanteprateleira(@RequestBody Estanteprateleira request) {
-        return ResponseEntity.ok(estateprateleiraService.adicionarEstanteprateleira(request));
+        return ResponseEntity.ok(estantePrateleiraService.adicionarEstanteprateleira(request));
     }
 
     @GetMapping
     public ResponseEntity<List<Estanteprateleira>> listarEstanteprateleira() {
-        return ResponseEntity.ok(estateprateleiraService.listarEstanteprateleiras());
+        return ResponseEntity.ok(estantePrateleiraService.listarEstanteprateleiras());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Estanteprateleira> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
-        return ResponseEntity.ok(estateprateleiraService.atualizarEstanteprateleira(id, body));
+        return ResponseEntity.ok(estantePrateleiraService.atualizarEstanteprateleira(id, body));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarEstanteprateleira(@PathVariable Integer id) {
-        return ResponseEntity.ok(estateprateleiraService.deletarEstanteprateleira(id));
+        return ResponseEntity.ok(estantePrateleiraService.deletarEstanteprateleira(id));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ExemplarResponseDTO>> listarExemplaresPorEstantePrateleira(@PathVariable Integer id) {
+        return ResponseEntity.ok(estantePrateleiraService.listarExemplaresPorEstantePrateleira(id));
     }
 }
