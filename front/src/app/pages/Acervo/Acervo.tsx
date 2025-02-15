@@ -99,8 +99,8 @@ const Acervo: React.FC = () => {
 				situacao: "disponivel",
 				idEstantePrateleira: {
 					id: 1,
-					estante: "3",
-					prateleira: "6"
+					estante: 3,
+					prateleira: 6
 				},
 				idSecao: {
 					id: 1,
@@ -139,8 +139,8 @@ const Acervo: React.FC = () => {
 				situacao: "disponivel",
 				idEstantePrateleira: {
 					id: 1,
-					estante: "3",
-					prateleira: "6"
+					estante: 3,
+					prateleira: 6
 				},
 				idSecao: {
 					id: 1,

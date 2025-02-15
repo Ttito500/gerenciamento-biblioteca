@@ -8,6 +8,7 @@ import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.repositories.AlunoRepository;
 import com.bibliotech.bibliotech.repositories.TurmaRepository;
+import com.bibliotech.bibliotech.utils.EmailValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +43,8 @@ public class AlunosService {
         if (requestDTO.getNome() == null || requestDTO.getNome().isEmpty()) {
             throw new ValidationException("O nome do aluno é obrigatório.");
         }
-        if (requestDTO.getEmail() == null || requestDTO.getEmail().isEmpty()) {
-            throw new ValidationException("O e-mail do aluno é obrigatório.");
+        if (!EmailValidator.isValid(requestDTO.getEmail()) || requestDTO.getEmail().isEmpty()) {
+            throw new ValidationException("O e-mail informado não é válido.");
         }
         if (alunoRepository.existsByEmail(requestDTO.getEmail())) {
             throw new ValidationException("Já existe um aluno cadastrado com esse e-mail.");

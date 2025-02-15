@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.dtos.response.mappers;
 
+import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
@@ -60,6 +61,21 @@ public class EmprestimoResponseMapper {
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
         dto.setDataConclusao(emprestimo.getDataConclusao());
         dto.setSituacao(emprestimo.getSituacao());
+
+        return dto;
+    }
+
+    public EmprestimoNotificacaoDTO toDTONotificacao(Emprestimo emprestimo) {
+        EmprestimoNotificacaoDTO dto = new EmprestimoNotificacaoDTO();
+
+        dto.setIdEmprestimo(emprestimo.getId());
+        dto.setIdAluno(emprestimo.getAluno().getId());
+        dto.setIdExemplar(emprestimo.getExemplar().getId());
+        dto.setNomeAluno(emprestimo.getAluno().getNome());
+        dto.setEmailAluno(emprestimo.getAluno().getEmail());
+        dto.setTitulo(emprestimo.getExemplar().getLivro().getTitulo());
+        dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
+        dto.setDataPrazo(emprestimo.getDataPrazo());
 
         return dto;
     }

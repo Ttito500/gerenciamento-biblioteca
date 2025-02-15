@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.EmprestimoRequestDTOConcluir;
+import com.bibliotech.bibliotech.dtos.response.EmprestimoNotificacaoDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOAluno;
 import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/emprestimos")
@@ -30,7 +32,7 @@ public class EmprestimoController {
     }
 
     @PostMapping("")
-    public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO){
+    public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO) {
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimosService.realizarEmprestimo(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoResponseDTO);
     }
@@ -92,12 +94,12 @@ public class EmprestimoController {
     }
 
     @PatchMapping("/renovar/{id}")
-    public ResponseEntity<String> renovarPrazo(@PathVariable Integer id){
+    public ResponseEntity<String> renovarPrazo(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimosService.renovarPrazo(id));
     }
 
     @PatchMapping("/cancelar/{id}")
-    public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id){
+    public ResponseEntity<String> cancelarEmprestimo(@PathVariable Integer id) {
         return ResponseEntity.ok(emprestimosService.cancelarEmprestimo(id));
     }
 
@@ -107,5 +109,10 @@ public class EmprestimoController {
             @RequestBody EmprestimoRequestDTOConcluir DTOConcluir) {
 
         return ResponseEntity.ok(emprestimosService.concluirEmprestimo(id, DTOConcluir));
+    }
+
+    @PostMapping("/enviar-email")
+    public ResponseEntity<List<EmprestimoNotificacaoDTO>> verificarAtrasos() {
+        return ResponseEntity.ok(emprestimosService.enviarEmailAtrasadosEPresteAAtrasar());
     }
 }
