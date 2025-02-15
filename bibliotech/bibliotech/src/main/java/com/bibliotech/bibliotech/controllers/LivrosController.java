@@ -65,8 +65,14 @@ public class LivrosController {
     }
 
     @PatchMapping("/inativar/{id}")
-    public ResponseEntity<LivroResponseDTO> inativarLivro(@PathVariable Integer id){
+    public ResponseEntity<Void> inativarLivro(@PathVariable Integer id){
         livrosService.inativarLivro(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<Void> ativarLivro(@PathVariable Integer id){
+        livrosService.ativarLivro(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -101,8 +101,7 @@ public class LivrosService {
     }
 
     public Livro atualizarLivro(Integer id, LivroRequestPatchDTO livroRequest){
-        Livro livro = livroRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Livro com ID " + id + " não encontrado."));
+        Livro livro = getLivroById(id);
 
         if (livroRequest.getIsbn() != null && !livroRequest.getIsbn().isEmpty()) {
             if (livroRequest.getIsbn().length() > 13) {
@@ -113,7 +112,6 @@ public class LivrosService {
             }
             livro.setIsbn(livroRequest.getIsbn());
         }
-
         if (livroRequest.getAutores().isEmpty()) {
             throw new ValidationException("Os nomes autores não podom ser vazios ou nulos.");
         }
@@ -124,7 +122,6 @@ public class LivrosService {
             livro.setTitulo(livroRequest.getTitulo());
         }
 
-        livro.setAtivo(livroRequest.getAtivo());
         livro.setAutores(autorService.cadastrarNovosAutores(autorMapper.toEntityList(livroRequest.getAutores()), livro));
         livro.setGeneros(generosService.cadastrarNovosGeneros(generoMapper.toEntityList(livroRequest.getGeneros()), livro));
 
@@ -134,14 +131,20 @@ public class LivrosService {
     }
 
     public void inativarLivro(Integer id) {
-        Livro livroExistente = livroRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Livro com ID: "+ id +" não encontrado."));
+        Livro livroExistente = getLivroById(id);
 
         if (livroRepository.existsExemplarEmprestado(id)) {
             throw new ValidationException("O livro não pode ser emprestado pois possui exemplares emprestados");
         }
 
         livroExistente.setAtivo(false);
+        livroRepository.save(livroExistente);
+    }
+
+    public void ativarLivro(Integer id) {
+        Livro livroExistente = getLivroById(id);
+
+        livroExistente.setAtivo(true);
         livroRepository.save(livroExistente);
     }
 }

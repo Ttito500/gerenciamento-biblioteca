@@ -23,7 +23,6 @@ public class LivroRequestPatchMapper {
 
         dto.setTitulo(livro.getTitulo());
         dto.setIsbn(livro.getIsbn());
-        dto.setAtivo(livro.getAtivo());
         dto.setAutores(AutorMapper.toDTOList(livro.getAutores()));
         dto.setGeneros(GeneroMapper.toDTOList(livro.getGeneros()));
 
@@ -40,7 +39,6 @@ public class LivroRequestPatchMapper {
 
         entity.setTitulo(dto.getTitulo());
         entity.setIsbn(dto.getIsbn());
-        entity.setAtivo(dto.getAtivo());
         entity.setAutores(autorMapper.toEntityList(dto.getAutores()));
         entity.setGeneros(generoMapper.toEntityList(dto.getGeneros()));
 

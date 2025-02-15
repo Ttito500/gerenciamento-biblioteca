@@ -12,11 +12,6 @@ import java.util.List;
 public class LivroRequestPatchDTO {
     private String titulo;
     private String isbn;
-    private boolean ativo;
     private List<AutorDTO> autores;
     private List<GeneroDTO> generos;
-
-    public boolean getAtivo() {
-        return ativo;
-    }
 }
