@@ -4,7 +4,7 @@ import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.models.Secao;
-import com.bibliotech.bibliotech.repositories.EstanteprateleiraRepository;
+import com.bibliotech.bibliotech.repositories.EstantePrateleiraRepository;
 import com.bibliotech.bibliotech.repositories.ExemplarRepository;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.bibliotech.bibliotech.repositories.SecaoRepository;
@@ -28,7 +28,7 @@ public class ExemplaresService {
     private ExemplarRepository exemplarRepository;
 
     @Autowired
-    private EstanteprateleiraRepository estanteprateleiraRepository;
+    private EstantePrateleiraRepository estantePrateleiraRepository;
 
     @Transactional
     public List<Exemplar> cadastrarExemplares(Livro livro, Secao secao, Estanteprateleira estanteprateleira, Integer qtdExemplaresNovos) {
