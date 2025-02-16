@@ -95,6 +95,14 @@ public class TurmasService {
     }
 
     public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras(LocalDate dataInicio, LocalDate dataFim) {
+        if (dataInicio == null) {
+            throw new ValidationException("A data de início é obrigatória.");
+        } else if (dataFim == null) {
+            dataFim = LocalDate.now();
+        } else if (dataInicio.isAfter(dataFim)) {
+            throw new ValidationException("A data de início deve ser anterior à data final.");
+        }
+
         return turmaRepository.obterTurmasMaisLeitoras(dataInicio, dataFim);
     }
 }

@@ -73,7 +73,7 @@ public class TurmaController {
     }
 
     @GetMapping("/mais-leitoras/export/pdf")
-    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
         byte[] pdfBytes = pdfExportService.exportTurmasMaisLeitoras(turmasService.obterTurmasMaisLeitoras(dataInicio, dataFim));
 
         HttpHeaders headers = new HttpHeaders();
