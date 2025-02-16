@@ -54,17 +54,13 @@ public class EstantePrateleiraService {
     public List<ExemplarResponseDTO> listarExemplaresPorEstantePrateleira(Integer idEstantePrateleira) {
         Estanteprateleira estanteprateleira = estantePrateleiraRepository.findById(idEstantePrateleira)
                 .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + idEstantePrateleira + " não encontrada."));
-
         List<Exemplar> exemplares = exemplarRepository.findByEstanteprateleira(estanteprateleira);
-
         if (exemplares.isEmpty()) {
             throw new NotFoundException("Nenhum exemplar encontrado para a Estante-Prateleira com ID " + idEstantePrateleira);
         }
-
         return exemplares.stream().map(exemplarResponseMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
     public Estanteprateleira atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
         Estanteprateleira ep_existente = estantePrateleiraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + id + " não encontrado."));
@@ -99,5 +95,10 @@ public class EstantePrateleiraService {
         estantePrateleiraRepository.delete(estanteprateleira);
 
         return "Estante-Prateleira deletada com sucesso";
+    }
+
+    public Estanteprateleira getEstantePrateleiraById(Integer id) {
+        return estantePrateleiraRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Estante-Prateleira com id: " + id + " não encontrada."));
     }
 }
