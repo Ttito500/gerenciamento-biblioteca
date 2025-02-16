@@ -80,6 +80,10 @@ const Inicio: React.FC = () => {
       <div className="Exemplar-acoes"></div>
 
       <div className="w-100">
+
+      </div>
+
+      <div className="w-100">
         <Accordion defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header className="custon-accordion-header-green">

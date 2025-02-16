@@ -139,6 +139,7 @@ const ListagemExemplares: React.FC = () => {
               backdrop="static"
               centered
               keyboard={false}
+              className="Modais-Confirmacao-Custon"
           >
               <Modal.Header closeButton>
                   <Modal.Title>Confirmação</Modal.Title>
