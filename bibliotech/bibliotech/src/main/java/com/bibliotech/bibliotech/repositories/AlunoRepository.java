@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.repositories;
 
+import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 import com.bibliotech.bibliotech.models.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,14 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
 
     @Query("SELECT CASE WHEN a.situacao <> 'regular' THEN true ELSE false END FROM Aluno a WHERE a.id = :id")
     boolean temSituacaoIrregular(@Param("id") Integer id);
+
+
+    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(a.nome, t.serie, t.turma, COUNT(e)) " +
+            "FROM Aluno a " +
+            "JOIN a.turma t " +
+            "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " +
+            "GROUP BY a.nome, t.serie, t.turma") // Group by serie and turma as well
+    List<AlunoLeiturasDTO> obterAlunosComQuantidadeLeituras();
 
     boolean existsByEmail(String email);
     boolean existsById(Integer id);

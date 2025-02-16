@@ -4,12 +4,16 @@ import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.response.TurmaResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.TurmaResponseMapper;
 import com.bibliotech.bibliotech.models.Turma;
+import com.bibliotech.bibliotech.services.PdfExportService;
 import com.bibliotech.bibliotech.services.TurmasService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,6 +25,9 @@ public class TurmaController {
 
     @Autowired
     private TurmaResponseMapper turmaResponseMapper;
+
+    @Autowired
+    private PdfExportService pdfExportService;
 
     @PostMapping("")
     public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody TurmaRequestDTO requestDTO){
@@ -63,5 +70,18 @@ public class TurmaController {
     public ResponseEntity<Void> ativarTurma(@PathVariable Integer id) {
         turmasService.ativarTurma(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mais-leitoras/export/pdf")
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+        byte[] pdfBytes = pdfExportService.exportTurmasMaisLeitoras(turmasService.obterTurmasMaisLeitoras(dataInicio, dataFim));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "turma-mais-leitoras.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }
