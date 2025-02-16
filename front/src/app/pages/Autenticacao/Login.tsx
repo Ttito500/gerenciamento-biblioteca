@@ -42,7 +42,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                             <Form.Control
                                 type="email"
                                 placeholder="Digite o email"
-                                value={email}
+                                // value={email}
+                                value="adelino@email.com"
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
@@ -56,7 +57,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                             <Form.Control
                                 type="password"
                                 placeholder="Digite a senha"
-                                value={password}
+                                // value={password}
+                                value="cunha"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />

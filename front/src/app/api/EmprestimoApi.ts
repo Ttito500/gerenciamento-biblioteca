@@ -1,16 +1,16 @@
 import axios from "axios";
 import { CreateEmprestimoRequest, EmprestimosFiltros, EmprestimosPorAlunoFiltros, EmprestimosPorLivroFiltros, GetEmprestimoPorAlunoResponse, GetEmprestimoPorLivroResponse, GetEmprestimoResponse } from "../interfaces/emprestimo";
-import { Pagination } from "../interfaces/pagination";
+import { ResponsePagination } from "../interfaces/pagination";
 import { getQueryString } from "../shared/utils";
 
 const API_URL = "http://localhost:8090/emprestimos";
 
-export const getEmprestimos = async (filtros: EmprestimosFiltros): Promise<Pagination<GetEmprestimoResponse>> => {
+export const getEmprestimos = async (filtros: EmprestimosFiltros): Promise<ResponsePagination<GetEmprestimoResponse>> => {
   try {
     const queryString = getQueryString(filtros);
-    const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtrar`;
+    const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;
     
-    const response = await axios.get<Pagination<GetEmprestimoResponse>>(url);
+    const response = await axios.get<ResponsePagination<GetEmprestimoResponse>>(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar empréstimos:", error);
@@ -18,12 +18,12 @@ export const getEmprestimos = async (filtros: EmprestimosFiltros): Promise<Pagin
   }
 };
 
-export const getEmprestimosPorAluno = async (idAluno: number, filtros: EmprestimosPorAlunoFiltros): Promise<Pagination<GetEmprestimoPorAlunoResponse>> => {
+export const getEmprestimosPorAluno = async (idAluno: number, filtros: EmprestimosPorAlunoFiltros): Promise<ResponsePagination<GetEmprestimoPorAlunoResponse>> => {
   try {
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}/aluno/${idAluno}?${queryString}` : `${API_URL}/aluno/${idAluno}`;
     
-    const response = await axios.get<Pagination<GetEmprestimoPorAlunoResponse>>(url);
+    const response = await axios.get<ResponsePagination<GetEmprestimoPorAlunoResponse>>(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar empréstimos por aluno:", error);
@@ -31,12 +31,12 @@ export const getEmprestimosPorAluno = async (idAluno: number, filtros: Emprestim
   }
 };
 
-export const getEmprestimosPorLivro = async (idLivro: number, filtros: EmprestimosPorLivroFiltros): Promise<Pagination<GetEmprestimoPorLivroResponse>> => {
+export const getEmprestimosPorLivro = async (idLivro: number, filtros: EmprestimosPorLivroFiltros): Promise<ResponsePagination<GetEmprestimoPorLivroResponse>> => {
   try {
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}/livro/${idLivro}?${queryString}` : `${API_URL}/livro/${idLivro}`;
     
-    const response = await axios.get<Pagination<GetEmprestimoPorLivroResponse>>(url);
+    const response = await axios.get<ResponsePagination<GetEmprestimoPorLivroResponse>>(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar empréstimos por livro:", error);

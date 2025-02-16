@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faFileImport } from "@fortawesome/free-solid-svg-icons";
@@ -9,21 +9,89 @@ import CadastrarEmprestimo from "./templates/CadastrarEmprestimo";
 import Spinner from "react-bootstrap/Spinner";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import ConfirmarEntrega from "./templates/ConfirmarEntrega";
+import RenovarPrazo from "./templates/RenovarPrazo";
+import CancelarEmprestimo from "./templates/CancelarEmprestimo";
+import { EmprestimosFiltros, GetEmprestimoResponse } from "./../../interfaces/emprestimo";
+import { getEmprestimos } from "./../../api/EmprestimoApi";
+import { ResponsePagination } from "./../../interfaces/pagination";
+import Pagination from "react-bootstrap/Pagination";
 
 const Emprestimo: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showToastError, setShowToastError] = useState(false);
   const [showToastSuccess, setShowToastSuccess] = useState(false);
 
+  const [showReceber, setShowReceber] = useState(false);
+  const handleCloseReceber = () => setShowReceber(false);
+  const handleShowReceber = () => setShowReceber(true);
+
+  const [showRenovar, setShowRenovar] = useState(false);
+  const handleCloseRenovar = () => setShowRenovar(false);
+  const handleShowRenovar = () => setShowRenovar(true);
+
+  const [showCancelar, setShowCancelar] = useState(false);
+  const handleCloseCancelar = () => setShowCancelar(false);
+  const handleShowCancelar = () => setShowCancelar(true);
+
+  const [emprestimos, setEmprestimos] = useState<ResponsePagination<GetEmprestimoResponse>>();
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const sizePage = 10;
+
+  const [formDataFiltrar, setFormDataFiltrar] = useState({
+    isbn: '',
+    nomeAluno: '',
+    tituloLivro: '',
+    situacao: '',
+    nomeRealizadoPor: '',
+    nomeConcluidoPor: '',
+    dataEmprestimo: '',
+    dataConclusao: '',
+    dataPrazo: '',
+    page: currentPage,
+    size: sizePage
+  } as EmprestimosFiltros);
+
+  const handleChangeFiltros = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormDataFiltrar({ ...formDataFiltrar, [name]: value });
+  };
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   useEffect(() => {
-    TelaEmprestimo();
+    listarEmprestimos();
   }, []);
 
-  const TelaEmprestimo = async (): Promise<void> => {
+  useEffect(() => {
+    listarEmprestimos();
+  }, [currentPage]);
+
+  const listarEmprestimos = async (): Promise<void> => {
     setLoading(true);
 
     try {
-      /* empty */
+      const filtros: EmprestimosFiltros = {
+        isbn: formDataFiltrar.isbn,
+        nomeAluno: formDataFiltrar.nomeAluno,
+        tituloLivro: formDataFiltrar.tituloLivro,
+        situacao: formDataFiltrar.situacao,
+        nomeRealizadoPor: formDataFiltrar.nomeRealizadoPor,
+        nomeConcluidoPor: formDataFiltrar.nomeConcluidoPor,
+        dataEmprestimo: formDataFiltrar.dataEmprestimo,
+        dataConclusao: formDataFiltrar.dataConclusao,
+        dataPrazo: formDataFiltrar.dataPrazo,
+        page: (currentPage - 1),
+        size: sizePage
+      }
+      console.log(filtros)
+      const data = await getEmprestimos(filtros);
+      setEmprestimos(data);
+      setTotalPages(data.totalPages);
     } catch (err) {
       setShowToastError(true);
     } finally {
@@ -119,14 +187,113 @@ const Emprestimo: React.FC = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal
+          show={showReceber}
+          onHide={handleCloseReceber}
+          size="lg"
+          backdrop="static"
+          centered
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Concluir Empréstimo</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <ConfirmarEntrega />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseReceber}>
+              Cancelar
+            </Button>
+            <Button variant="success">
+              <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal
+          show={showRenovar}
+          onHide={handleCloseRenovar}
+          size="lg"
+          backdrop="static"
+          centered
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Renovar Prazo</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <RenovarPrazo />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseRenovar}>
+              Cancelar
+            </Button>
+            <Button variant="success">
+              <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal
+          show={showCancelar}
+          onHide={handleCloseCancelar}
+          size="lg"
+          backdrop="static"
+          centered
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Cancelar Empréstimo</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <CancelarEmprestimo />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseCancelar}>
+              Cancelar
+            </Button>
+            <Button variant="danger">
+              <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
 
       <div className="w-100">
-        <FiltrosEmprestimo />
+        <FiltrosEmprestimo 
+          formData={formDataFiltrar} 
+          onChange={handleChangeFiltros} 
+          onSearch={listarEmprestimos} 
+        />
       </div>
 
       <div className="w-100">
-        <ListagemEmprestimos />
+        <ListagemEmprestimos 
+          emprestimos={emprestimos} 
+          onCancelar={handleShowCancelar} 
+          onConcluir={handleShowReceber} 
+          onRenovar={handleShowRenovar} 
+        />
+
+        <Pagination>
+          <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+          <Pagination.Prev onClick={() => handlePageChange((currentPage - 1))} disabled={currentPage === 1} />
+          <Pagination.Item
+            active={true}
+          >
+            {currentPage}
+          </Pagination.Item>
+          <Pagination.Next onClick={() => handlePageChange((currentPage + 1))} disabled={currentPage === totalPages} />
+          <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+        </Pagination>
       </div>
     </section>
   );

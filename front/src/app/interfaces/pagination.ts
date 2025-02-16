@@ -1,4 +1,4 @@
-export interface Pagination<T> {
+export interface ResponsePagination<T> {
   content: T[]
   pageable: Pageable
   last: boolean
