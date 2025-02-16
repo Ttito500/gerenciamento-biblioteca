@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,13 +29,15 @@ public interface AlunoRepository extends JpaRepository<Aluno, Integer> {
     @Query("SELECT CASE WHEN a.situacao <> 'regular' THEN true ELSE false END FROM Aluno a WHERE a.id = :id")
     boolean temSituacaoIrregular(@Param("id") Integer id);
 
-
-    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(a.nome, t.serie, t.turma, COUNT(e)) " +
+    @Query("SELECT new com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO(" +
+            "a.nome, t.serie, t.turma, COUNT(e.id)) " +
             "FROM Aluno a " +
-            "JOIN a.turma t " +
-            "LEFT JOIN Emprestimo e ON a.id = e.aluno.id " +
-            "GROUP BY a.nome, t.serie, t.turma") // Group by serie and turma as well
-    List<AlunoLeiturasDTO> obterAlunosComQuantidadeLeituras();
+            "INNER JOIN Turma t ON a.turma.id = t.id " + // Join with Turma
+            "INNER JOIN Emprestimo e ON a.id = e.aluno.id " +
+            "WHERE e.dataEmprestimo BETWEEN :dataInicio AND :dataFim " +
+            "GROUP BY a.nome, t.serie, t.turma " + // Group by all selected non-aggregated fields
+            "ORDER BY COUNT(e.id) DESC")
+    List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim);
 
     boolean existsByEmail(String email);
     boolean existsById(Integer id);

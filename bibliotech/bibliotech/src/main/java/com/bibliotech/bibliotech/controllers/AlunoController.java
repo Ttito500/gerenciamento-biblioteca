@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -66,9 +67,10 @@ public class AlunoController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/top-leitores/export/pdf")
-    public ResponseEntity<byte[]> exportTopLeitoresPdf() {
-        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores(alunosService.obterAlunosComQuantidadeLeituras());
+    //coloquei a data de inicio como nao obrigatorio para tratar dela bonitinho no service
+    @GetMapping("/mais-leitores/export/pdf")
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores(alunosService.obterAlunosMaisLeitures(dataInicio, dataFim));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

@@ -3,7 +3,6 @@ package com.bibliotech.bibliotech.services;
 import com.bibliotech.bibliotech.dtos.request.AlunoRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.AlunoRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
-import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Aluno;
@@ -15,9 +14,8 @@ import com.bibliotech.bibliotech.utils.EmailValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AlunosService {
@@ -129,7 +127,15 @@ public class AlunosService {
         alunoRepository.saveAll(alunos);
     }
 
-    public List<AlunoLeiturasDTO> obterAlunosComQuantidadeLeituras() {
-        return alunoRepository.obterAlunosComQuantidadeLeituras();
+    public List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim) {
+        if (dataInicio == null) {
+            throw new ValidationException("A data de início é obrigatória.");
+        } else if (dataFim == null) {
+            dataFim = LocalDate.now();
+        } else if (dataInicio.isAfter(dataFim)) {
+            throw new ValidationException("A data de início deve ser anterior à data final.");
+        }
+
+        return alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim);
     }
 }
