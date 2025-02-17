@@ -1,5 +1,8 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
+import com.bibliotech.bibliotech.exception.NotFoundException;
+import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
 import com.bibliotech.bibliotech.models.Exemplar;
 import com.bibliotech.bibliotech.models.Livro;
@@ -22,13 +25,13 @@ public class ExemplaresService {
     private LivroRepository livroRepository;
 
     @Autowired
-    private SecaoRepository secaoRepository;
+    private SecoesService secoesService;
 
     @Autowired
     private ExemplarRepository exemplarRepository;
 
     @Autowired
-    private EstantePrateleiraRepository estantePrateleiraRepository;
+    private EstantePrateleiraService estantePrateleiraService;
 
     @Transactional
     public List<Exemplar> cadastrarExemplares(Livro livro, Secao secao, Estanteprateleira estanteprateleira, Integer qtdExemplaresNovos) {
@@ -53,5 +56,40 @@ public class ExemplaresService {
 
     public List<Exemplar> listarExemplaresDeUmLivro(Integer id) {
         return exemplarRepository.findExemplarByLivro_Id(id);
+    }
+
+    public Exemplar findExemplarById(Integer id) {
+        return exemplarRepository.findById(id).orElseThrow(()-> new NotFoundException("Exemplar com id: " + id + " não encontrado"));
+    }
+
+    public void extraviarExemplar(Integer id) {
+        Exemplar exemplar = findExemplarById(id);
+
+        if (exemplarRepository.existsByExemplarAndSituacaoPendenteOuAtrasado(id)) {
+            throw new ValidationException("Exemplar não pode ser extraviado pois está associado a um emprestimo pendente ou atrasado.");
+        }
+
+        exemplar.setSituacao("extraviado");
+        exemplarRepository.save(exemplar);
+    }
+
+    public Exemplar atualizarExemplar(Integer id, ExemplarRequestPatchDTO exemplarDTO) {
+        Exemplar exemplar = findExemplarById(id);
+        Secao secao = secoesService.getSecaoById(exemplarDTO.getIdSecao());
+        Estanteprateleira estanteprateleira = estantePrateleiraService.getEstantePrateleiraById(exemplarDTO.getIdEstantePrateleira());
+
+        if (exemplarDTO.getIdLivro() != exemplar.getLivro().getId()) {
+            throw new ValidationException("O id do Livro infromado não corresponde ao exemplar selecionado.");
+        }
+        if (exemplarDTO.getSituacao() != null || !exemplarDTO.getSituacao().equals("")) {
+            exemplar.setSituacao(exemplarDTO.getSituacao());
+        }
+        if (exemplarDTO.getObservacao() != null) {
+            exemplar.setObservacao(exemplarDTO.getObservacao());
+        }
+        exemplar.setEstanteprateleira(estanteprateleira);
+        exemplar.setSecao(secao);
+
+        return exemplarRepository.save(exemplar);
     }
 }
