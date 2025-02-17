@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.ExemplarDTO;
 import com.bibliotech.bibliotech.dtos.mappers.ExemplarMapper;
+import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
@@ -90,5 +91,17 @@ public class LivrosController {
     public ResponseEntity<Void> ativarLivro(@PathVariable Integer id){
         livrosService.ativarLivro(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/exemplares/extraviar/{id}")
+    public ResponseEntity<Void> extraviarExemplar(@PathVariable Integer id){
+        livrosService.extraviarExemplar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/exemplares/atualizar/{id}")
+    public ResponseEntity<ExemplarDTO> atualizarExemplar(@PathVariable Integer id, @RequestBody ExemplarRequestPatchDTO body){
+        ExemplarDTO exemplarDTO = exemplarMapper.toDTO(livrosService.atualizarExemplar(id, body));
+        return ResponseEntity.ok(exemplarDTO);
     }
 }
