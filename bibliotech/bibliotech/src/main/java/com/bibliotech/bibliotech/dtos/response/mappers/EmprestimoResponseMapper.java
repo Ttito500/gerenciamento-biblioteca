@@ -23,6 +23,7 @@ public class EmprestimoResponseMapper {
         dto.setExemplarId(emprestimo.getExemplar().getId());
         dto.setIsbn(emprestimo.getExemplar().getLivro().getIsbn());
         dto.setTituloLivro(emprestimo.getExemplar().getLivro().getTitulo());
+        dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
         dto.setNomeAluno(emprestimo.getAluno().getNome());
         dto.setRealizadoPor(emprestimo.getRealizadoPor().getNome());
         dto.setObservacao(emprestimo.getObservacao());
@@ -40,6 +41,7 @@ public class EmprestimoResponseMapper {
 
         dto.setId(emprestimo.getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
         dto.setTituloLivro(emprestimo.getExemplar().getLivro().getTitulo());
         dto.setIsbn(emprestimo.getExemplar().getLivro().getIsbn());
         dto.setDataEmprestimo(emprestimo.getDataEmprestimo());
@@ -55,6 +57,7 @@ public class EmprestimoResponseMapper {
         dto.setId(emprestimo.getId());
         dto.setAlunoId(emprestimo.getAluno().getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
         dto.setNomeAluno(emprestimo.getAluno().getNome());
         dto.setSerieAluno(emprestimo.getAluno().getTurma().getSerie());
         dto.setTurmaAluno(emprestimo.getAluno().getTurma().getTurma());
@@ -71,6 +74,7 @@ public class EmprestimoResponseMapper {
         dto.setIdEmprestimo(emprestimo.getId());
         dto.setIdAluno(emprestimo.getAluno().getId());
         dto.setIdExemplar(emprestimo.getExemplar().getId());
+        dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
         dto.setNomeAluno(emprestimo.getAluno().getNome());
         dto.setEmailAluno(emprestimo.getAluno().getEmail());
         dto.setTitulo(emprestimo.getExemplar().getLivro().getTitulo());
