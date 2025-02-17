@@ -53,6 +53,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "date-fns": "^4.1.0",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.6",

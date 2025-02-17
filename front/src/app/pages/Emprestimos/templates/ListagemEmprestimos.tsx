@@ -1,33 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  faCalendarCheck,
   faCalendarPlus,
-  faCheck,
   faCircleXmark,
+  faClipboardCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import Table from "react-bootstrap/Table";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Badge from "react-bootstrap/Badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/esm/Modal";
-import ConfirmarEntrega from "./ConfirmarEntrega";
-import RenovarPrazo from "./RenovarPrazo";
-import CancelarEmprestimo from "./CancelarEmprestimo";
+import { ResponsePagination } from "./../../../interfaces/pagination";
+import { GetEmprestimoResponse } from "./../../../interfaces/emprestimo";
+import FormatDate from "./../../../shared/components/format-date/FormatDate";
 
-const ListagemEmprestimos = () => {
-  const [showReceber, setShowReceber] = useState(false);
-  const handleCloseReceber = () => setShowReceber(false);
-  const handleShowReceber = () => setShowReceber(true);
+interface ListagemEmprestimosProps {
+  emprestimos: ResponsePagination<GetEmprestimoResponse>;
+  onConcluir: (id: number) => void;
+  onRenovar: (id: number) => void;
+  onCancelar: (id: number) => void;
+}
 
-  const [showRenovar, setShowRenovar] = useState(false);
-  const handleCloseRenovar = () => setShowRenovar(false);
-  const handleShowRenovar = () => setShowRenovar(true);
-
-  const [showCancelar, setShowCancelar] = useState(false);
-  const handleCloseCancelar = () => setShowCancelar(false);
-  const handleShowCancelar = () => setShowCancelar(true);
-
+const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, onConcluir, onRenovar, onCancelar }) => {
   return (
     <>
       <Table striped className="tabela">
@@ -49,258 +42,81 @@ const ListagemEmprestimos = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="tabela-tr">
-            <td>978-3-16-148410-0</td>
-            <td className="text-center">1</td>
-            <td>Livro Exemplo</td>
-            <td>João Silva</td>
-            <td>Monitor N</td>
-            <td>Bibliotecária</td>
-            <td>Nenhuma</td>
-            <td className="text-center">01/02/2024</td>
-            <td className="text-center">15/02/2024</td>
-            <td className="text-center">14/02/2024</td>
-            <td className="text-center">1</td>
-            <td className="text-center">
-              <Badge className="bibliotech-badge" bg="green">
-                Entregue
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowReceber}
-                  variant="btn-outline-secondary"
-                  className="color-orange"
-                >
-                  <FontAwesomeIcon icon={faCalendarCheck} />
-                </Button>
-                <Button
-                  onClick={handleShowRenovar}
-                  variant="btn-outline-secondary"
-                  className="color-blue"
-                >
-                  <FontAwesomeIcon icon={faCalendarPlus} />
-                </Button>
-                <Button
-                  onClick={handleShowCancelar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td>978-3-16-148411-7</td>
-            <td className="text-center">2</td>
-            <td>Livro Pendente</td>
-            <td>Maria Oliveira</td>
-            <td>Monitor A</td>
-            <td>Bibliotecário X</td>
-            <td>Atenção na devolução</td>
-            <td className="text-center">05/02/2024</td>
-            <td className="text-center">20/02/2024</td>
-            <td className="text-center"></td>
-            <td className="text-center">2</td>
-            <td className="text-center">
-              <Badge className="bibliotech-badge" bg="blue">
-                Pendente
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowReceber}
-                  variant="btn-outline-secondary"
-                  className="color-orange"
-                >
-                  <FontAwesomeIcon icon={faCalendarCheck} />
-                </Button>
-                <Button
-                  onClick={handleShowRenovar}
-                  variant="btn-outline-secondary"
-                  className="color-blue"
-                >
-                  <FontAwesomeIcon icon={faCalendarPlus} />
-                </Button>
-                <Button
-                  onClick={handleShowCancelar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td>978-3-16-148412-4</td>
-            <td className="text-center">3</td>
-            <td>Livro Atrasado</td>
-            <td>Carlos Mendes</td>
-            <td>Monitor B</td>
-            <td>Bibliotecário Y</td>
-            <td>Urgente</td>
-            <td className="text-center">10/01/2024</td>
-            <td className="text-center">25/01/2024</td>
-            <td className="text-center"></td>
-            <td className="text-center">0</td>
-            <td className="text-center">
-              <Badge className="bibliotech-badge" bg="warning">
-                Atrasado
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowReceber}
-                  variant="btn-outline-secondary"
-                  className="color-orange"
-                >
-                  <FontAwesomeIcon icon={faCalendarCheck} />
-                </Button>
-                <Button
-                  onClick={handleShowRenovar}
-                  variant="btn-outline-secondary"
-                  className="color-blue"
-                >
-                  <FontAwesomeIcon icon={faCalendarPlus} />
-                </Button>
-                <Button
-                  onClick={handleShowCancelar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr className="tabela-tr">
-            <td>978-3-16-148413-1</td>
-            <td className="text-center">4</td>
-            <td>Livro Extraviado</td>
-            <td>Ana Souza</td>
-            <td>Monitor C</td>
-            <td>Bibliotecário Z</td>
-            <td>Verificar condição</td>
-            <td className="text-center">12/02/2024</td>
-            <td className="text-center">27/02/2024</td>
-            <td className="text-center"></td>
-            <td className="text-center">1</td>
-            <td className="text-center">
-              <Badge className="bibliotech-badge" bg="red">
-                Extraviado
-              </Badge>
-            </td>
-            <td className="text-center">
-              <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                <Button
-                  onClick={handleShowReceber}
-                  variant="btn-outline-secondary"
-                  className="color-orange"
-                >
-                  <FontAwesomeIcon icon={faCalendarCheck} />
-                </Button>
-                <Button
-                  onClick={handleShowRenovar}
-                  variant="btn-outline-secondary"
-                  className="color-blue"
-                >
-                  <FontAwesomeIcon icon={faCalendarPlus} />
-                </Button>
-                <Button
-                  onClick={handleShowCancelar}
-                  variant="btn-outline-secondary"
-                  className="color-red"
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </Button>
-              </ButtonGroup>
-            </td>
-          </tr>
+          {emprestimos.content.map((emprestimo) => (
+            <tr key={emprestimo.id} className="tabela-tr">
+              <td>{emprestimo.isbn}</td>
+              <td className="text-center">TO DO</td>
+              <td>{emprestimo.tituloLivro}</td>
+              <td>{emprestimo.nomeAluno}</td>
+              <td>{emprestimo.realizadoPor}</td>
+              <td>{emprestimo.concluidoPor}</td>
+              <td>{emprestimo.observacao}</td>
+              <td className="text-center"><FormatDate dateString={emprestimo.dataEmprestimo} /></td>
+              <td className="text-center"><FormatDate dateString={emprestimo.dataPrazo} /></td>
+              <td className="text-center"><FormatDate dateString={emprestimo.dataConclusao} /></td>
+              <td className="text-center">{emprestimo.qtdRenovacao}</td>
+              <td className="text-center">
+
+                {emprestimo.situacao == 'entregue' &&
+                  <Badge className="bibliotech-badge" bg="success">
+                    Entregue
+                  </Badge>
+                }
+                {emprestimo.situacao == 'pendente' &&
+                  <Badge className="bibliotech-badge" bg="info">
+                    Pendente
+                  </Badge>
+                }
+                {emprestimo.situacao == 'atrasado' &&
+                  <Badge className="bibliotech-badge" bg="warning">
+                    Atrasado
+                  </Badge>
+                }
+                {emprestimo.situacao == 'cancelado' &&
+                  <Badge className="bibliotech-badge" bg="danger">
+                    Cancelado
+                  </Badge>
+                }
+                {emprestimo.situacao == 'extraviado' &&
+                  <Badge className="bibliotech-badge" bg="danger">
+                    Extraviado
+                  </Badge>
+                }
+                
+              </td>
+              <td>
+                <ButtonGroup aria-label="Ações" className="tabela-acoes">
+
+                  <Button
+                    variant="btn-outline-secondary"
+                    className="color-orange"
+                    onClick={() => onConcluir(emprestimo.id)}
+                  >
+                    <FontAwesomeIcon icon={faClipboardCheck} />
+                  </Button>
+
+                  <Button
+                    variant="btn-outline-secondary"
+                    className="color-blue"
+                    onClick={() => onRenovar(emprestimo.id)}
+                  >
+                    <FontAwesomeIcon icon={faCalendarPlus} />
+                  </Button>
+
+                  <Button
+                    variant="btn-outline-secondary"
+                    className="color-red"
+                    onClick={() => onCancelar(emprestimo.id)}
+                  >
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                  </Button>
+
+                </ButtonGroup>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
-
-      <Modal
-        show={showReceber}
-        onHide={handleCloseReceber}
-        size="lg"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Concluir Empréstimo</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <ConfirmarEntrega />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseReceber}>
-            Cancelar
-          </Button>
-          <Button variant="success">
-            <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showRenovar}
-        onHide={handleCloseRenovar}
-        size="lg"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Renovar Prazo</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <RenovarPrazo />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseRenovar}>
-            Cancelar
-          </Button>
-          <Button variant="success">
-            <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showCancelar}
-        onHide={handleCloseCancelar}
-        size="lg"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Cancelar Empréstimo</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <CancelarEmprestimo />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseCancelar}>
-            Cancelar
-          </Button>
-          <Button variant="danger">
-            <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 };

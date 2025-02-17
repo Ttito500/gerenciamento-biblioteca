@@ -20,6 +20,10 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = (email: string, senha: string) => {
+    // temporario
+    setIsAuthenticated(true);
+    return
+
     if (email === "adelino@email.com" && senha === "cunha") {
       setIsAuthenticated(true);
     } else {
