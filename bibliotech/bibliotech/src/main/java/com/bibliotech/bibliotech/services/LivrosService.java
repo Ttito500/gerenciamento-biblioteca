@@ -43,12 +43,12 @@ public class LivrosService {
     @Autowired
     private LivroRequestPatchMapper livroRequestPatchMapper;
     @Autowired
-    private EstanteprateleiraService estanteprateleiraService;
+    private EstantePrateleiraService estantePrateleiraService;
 
     @Transactional
     public Livro cadastrarLivro(LivroRequestPostDTO livro){
         Secao secaoExistente = secoesService.getSecaoById(livro.getIdSecao());
-        Estanteprateleira estanteprateleiraExistente = estanteprateleiraService.getEstantePrateleiraById(livro.getIdEstanteprateleira());
+        Estanteprateleira estanteprateleiraExistente = estantePrateleiraService.getEstantePrateleiraById(livro.getIdEstanteprateleira());
 
         if (livroRepository.existsLivroByIsbn(livro.getIsbn())) {
             throw new ValidationException("Já existe um livro com esse isbn: " + livro.getIsbn());
@@ -151,7 +151,7 @@ public class LivrosService {
     public List<Exemplar> cadastrarExemplaresDeUmLivro(ExemplarRequestPostDTO exemplarRequestPostDTO) {
         Livro livroExistente = getLivroById(exemplarRequestPostDTO.getIdLivro());
         Secao secaoExistente = secoesService.getSecaoById(exemplarRequestPostDTO.getIdSecao());
-        Estanteprateleira estanteprateleiraExistente = estanteprateleiraService.getEstantePrateleiraById(exemplarRequestPostDTO.getIdEstanteprateleira());
+        Estanteprateleira estanteprateleiraExistente = estantePrateleiraService.getEstantePrateleiraById(exemplarRequestPostDTO.getIdEstanteprateleira());
 
         return exemplaresService.cadastrarExemplares(livroExistente, secaoExistente, estanteprateleiraExistente, exemplarRequestPostDTO.getQtdExemplares());
     }

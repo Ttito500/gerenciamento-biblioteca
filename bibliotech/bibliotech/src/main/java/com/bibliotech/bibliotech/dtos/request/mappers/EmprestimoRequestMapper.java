@@ -18,43 +18,12 @@ import java.time.LocalDate;
 
 @Component
 public class EmprestimoRequestMapper {
-    private final AlunoRepository alunoRepository;
-    private final ExemplarRepository exemplarRepository;
-    private final UsuarioRepository usuarioRepository;
-
-    public EmprestimoRequestMapper(AlunoRepository alunoRepository, ExemplarRepository exemplarRepository, UsuarioRepository usuarioRepository) {
-        this.alunoRepository = alunoRepository;
-        this.exemplarRepository = exemplarRepository;
-        this.usuarioRepository = usuarioRepository;
-    }
-
-    //CONSERTAR USUARIO DEPOIS
-    public Emprestimo toEntity(EmprestimoRequestDTO EmprestimoDto){
-        Aluno aluno = alunoRepository.findById(EmprestimoDto.getIdAluno())
-                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
-
-        Exemplar exemplar = exemplarRepository.findById(EmprestimoDto.getIdExemplar())
-                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
-
-        Usuario usuario = usuarioRepository.findById(Long.valueOf(EmprestimoDto.getIdUsuario())) //TEMPORARIO
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
-
-        if(!"regular".equalsIgnoreCase(aluno.getSituacao())){
-            throw new ValidationException("O aluno não está com a situação regular");
-        }
-
-        if(!"disponivel".equalsIgnoreCase(exemplar.getSituacao())){
-            throw new ValidationException("O exemplar não está disponivel");
-        }
-
+    public Emprestimo toEntity(EmprestimoRequestDTO EmprestimoDto) {
         Emprestimo emprestimo = new Emprestimo();
-        emprestimo.setAluno(aluno);
-        emprestimo.setExemplar(exemplar);
         emprestimo.setDataEmprestimo(LocalDate.now());
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
         emprestimo.setQtdRenovacao(0);
         emprestimo.setObservacao(EmprestimoDto.getObservacao());
-        emprestimo.setRealizadoPor(usuario); //TEMPORARIO
 
         return emprestimo;
     }
