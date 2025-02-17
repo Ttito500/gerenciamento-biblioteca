@@ -24,6 +24,7 @@ public class EmprestimoRequestMapper {
         emprestimo.setDataPrazo(LocalDate.now().plusDays(7));
         emprestimo.setQtdRenovacao(0);
         emprestimo.setObservacao(EmprestimoDto.getObservacao());
+        emprestimo.setDataUltimaNotificacao(LocalDate.now());
 
         return emprestimo;
     }

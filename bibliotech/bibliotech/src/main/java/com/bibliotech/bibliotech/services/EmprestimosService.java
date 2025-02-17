@@ -253,6 +253,12 @@ public class EmprestimosService {
     }
 
     private boolean enviarNotificacaoAtraso(Emprestimo emprestimo) {
+        LocalDate hoje = LocalDate.now();
+
+        if (emprestimo.getDataUltimaNotificacao() != null && emprestimo.getDataUltimaNotificacao().isEqual(hoje)) {
+            return false;
+        }
+
         try {
             String assunto = "Empréstimo atrasado - Biblioteca";
 
@@ -281,6 +287,10 @@ public class EmprestimosService {
             );
 
             emailSend.sendEmail(emprestimo.getAluno().getEmail(), assunto, mensagem);
+
+            emprestimo.setDataUltimaNotificacao(hoje);
+            emprestimoRepository.save(emprestimo);
+
             return true;
 
         } catch (Exception e) {
@@ -289,6 +299,12 @@ public class EmprestimosService {
     }
 
     private boolean enviarNotificacaoPreAtraso(Emprestimo emprestimo) {
+        LocalDate hoje = LocalDate.now();
+
+        if (emprestimo.getDataUltimaNotificacao() != null && emprestimo.getDataUltimaNotificacao().isEqual(hoje)) {
+            return false;
+        }
+
         try {
             String assunto = "Lembrete: Empréstimo prestes a atrasar - Biblioteca";
 
@@ -317,6 +333,10 @@ public class EmprestimosService {
             );
 
             emailSend.sendEmail(emprestimo.getAluno().getEmail(), assunto, mensagem);
+
+            emprestimo.setDataUltimaNotificacao(hoje);
+            emprestimoRepository.save(emprestimo);
+
             return true;
 
         } catch (Exception e) {
