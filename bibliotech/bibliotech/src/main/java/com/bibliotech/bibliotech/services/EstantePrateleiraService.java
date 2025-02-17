@@ -68,6 +68,9 @@ public class EstantePrateleiraService {
         if(ep.getEstante() == null || ep.getEstante().isEmpty()){
             throw new ValidationException("A estante não pode ser vazia.");
         }
+        if(ep.getPrateleira() == null){
+            throw new ValidationException("A prateleira não pode ser vazia.");
+        }
         if(ep.getEstante().length() > 1){
             throw new ValidationException("A estante só pode conter um caractere.");
         }
