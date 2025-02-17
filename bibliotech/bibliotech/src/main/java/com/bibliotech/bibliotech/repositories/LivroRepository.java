@@ -29,7 +29,7 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
             "AND (:isbn is null or l.isbn = :isbn) " +
             "AND (:autor is null or a.nome ILIKE %:autor%) " +
             "AND (:genero is null or g.genero ILIKE %:genero%) " +
-            "AND (:ativo IS NULL OR l.ativo = :ativo)")
+            "AND (:ativo IS NULL OR l.ativo = :ativo) ORDER BY l.titulo")
     Page<Livro> filtrarLivros(
             @Param("titulo") @Nullable String titulo,
             @Param("isbn") @Nullable String isbn,
