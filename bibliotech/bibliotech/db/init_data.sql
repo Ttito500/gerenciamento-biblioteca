@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
--- Dumped by pg_dump version 15.10 (Debian 15.10-1.pgdg120+1)
+-- Dumped from database version 15.11 (Debian 15.11-1.pgdg120+1)
+-- Dumped by pg_dump version 15.11 (Debian 15.11-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -56,7 +56,6 @@ ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT 
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleirasecao DROP CONSTRAINT IF EXISTS estanteprateleirasecao_id_estante_prateleira_id_secao_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_prateleira_key;
-ALTER TABLE IF EXISTS ONLY adelino_cunha.estanteprateleira DROP CONSTRAINT IF EXISTS estanteprateleira_estante_key;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.emprestimo DROP CONSTRAINT IF EXISTS emprestimo_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_pkey;
 ALTER TABLE IF EXISTS ONLY adelino_cunha.cronogramaalunomonitor DROP CONSTRAINT IF EXISTS cronogramaalunomonitor_id_aluno_monitor_dia_da_semana_key;
@@ -134,8 +133,8 @@ CREATE TABLE adelino_cunha.aluno (
                                      email character varying(255) NOT NULL,
                                      telefone character varying(15),
                                      ativo boolean DEFAULT true NOT NULL,
-                                     situacao character varying(20) DEFAULT 'regular'::character varying,
-                                     CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY (ARRAY[('regular'::character varying)::text, ('irregular'::character varying)::text, ('debito'::character varying)::text])))
+                                     situacao character varying(9) DEFAULT 'regular'::character varying,
+                                     CONSTRAINT aluno_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['regular'::character varying, 'irregular'::character varying, 'debito'::character varying])::text[])))
 );
 
 
@@ -233,12 +232,12 @@ CREATE TABLE adelino_cunha.emprestimo (
                                           data_conclusao date,
                                           data_prazo date NOT NULL,
                                           qtd_renovacao integer DEFAULT 0,
-                                          situacao character varying(20) DEFAULT 'pendente'::character varying,
+                                          situacao character varying(10) DEFAULT 'pendente'::character varying,
                                           observacao character varying(500),
                                           realizado_por integer NOT NULL,
                                           concluido_por integer,
-                                          data_devolucao date,
-                                          CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY (ARRAY[('pendente'::character varying)::text, ('atrasado'::character varying)::text, ('entregue'::character varying)::text, ('extraviado'::character varying)::text, ('cancelado'::character varying)::text])))
+                                          data_ultima_notificacao date,
+                                          CONSTRAINT emprestimo_situacao_check CHECK (((situacao)::text = ANY ((ARRAY['pendente'::character varying, 'atrasado'::character varying, 'entregue'::character varying, 'extraviado'::character varying, 'cancelado'::character varying])::text[])))
 );
 
 
@@ -400,7 +399,7 @@ ALTER SEQUENCE adelino_cunha.frequenciaalunos_id_seq OWNED BY adelino_cunha.freq
 
 CREATE TABLE adelino_cunha.genero (
                                       id integer NOT NULL,
-                                      genero character varying(255) NOT NULL
+                                      genero character varying(100) NOT NULL
 );
 
 
@@ -590,7 +589,7 @@ CREATE TABLE adelino_cunha.turma (
                                      id integer NOT NULL,
                                      serie integer NOT NULL,
                                      turma character varying(1) NOT NULL,
-                                     ano_de_entrada integer NOT NULL,
+                                     ano_de_entrada smallint NOT NULL,
                                      ativo boolean DEFAULT true NOT NULL
 );
 
@@ -622,12 +621,12 @@ ALTER SEQUENCE adelino_cunha.turma_id_seq OWNED BY adelino_cunha.turma.id;
 CREATE TABLE adelino_cunha.usuario (
                                        id integer NOT NULL,
                                        nome character varying(255) NOT NULL,
-                                       cargo character varying(50) NOT NULL,
+                                       cargo character varying(13) NOT NULL,
                                        ativo boolean DEFAULT true NOT NULL,
                                        email character varying(255) NOT NULL,
                                        senha character varying(255) NOT NULL,
                                        data_ultimo_acesso timestamp with time zone,
-                                       CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY (ARRAY[('bibliotecario'::character varying)::text, ('aluno_monitor'::character varying)::text])))
+                                       CONSTRAINT usuario_cargo_check CHECK (((cargo)::text = ANY ((ARRAY['bibliotecario'::character varying, 'aluno_monitor'::character varying])::text[])))
 );
 
 
@@ -768,6 +767,16 @@ ALTER TABLE ONLY adelino_cunha.usuario ALTER COLUMN id SET DEFAULT nextval('adel
 --
 
 COPY adelino_cunha.aluno (id, id_turma, nome, email, telefone, ativo, situacao) FROM stdin;
+1	1	Kauan	kauan@email.com	1111111111	t	regular
+2	2	Maria Oliveira	maria@email.com	2222222222	t	regular
+3	3	Gabriel Alves	gabriel@email.com	3333333333	t	regular
+4	4	Ana Souza	ana@email.com	4444444444	t	irregular
+5	5	Pedro Rivaldo	pedro@email.com	5555555555	t	regular
+6	6	Lucas Tito	lucas@email.com	6666666666	f	regular
+7	7	Juliana Mendes	juliana@email.com	7777777777	t	regular
+8	8	Luis	luis@email.com	8888888888	t	debito
+9	9	Camila Andrade	camila@email.com	9999999999	t	regular
+10	10	Tiago Tito	tiago@email.com	1010101010	t	regular
 \.
 
 
@@ -776,6 +785,16 @@ COPY adelino_cunha.aluno (id, id_turma, nome, email, telefone, ativo, situacao) 
 --
 
 COPY adelino_cunha.autor (id, nome) FROM stdin;
+1	Isaac Asimov
+2	Jane Austen
+3	Yuval Noah Harari
+4	Steve Jobs
+5	Paulo Freire
+6	Vincent Van Gogh
+7	Plat├úo
+8	Sigmund Freud
+9	Monteiro Lobato
+10	Nelson Mandela
 \.
 
 
@@ -784,6 +803,16 @@ COPY adelino_cunha.autor (id, nome) FROM stdin;
 --
 
 COPY adelino_cunha.cronogramaalunomonitor (id, id_aluno_monitor, dia_da_semana) FROM stdin;
+1	2	segunda-feira
+2	4	segunda-feira
+3	6	terca-feira
+4	8	terca-feira
+5	10	quarta-feira
+6	2	quarta-feira
+7	4	quinta-feira
+8	6	quinta-feira
+9	8	sexta-feira
+10	10	sexta-feira
 \.
 
 
@@ -791,7 +820,17 @@ COPY adelino_cunha.cronogramaalunomonitor (id, id_aluno_monitor, dia_da_semana) 
 -- Data for Name: emprestimo; Type: TABLE DATA; Schema: adelino_cunha; Owner: -
 --
 
-COPY adelino_cunha.emprestimo (id, id_aluno, id_exemplar, data_emprestimo, data_conclusao, data_prazo, qtd_renovacao, situacao, observacao, realizado_por, concluido_por, data_devolucao) FROM stdin;
+COPY adelino_cunha.emprestimo (id, id_aluno, id_exemplar, data_emprestimo, data_conclusao, data_prazo, qtd_renovacao, situacao, observacao, realizado_por, concluido_por, data_ultima_notificacao) FROM stdin;
+2	2	2	2023-10-02	2023-10-16	2023-10-16	1	entregue	\N	2	2	\N
+3	3	3	2023-10-03	\N	2023-10-17	0	pendente	Devolvido com rasuras na primeira pagina	3	\N	\N
+4	4	4	2023-10-04	2023-10-18	2023-10-18	0	\N	Entregue no prazo	4	4	\N
+5	5	5	2023-10-05	\N	2023-10-19	0	pendente	Devolvido com paginas arrancadas	5	\N	\N
+6	6	6	2023-10-06	\N	2023-10-20	0	pendente	\N	6	\N	\N
+7	7	7	2023-10-07	2023-10-21	2023-10-21	0	\N	Entregue no prazo	7	7	\N
+8	8	8	2023-10-08	\N	2023-10-22	0	pendente	Devolvido com mancha de caf├⌐	8	\N	\N
+9	9	9	2023-10-09	\N	2023-10-23	0	pendente	\N	9	\N	\N
+10	10	10	2023-10-10	\N	2023-10-24	0	pendente	\N	10	\N	\N
+1	1	1	2023-10-01	\N	2023-10-15	0	pendente	\N	1	\N	2025-12-14
 \.
 
 
@@ -800,6 +839,33 @@ COPY adelino_cunha.emprestimo (id, id_aluno, id_exemplar, data_emprestimo, data_
 --
 
 COPY adelino_cunha.estanteprateleira (id, estante, prateleira) FROM stdin;
+1	A	1
+2	A	2
+3	A	3
+4	A	4
+5	A	5
+6	B	1
+7	B	2
+8	B	3
+9	B	4
+10	B	5
+11	C	1
+12	C	2
+13	C	3
+14	C	4
+15	C	5
+16	D	1
+17	D	2
+18	D	3
+19	D	4
+20	D	5
+21	E	1
+22	E	2
+23	E	3
+24	E	4
+25	E	5
+26	F	1
+27	F	2
 \.
 
 
@@ -808,6 +874,31 @@ COPY adelino_cunha.estanteprateleira (id, estante, prateleira) FROM stdin;
 --
 
 COPY adelino_cunha.estanteprateleirasecao (id, id_estante_prateleira, id_secao) FROM stdin;
+1	1	1
+2	6	1
+3	11	1
+4	2	2
+5	7	2
+6	12	2
+7	3	3
+8	4	3
+9	5	3
+10	8	4
+11	9	4
+12	13	5
+13	14	5
+14	15	5
+15	17	6
+16	18	6
+17	19	7
+18	20	7
+19	21	7
+20	22	8
+21	23	8
+22	24	9
+23	25	9
+24	26	10
+25	27	10
 \.
 
 
@@ -816,6 +907,26 @@ COPY adelino_cunha.estanteprateleirasecao (id, id_estante_prateleira, id_secao) 
 --
 
 COPY adelino_cunha.exemplar (id, id_livro, id_secao, id_estante_prateleira, observacao, numero, situacao) FROM stdin;
+1	1	1	1	Bom estado	1	disponivel
+2	1	1	6	Capa levemente danificada	2	disponivel
+3	2	2	2	├ôtimo estado	1	disponivel
+4	2	2	7	Anota├º├╡es a l├ípis	2	disponivel
+5	3	3	3	Bom estado	1	disponivel
+6	3	3	4	Rasura na p├ígina 50	2	disponivel
+7	4	10	26	Bom estado	1	disponivel
+8	4	10	27	Capa desgastada	2	disponivel
+9	5	5	13	├ôtimo estado	1	disponivel
+10	5	5	14	Levemente amassado	2	disponivel
+11	6	6	17	Novo	1	disponivel
+12	6	6	18	Leve desgaste	2	disponivel
+13	7	7	19	├ôtimo estado	1	disponivel
+14	7	7	20	Sublinhado a caneta	2	disponivel
+15	8	8	22	Capa intacta	1	disponivel
+16	8	8	23	Marcas de uso	2	disponivel
+17	9	9	24	Novo	1	disponivel
+18	9	9	25	Capa suja	2	disponivel
+19	10	10	26	Bom estado	1	disponivel
+20	10	10	27	Leves marcas na capa	2	disponivel
 \.
 
 
@@ -824,6 +935,16 @@ COPY adelino_cunha.exemplar (id, id_livro, id_secao, id_estante_prateleira, obse
 --
 
 COPY adelino_cunha.frequenciaalunos (id, id_aluno, registrada_por, atividade, data_frequencia) FROM stdin;
+1	1	1	lendo	2023-10-01
+2	2	2	celula_de_estudo	2023-10-01
+3	3	3	estudo_individual	2023-10-01
+4	4	4	descansando	2023-10-01
+5	5	5	outros	2023-10-01
+6	6	6	lendo	2023-10-03
+7	7	7	celula_de_estudo	2023-10-03
+8	8	8	estudo_individual	2023-10-03
+9	9	9	descansando	2023-10-03
+10	10	10	outros	2023-10-13
 \.
 
 
@@ -832,6 +953,16 @@ COPY adelino_cunha.frequenciaalunos (id, id_aluno, registrada_por, atividade, da
 --
 
 COPY adelino_cunha.genero (id, genero) FROM stdin;
+1	Fic├º├úo Cient├¡fica
+2	Romance
+3	Hist├│ria
+4	Biografia
+5	Educa├º├úo
+6	Artes
+7	Filosofia
+8	Psicologia
+9	Infantil
+10	Biografia
 \.
 
 
@@ -840,6 +971,16 @@ COPY adelino_cunha.genero (id, genero) FROM stdin;
 --
 
 COPY adelino_cunha.livro (id, isbn, titulo, ativo) FROM stdin;
+1	9788576574835	Funda├º├úo	t
+2	9786586490275	Orgulho e Preconceito	t
+3	9788525432186	Sapiens: Uma Breve Hist├│ria da Humanidade	t
+4	9788535919714	Steve Jobs: A Biografia	t
+5	9788577534180	Pedagogia do Oprimido	t
+6	9788527307697	vincent van gogh	t
+7	9788581862538	A Rep├║blica	t
+8	9788551301982	Introdu├º├úo ├á Psican├ílise	t
+9	9788551304440	O S├¡tio do Picapau Amarelo	t
+10	9788526707436	O Longo Caminho para a Liberdade	t
 \.
 
 
@@ -848,6 +989,16 @@ COPY adelino_cunha.livro (id, isbn, titulo, ativo) FROM stdin;
 --
 
 COPY adelino_cunha.livroautor (id, id_livro, id_autor) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+6	6	6
+7	7	7
+8	8	8
+9	9	9
+10	10	10
 \.
 
 
@@ -856,6 +1007,16 @@ COPY adelino_cunha.livroautor (id, id_livro, id_autor) FROM stdin;
 --
 
 COPY adelino_cunha.livrogenero (id, id_livro, id_genero) FROM stdin;
+1	1	1
+2	2	2
+3	3	3
+4	4	4
+5	5	5
+6	6	6
+7	7	7
+8	8	8
+9	9	9
+10	10	4
 \.
 
 
@@ -864,6 +1025,16 @@ COPY adelino_cunha.livrogenero (id, id_livro, id_genero) FROM stdin;
 --
 
 COPY adelino_cunha.ocorrencias (id, id_aluno, registrada_por, detalhes, data_ocorrencia) FROM stdin;
+1	3	1	Aluno pregando ideias extremistas	2023-10-01
+2	10	2	Aluno comendo feijoada na biblioteca	2023-10-02
+3	8	3	Aluno jogando LOL	2023-10-03
+4	1	4	Aluno se escondendo na biblioteca para faltar aula	2023-10-04
+5	5	5	Aluno usa JS no backend	2023-10-05
+6	6	6	Aluno danificou livro	2023-10-06
+7	7	7	Aluno puxando cabelo da outra	2023-10-07
+8	8	8	Aluno jogando free fire	2023-10-08
+9	9	9	Aluno trouxe uma sanduicheira e fez misto quente	2023-10-09
+10	10	10	Aluno quebrou a mesa jogando truco	2023-10-10
 \.
 
 
@@ -872,6 +1043,16 @@ COPY adelino_cunha.ocorrencias (id, id_aluno, registrada_por, detalhes, data_oco
 --
 
 COPY adelino_cunha.secao (id, nome, descricao) FROM stdin;
+1	Fic├º├úo Cient├¡fica	Livros sobre fic├º├úo cient├¡fica
+2	Romance	Se├º├úo dedicada a romances
+3	Hist├│ria	Livros sobre hist├│ria mundial e do Brasil
+4	Tecnologia	Livros sobre tecnologia e inova├º├úo
+5	Educa├º├úo	Livros did├íticos e pedag├│gicos
+6	Artes	Se├º├úo de livros sobre arte e design
+7	Filosofia	Livros sobre filosofia cl├íssica e contempor├ónea
+8	Psicologia	Estudos e pesquisas sobre psicologia
+9	Infantil	Livros para crian├ºas e contos infantis
+10	Biografias	Hist├│rias de personalidades famosas
 \.
 
 
@@ -880,6 +1061,16 @@ COPY adelino_cunha.secao (id, nome, descricao) FROM stdin;
 --
 
 COPY adelino_cunha.turma (id, serie, turma, ano_de_entrada, ativo) FROM stdin;
+1	1	A	2025	t
+2	1	B	2025	t
+3	1	C	2025	t
+4	2	A	2024	t
+5	2	B	2024	t
+6	2	C	2024	t
+7	3	A	2023	t
+8	3	B	2023	t
+9	3	C	2023	t
+10	3	A	2022	f
 \.
 
 
@@ -888,6 +1079,16 @@ COPY adelino_cunha.turma (id, serie, turma, ano_de_entrada, ativo) FROM stdin;
 --
 
 COPY adelino_cunha.usuario (id, nome, cargo, ativo, email, senha, data_ultimo_acesso) FROM stdin;
+1	Jo├úo Silva	bibliotecario	t	joao.silva@escola.com	senha123	2023-10-01 00:00:00+00
+2	Maria Oliveira	aluno_monitor	t	maria.oliveira@escola.com	senha456	2023-10-02 00:00:00+00
+3	Pedro Souza	bibliotecario	t	pedro.souza@escola.com	senha789	2023-10-03 00:00:00+00
+4	Ana Costa	aluno_monitor	t	ana.costa@escola.com	senha101	2023-10-04 00:00:00+00
+5	Carlos Mendes	bibliotecario	t	carlos.mendes@escola.com	senha202	2023-10-05 00:00:00+00
+6	Fernanda Lima	aluno_monitor	t	fernanda.lima@escola.com	senha303	2023-10-06 00:00:00+00
+7	Ricardo Alves	bibliotecario	t	ricardo.alves@escola.com	senha404	2023-10-07 00:00:00+00
+8	Juliana Pereira	aluno_monitor	t	juliana.pereira@escola.com	senha505	2023-10-08 00:00:00+00
+9	Lucas Gomes	bibliotecario	t	lucas.gomes@escola.com	senha606	2023-10-09 00:00:00+00
+10	Patricia Santos	aluno_monitor	t	patricia.santos@escola.com	senha707	2023-10-10 00:00:00+00
 \.
 
 
@@ -895,28 +1096,28 @@ COPY adelino_cunha.usuario (id, nome, cargo, ativo, email, senha, data_ultimo_ac
 -- Name: aluno_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.aluno_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.aluno_id_seq', 10, true);
 
 
 --
 -- Name: autor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.autor_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.autor_id_seq', 10, true);
 
 
 --
 -- Name: cronogramaalunomonitor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.cronogramaalunomonitor_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.cronogramaalunomonitor_id_seq', 10, true);
 
 
 --
 -- Name: emprestimo_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.emprestimo_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.emprestimo_id_seq', 10, true);
 
 
 --
@@ -930,56 +1131,56 @@ SELECT pg_catalog.setval('adelino_cunha.estanteprateleira_id_seq', 1, false);
 -- Name: estanteprateleirasecao_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.estanteprateleirasecao_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.estanteprateleirasecao_id_seq', 25, true);
 
 
 --
 -- Name: exemplar_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.exemplar_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.exemplar_id_seq', 20, true);
 
 
 --
 -- Name: frequenciaalunos_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.frequenciaalunos_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.frequenciaalunos_id_seq', 10, true);
 
 
 --
 -- Name: genero_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.genero_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.genero_id_seq', 10, true);
 
 
 --
 -- Name: livro_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.livro_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.livro_id_seq', 10, true);
 
 
 --
 -- Name: livroautor_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.livroautor_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.livroautor_id_seq', 10, true);
 
 
 --
 -- Name: livrogenero_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.livrogenero_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.livrogenero_id_seq', 10, true);
 
 
 --
 -- Name: ocorrencias_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.ocorrencias_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.ocorrencias_id_seq', 10, true);
 
 
 --
@@ -993,7 +1194,7 @@ SELECT pg_catalog.setval('adelino_cunha.secao_id_seq', 1, false);
 -- Name: turma_id_seq; Type: SEQUENCE SET; Schema: adelino_cunha; Owner: -
 --
 
-SELECT pg_catalog.setval('adelino_cunha.turma_id_seq', 1, false);
+SELECT pg_catalog.setval('adelino_cunha.turma_id_seq', 10, true);
 
 
 --
@@ -1049,14 +1250,6 @@ ALTER TABLE ONLY adelino_cunha.cronogramaalunomonitor
 
 ALTER TABLE ONLY adelino_cunha.emprestimo
     ADD CONSTRAINT emprestimo_pkey PRIMARY KEY (id);
-
-
---
--- Name: estanteprateleira estanteprateleira_estante_key; Type: CONSTRAINT; Schema: adelino_cunha; Owner: -
---
-
-ALTER TABLE ONLY adelino_cunha.estanteprateleira
-    ADD CONSTRAINT estanteprateleira_estante_key UNIQUE (estante);
 
 
 --
