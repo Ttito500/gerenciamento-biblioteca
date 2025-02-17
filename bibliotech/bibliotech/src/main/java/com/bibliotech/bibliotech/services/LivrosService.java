@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.mappers.AutorMapper;
 import com.bibliotech.bibliotech.dtos.mappers.GeneroMapper;
+import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
@@ -158,5 +159,13 @@ public class LivrosService {
 
     public List<Exemplar> listarExemplaresDeUmLivro(Integer id) {
         return exemplaresService.listarExemplaresDeUmLivro(id);
+    }
+
+    public void extraviarExemplar(Integer id) {
+        exemplaresService.extraviarExemplar(id);
+    }
+
+    public Exemplar atualizarExemplar(Integer id, ExemplarRequestPatchDTO exemplarDTO) {
+        return exemplaresService.atualizarExemplar(id, exemplarDTO);
     }
 }
