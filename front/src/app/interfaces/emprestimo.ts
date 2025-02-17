@@ -19,7 +19,7 @@ export interface CreateEmprestimoRequest {
   idAluno: number
   idExemplar: number
   observacao: string
-  idusuario: number
+  idUsuario: number
 }
 
 export interface GetEmprestimoPorAlunoResponse {

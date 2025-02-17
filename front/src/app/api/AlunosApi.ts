@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { AlunoFiltros, CreateAlunoRequest, CreateAlunoResponse, GetAlunoResponse, UpdateAlunoRequest, UpdateAlunoResponse } from '../interfaces/aluno';
 import { getQueryString } from '../shared/utils';
+import { ResponsePagination } from '../interfaces/pagination';
 
 const API_URL = 'http://localhost:8090/alunos';
 
-export const getAlunos = async (filtros?: AlunoFiltros): Promise<GetAlunoResponse[]> => {
+export const getAlunos = async (filtros?: AlunoFiltros): Promise<ResponsePagination<GetAlunoResponse>> => {
   try {
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;
 
-    const response = await axios.get<GetAlunoResponse[]>(url);
+    const response = await axios.get<ResponsePagination<GetAlunoResponse>>(url);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar alunos:', error);

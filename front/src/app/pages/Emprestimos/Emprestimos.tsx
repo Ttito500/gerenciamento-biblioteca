@@ -12,8 +12,8 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import ConfirmarEntrega from "./templates/ConfirmarEntrega";
 import RenovarPrazo from "./templates/RenovarPrazo";
 import CancelarEmprestimo from "./templates/CancelarEmprestimo";
-import { EmprestimosFiltros, GetEmprestimoResponse } from "./../../interfaces/emprestimo";
-import { getEmprestimos } from "./../../api/EmprestimoApi";
+import { CreateEmprestimoRequest, EmprestimosFiltros, GetEmprestimoResponse } from "./../../interfaces/emprestimo";
+import { createEmprestimo, getEmprestimos } from "./../../api/EmprestimoApi";
 import { ResponsePagination } from "./../../interfaces/pagination";
 import Pagination from "react-bootstrap/Pagination";
 
@@ -103,6 +103,42 @@ const Emprestimo: React.FC = () => {
   const handleCloseCadastrar = () => setShowCadastrar(false);
   const handleShowCadastrar = () => setShowCadastrar(true);
 
+  const [formDataCadastrarEmprestimo, setFormDataCadastrarEmprestimo] = useState({
+    idAluno: null as number,
+    idExemplar: null as number,
+    idUsuario: null as number,
+    observacao: ""
+  } as CreateEmprestimoRequest);
+
+  const handleChangeCadastrarEmprestimo = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormDataCadastrarEmprestimo({ ...formDataCadastrarEmprestimo, [name]: value });
+  };
+
+  const handleSubmitCadastrarEmprestimo = async (): Promise<void> => {
+    try {
+      const body: CreateEmprestimoRequest = {
+        idAluno: Number(formDataCadastrarEmprestimo.idAluno),
+        idExemplar: Number(formDataCadastrarEmprestimo.idExemplar),
+        idUsuario: 1,
+        observacao: formDataCadastrarEmprestimo.observacao
+      }
+      await createEmprestimo(body);
+
+      listarEmprestimos();
+      setShowToastSuccess(true);
+      setFormDataCadastrarEmprestimo({
+        idAluno: null as number,
+        idExemplar: null as number,
+        idUsuario: null as number,
+        observacao: ""
+      });
+      handleCloseCadastrar();
+    } catch (err) {
+      setShowToastError(true);
+    }
+  };
+
   if (loading) {
     return (
       <Spinner animation="border" role="status">
@@ -165,7 +201,7 @@ const Emprestimo: React.FC = () => {
         <Modal
           show={showCadastrar}
           onHide={handleCloseCadastrar}
-          size="lg"
+          size="xl"
           backdrop="static"
           centered
           keyboard={false}
@@ -175,15 +211,15 @@ const Emprestimo: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <CadastrarEmprestimo />
+            <CadastrarEmprestimo formData={formDataCadastrarEmprestimo} onChange={handleChangeCadastrarEmprestimo} />
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseCadastrar}>
               Cancelar
             </Button>
-            <Button variant="success">
-              <FontAwesomeIcon icon={faCheck} /> Salvar
+            <Button variant="success" onClick={handleSubmitCadastrarEmprestimo}>
+              <FontAwesomeIcon icon={faCheck}/> Salvar
             </Button>
           </Modal.Footer>
         </Modal>

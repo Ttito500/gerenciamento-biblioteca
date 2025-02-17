@@ -1,11 +1,17 @@
 import axios from 'axios';
-import { CreateLivroRequest, CreateLivroResponse, GetLivroResponse, UpdateLivroRequest, UpdateLivroResponse } from '../interfaces/acervo';
+import { CreateLivroRequest, CreateLivroResponse, GetLivroResponse, LivroFiltros, UpdateLivroRequest, UpdateLivroResponse } from '../interfaces/acervo';
+import { getQueryString } from '../shared/utils';
+import { ResponsePagination } from '../interfaces/pagination';
+import { GetExemplarResponse } from '../interfaces/exemplar';
 
 const API_URL = 'http://localhost:8090/livros';
 
-export const getLivros = async (): Promise<GetLivroResponse[]> => {
+export const getLivros = async (filtros: LivroFiltros): Promise<ResponsePagination<GetLivroResponse>> => {
   try {
-    const response = await axios.get<GetLivroResponse[]>(API_URL);
+    const queryString = getQueryString(filtros);
+    const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtros`;
+    
+    const response = await axios.get<ResponsePagination<GetLivroResponse>>(url);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar livros:', error);
@@ -38,6 +44,18 @@ export const deleteLivro = async (id: number): Promise<void> => {
     await axios.delete(`${API_URL}/${id}`);
   } catch (error) {
     console.error('Erro ao deletar livro:', error);
+    throw error;
+  }
+};
+
+export const getExemplares = async (idLivro: number): Promise<GetExemplarResponse[]> => {
+  try {
+    const url = `${API_URL}/exemplares/${idLivro}`;
+    
+    const response = await axios.get<GetExemplarResponse[]>(url);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar exemplares do livro:', error);
     throw error;
   }
 };
