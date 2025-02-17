@@ -11,6 +11,7 @@ public class EmprestimoNotificacaoDTO {
     private Integer idEmprestimo;
     private Integer idAluno;
     private Integer idExemplar;
+    private Integer numeroExemplar;
     private String nomeAluno;
     private String emailAluno;
     private String titulo;
