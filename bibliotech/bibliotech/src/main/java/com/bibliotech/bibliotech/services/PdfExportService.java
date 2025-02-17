@@ -1,16 +1,22 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
+
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
+
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
+
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 
 @Service
 public class PdfExportService {
@@ -100,6 +106,93 @@ public class PdfExportService {
 
         document.add(table);
         document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportTurmasMaisLeitoras(List<TurmaLeiturasDTO> turmasMaisLeitoras) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+
+        //fonte em negrito para o título, tamanho 18
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Turmas Leitoras", fontBold18));
+        cell.setColspan(5);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        //fonte em negrito para os headers da tabela, tamanho 12
+        Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Turma", FontBold12));
+        table.addCell(new Phrase("Leituras da Turma", FontBold12));
+        table.addCell(new Phrase("Aluno Destaque", FontBold12));
+        table.addCell(new Phrase("Leituras do Aluno", FontBold12));
+
+        for (TurmaLeiturasDTO turmaLeiturasDTO : turmasMaisLeitoras) {
+            table.addCell(turmaLeiturasDTO.getSerie() + " " + turmaLeiturasDTO.getTurma());
+            table.addCell(turmaLeiturasDTO.getQuantidadeLeiturasTurma().toString());
+            table.addCell(turmaLeiturasDTO.getNomeAluno());
+            table.addCell(turmaLeiturasDTO.getQuantidadeLeiturasAluno().toString());
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportAlunosMaisLeitores(List<AlunoLeiturasDTO> alunos) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            PdfWriter writer = PdfWriter.getInstance(document, out);
+            document.open();
+
+            addHeader(document, writer);
+
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
+            table.setWidths(new float[]{2, 1, 1});
+
+            //fonte em negrito para o título, tamanho 18
+            Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+            PdfPCell cell = new PdfPCell(new Phrase("Alunos Leitores", fontBold18));
+            cell.setColspan(3);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setPadding(8.0f);
+            table.addCell(cell);
+
+            //fonte em negrito para os headers da tabela, tamanho 12
+            Font FontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+            table.addCell(new Phrase("Nome", FontBold12));
+            table.addCell(new Phrase("Turma", FontBold12));
+            table.addCell(new Phrase("Leituras", FontBold12));
+
+            for (AlunoLeiturasDTO aluno : alunos) {
+                table.addCell(aluno.getNome());
+                table.addCell(aluno.getSerie() + " " + aluno.getTurma());
+                table.addCell(aluno.getQuantidade_leituras().toString());
+            }
+
+            document.add(table);
+            document.close();
 
         return out.toByteArray();
     }

@@ -5,15 +5,19 @@ import com.bibliotech.bibliotech.dtos.response.AlunoResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.AlunoResponseMapper;
 import com.bibliotech.bibliotech.models.Aluno;
 import com.bibliotech.bibliotech.services.AlunosService;
+import com.bibliotech.bibliotech.services.PdfExportService;
+import org.springframework.http.HttpHeaders;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -22,10 +26,12 @@ public class AlunoController {
 
     private final AlunosService alunosService;
     private final AlunoResponseMapper alunoResponseMapper;
+    private final PdfExportService pdfExportService;
 
-    public AlunoController(AlunosService alunosService, AlunoResponseMapper alunoResponseMapper) {
+    public AlunoController(AlunosService alunosService, AlunoResponseMapper alunoResponseMapper, PdfExportService pdfExportService) {
         this.alunosService = alunosService;
         this.alunoResponseMapper = alunoResponseMapper;
+        this.pdfExportService = pdfExportService;
     }
 
     @GetMapping("")
@@ -75,5 +81,19 @@ public class AlunoController {
     public ResponseEntity<Void> ativarAluno(@PathVariable Integer id) {
         alunosService.ativarAluno(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //coloquei a data de inicio como nao obrigatorio para tratar dela bonitinho no service
+    @GetMapping("/mais-leitores/export/pdf")
+    public ResponseEntity<byte[]> exportTopLeitoresPdf(@RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+        byte[] pdfBytes = pdfExportService.exportAlunosMaisLeitores(alunosService.obterAlunosMaisLeitures(dataInicio, dataFim));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "top-leitores.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }

@@ -2,6 +2,7 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.TurmaRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.TurmaRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
@@ -9,6 +10,7 @@ import com.bibliotech.bibliotech.repositories.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -90,5 +92,17 @@ public class TurmasService {
         alunosService.ativarAlunosPorTurma(turmaExistente);
         turmaExistente.setAtivo(true);
         turmaRepository.save(turmaExistente);
+    }
+
+    public List<TurmaLeiturasDTO> obterTurmasMaisLeitoras(LocalDate dataInicio, LocalDate dataFim) {
+        if (dataInicio == null) {
+            throw new ValidationException("A data de início é obrigatória.");
+        } else if (dataFim == null) {
+            dataFim = LocalDate.now();
+        } else if (dataInicio.isAfter(dataFim)) {
+            throw new ValidationException("A data de início deve ser anterior à data final.");
+        }
+
+        return turmaRepository.obterTurmasMaisLeitoras(dataInicio, dataFim);
     }
 }
