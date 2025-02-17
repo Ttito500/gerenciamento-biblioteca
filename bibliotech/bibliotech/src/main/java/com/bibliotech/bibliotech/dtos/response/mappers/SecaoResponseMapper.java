@@ -7,6 +7,7 @@ public class SecaoResponseMapper {
 
     public static SecaoResponseDTO toDTO(Secao secao) {
         SecaoResponseDTO dto = new SecaoResponseDTO();
+        dto.setId(secao.getId());
         dto.setNome(secao.getNome());
         dto.setDescricao(secao.getDescricao());
 

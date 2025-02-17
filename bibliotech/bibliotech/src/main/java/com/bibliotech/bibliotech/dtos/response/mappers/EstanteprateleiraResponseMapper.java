@@ -11,6 +11,7 @@ public class EstanteprateleiraResponseMapper {
         }
 
         EstanteprateleiraDTO dto = new EstanteprateleiraDTO();
+        dto.setId(entity.getId());
         dto.setEstante(entity.getEstante());
         dto.setPrateleira(entity.getPrateleira());
         return dto;
