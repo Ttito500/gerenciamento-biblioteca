@@ -53,4 +53,7 @@ public class Emprestimo {
 
     @Column(name = "data_conclusao")
     private LocalDate dataConclusao;
+
+    @Column(name = "data_ultima_notificacao")
+    private LocalDate dataUltimaNotificacao;
 }
