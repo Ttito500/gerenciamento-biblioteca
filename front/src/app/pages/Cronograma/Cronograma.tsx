@@ -1,11 +1,61 @@
 import React, { useState } from "react";
 import { Table } from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
+import Button from "react-bootstrap/esm/Button";
+import Modal from "react-bootstrap/esm/Modal";
+import CadastraAlunoMonitor from "./Templates/CadastraAlunoMonitor";
 
 const Cronograma: React.FC = () => {
+
+    const [showCadastrar, setShowCadastrar] = useState(false);
+    const handleCloseCadastrar = () => setShowCadastrar(false);
+    const handleShowCadastrar = () => setShowCadastrar(true);
+
 
     return (
         <section className="Exemplar">
             <div className="Exemplar-acoes"></div>
+
+            <div className="w-100">
+
+            </div>
+
+            <div className="w-100">
+                <Button
+                    variant="info"
+                    className="btn-orange"
+                    onClick={handleShowCadastrar}
+                >
+                    <FontAwesomeIcon icon={faPlus} /> Adicionar Monitor ao Cronograma
+                </Button>
+
+                <Modal
+                    show={showCadastrar}
+                    onHide={handleCloseCadastrar}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Adicionar Aluno</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <CadastraAlunoMonitor />
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseCadastrar}>
+                            Cancelar
+                        </Button>
+                        <Button variant="success">
+                            <FontAwesomeIcon icon={faCheck} /> Salvar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
 
             <div className="w-100">
                 <Table striped className="cronograma">
