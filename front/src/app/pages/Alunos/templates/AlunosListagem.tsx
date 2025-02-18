@@ -37,7 +37,7 @@ const AlunosListagem: React.FC<AlunosListagemProps> = ({ alunos, onEdit, onActiv
           </tr>
         </thead>
         <tbody>
-          {alunos.map((aluno) => (
+          {alunos?.map((aluno) => (
             <tr key={aluno.id} className="tabela-tr">
               <td>{aluno.turma.serie}ª</td>
               <td>{aluno.turma.turma}</td>

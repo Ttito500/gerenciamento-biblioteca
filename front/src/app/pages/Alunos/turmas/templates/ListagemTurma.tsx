@@ -25,7 +25,7 @@ const ListagemTurma: React.FC<TurmasListagemProps> = ({ turmas, onEdit, onActive
           </tr>
         </thead>
         <tbody>
-          {turmas.map((turma) => (
+          {turmas?.map((turma) => (
             <tr key={turma.id} className="tabela-tr">
               <td>{turma.serie}ª</td>
               <td>{turma.turma}</td>
