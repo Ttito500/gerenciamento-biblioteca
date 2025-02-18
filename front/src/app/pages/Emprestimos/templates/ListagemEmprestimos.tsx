@@ -15,9 +15,9 @@ import FormatDate from "./../../../shared/components/format-date/FormatDate";
 
 interface ListagemEmprestimosProps {
   emprestimos: ResponsePagination<GetEmprestimoResponse>;
-  onConcluir: (id: number) => void;
-  onRenovar: (id: number) => void;
-  onCancelar: (id: number) => void;
+  onConcluir: (emprestimo: GetEmprestimoResponse) => void;
+  onRenovar: (emprestimo: GetEmprestimoResponse) => void;
+  onCancelar: (emprestimo: GetEmprestimoResponse) => void;
 }
 
 const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, onConcluir, onRenovar, onCancelar }) => {
@@ -90,7 +90,7 @@ const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, 
                   <Button
                     variant="btn-outline-secondary"
                     className="color-orange"
-                    onClick={() => onConcluir(emprestimo.id)}
+                    onClick={() => onConcluir(emprestimo)}
                   >
                     <FontAwesomeIcon icon={faClipboardCheck} />
                   </Button>
@@ -98,7 +98,7 @@ const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, 
                   <Button
                     variant="btn-outline-secondary"
                     className="color-blue"
-                    onClick={() => onRenovar(emprestimo.id)}
+                    onClick={() => onRenovar(emprestimo)}
                   >
                     <FontAwesomeIcon icon={faCalendarPlus} />
                   </Button>
@@ -106,7 +106,7 @@ const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, 
                   <Button
                     variant="btn-outline-secondary"
                     className="color-red"
-                    onClick={() => onCancelar(emprestimo.id)}
+                    onClick={() => onCancelar(emprestimo)}
                   >
                     <FontAwesomeIcon icon={faCircleXmark} />
                   </Button>
