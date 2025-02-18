@@ -1,12 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
-import Spinner from "react-bootstrap/Spinner";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { GetTurmaResponse, TurmaFiltros } from "./../../../interfaces/turma";
 import { getTurmas } from "./../../../api/TurmaApi";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 
 interface AlunosCadastrarAlunoProps {
   formData: {
@@ -21,61 +18,21 @@ interface AlunosCadastrarAlunoProps {
 const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, onChange }) => {
 
   const [turmas, setTurmas] = useState<GetTurmaResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   useEffect(() => {
     listarTurmas();
   }, []);
   
   const listarTurmas = async (): Promise<void> => {
-    setLoading(true);
-
-    try {
-      const filtros: TurmaFiltros = {
-        ativo: true
-      }
-      const data = await getTurmas(filtros);
-      setTurmas(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
+    const filtros: TurmaFiltros = {
+      ativo: true
     }
+    const data = await getTurmas(filtros);
+    setTurmas(data);
   };
-
-  if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
 
   return (
     <>
-      <ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-      >
-        <Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
       <Form>
         <Row>
           <Col>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../shared/axios/axios";
 import { CreateTurmaRequest, CreateTurmaResponse, GetTurmaResponse, TurmaFiltros, UpdateTurmaRequest, UpdateTurmaResponse } from "../interfaces/turma";
 import { getQueryString } from "../shared/utils";
 
@@ -9,7 +9,7 @@ export const getTurmas = async (filtros: TurmaFiltros): Promise<GetTurmaResponse
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtrar`;
     
-    const response = await axios.get<GetTurmaResponse[]>(url);
+    const response = await api.get<GetTurmaResponse[]>(url);
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar turmas:", error);
@@ -21,7 +21,7 @@ export const createTurma = async (
   turma: CreateTurmaRequest
 ): Promise<CreateTurmaResponse> => {
   try {
-    const response = await axios.post<CreateTurmaResponse>(API_URL, turma);
+    const response = await api.post<CreateTurmaResponse>(API_URL, turma);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar turma:", error);
@@ -34,7 +34,7 @@ export const updateTurma = async (
   turma: UpdateTurmaRequest
 ): Promise<UpdateTurmaResponse> => {
   try {
-    const response = await axios.put<UpdateTurmaResponse>(
+    const response = await api.put<UpdateTurmaResponse>(
       `${API_URL}/${id}`,
       turma
     );
@@ -47,7 +47,7 @@ export const updateTurma = async (
 
 export const inativarTurma = async (id: number): Promise<void> => {
   try {
-    await axios.patch(`${API_URL}/inativar/${id}`);
+    await api.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
     console.error("Erro ao inativar turma:", error);
     throw error;
@@ -56,7 +56,7 @@ export const inativarTurma = async (id: number): Promise<void> => {
 
 export const ativarTurma = async (id: number): Promise<void> => {
   try {
-    await axios.patch(`${API_URL}/ativar/${id}`);
+    await api.patch(`${API_URL}/ativar/${id}`);
   } catch (error) {
     console.error("Erro ao ativar turma:", error);
     throw error;

@@ -14,6 +14,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { deleteAutoresSemAssociacao } from "./api/AutorApi";
 import { deleteGeneroesSemAssociacao } from "./api/GeneroApi";
 import { notificarAtrasos } from "./api/EmprestimoApi";
+import LoadingBar from "./shared/components/loading-bar/LoadingBar";
+import ErrorToast from "./shared/components/error-toast/ErrorToast";
 
 const App: React.FC = () => {
 
@@ -115,6 +117,9 @@ const App: React.FC = () => {
   }
   
   return (
+    <>
+      <LoadingBar />
+      <ErrorToast />
       <Router>
         <div className="w-100">
           <Routes>
@@ -130,6 +135,8 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </Router>
+  
+    </>
   );
 };
 
