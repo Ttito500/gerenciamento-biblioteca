@@ -1,5 +1,6 @@
 package com.bibliotech.bibliotech.services;
 
+import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Usuario;
@@ -17,7 +18,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario cadastrarUsuario(Usuario usuario) {
+    public Usuario cadastrarUsuario(UsuarioRequestDTO usuario) {
         if (usuario.getNome() == null) {
             throw new ValidationException("O nome do usuário é obrigatório.");
         }
