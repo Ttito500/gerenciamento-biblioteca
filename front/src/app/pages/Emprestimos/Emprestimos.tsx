@@ -6,9 +6,6 @@ import ListagemEmprestimos from "./templates/ListagemEmprestimos";
 import FiltrosEmprestimo from "./templates/FiltrosEmprestimo";
 import Modal from "react-bootstrap/Modal";
 import CadastrarEmprestimo from "./templates/CadastrarEmprestimo";
-import Spinner from "react-bootstrap/Spinner";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
 import ConfirmarEntrega from "./templates/ConfirmarEntrega";
 import RenovarPrazo from "./templates/RenovarPrazo";
 import CancelarEmprestimo from "./templates/CancelarEmprestimo";
@@ -18,9 +15,6 @@ import { ResponsePagination } from "./../../interfaces/pagination";
 import Pagination from "react-bootstrap/Pagination";
 
 const Emprestimo: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
   const [editingEmprestimo, setEditingEmprestimo] = useState<GetEmprestimoResponse | null>(null);
 
   const [showReceber, setShowReceber] = useState(false);
@@ -86,31 +80,23 @@ const Emprestimo: React.FC = () => {
   }, [currentPage]);
 
   const listarEmprestimos = async (): Promise<void> => {
-    setLoading(true);
-
-    try {
-      const filtros: EmprestimosFiltros = {
-        isbn: formDataFiltrar.isbn,
-        nomeAluno: formDataFiltrar.nomeAluno,
-        tituloLivro: formDataFiltrar.tituloLivro,
-        situacao: formDataFiltrar.situacao,
-        nomeRealizadoPor: formDataFiltrar.nomeRealizadoPor,
-        nomeConcluidoPor: formDataFiltrar.nomeConcluidoPor,
-        dataEmprestimo: formDataFiltrar.dataEmprestimo,
-        dataConclusao: formDataFiltrar.dataConclusao,
-        dataPrazo: formDataFiltrar.dataPrazo,
-        page: (currentPage - 1),
-        size: sizePage
-      }
-      console.log(filtros)
-      const data = await getEmprestimos(filtros);
-      setEmprestimos(data);
-      setTotalPages(data.totalPages);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
+    const filtros: EmprestimosFiltros = {
+      isbn: formDataFiltrar.isbn,
+      nomeAluno: formDataFiltrar.nomeAluno,
+      tituloLivro: formDataFiltrar.tituloLivro,
+      situacao: formDataFiltrar.situacao,
+      nomeRealizadoPor: formDataFiltrar.nomeRealizadoPor,
+      nomeConcluidoPor: formDataFiltrar.nomeConcluidoPor,
+      dataEmprestimo: formDataFiltrar.dataEmprestimo,
+      dataConclusao: formDataFiltrar.dataConclusao,
+      dataPrazo: formDataFiltrar.dataPrazo,
+      page: (currentPage - 1),
+      size: sizePage
     }
+    console.log(filtros)
+    const data = await getEmprestimos(filtros);
+    setEmprestimos(data);
+    setTotalPages(data.totalPages);
   };
 
   const [showCadastrar, setShowCadastrar] = useState(false);
@@ -130,51 +116,36 @@ const Emprestimo: React.FC = () => {
   };
 
   const handleSubmitCadastrarEmprestimo = async (): Promise<void> => {
-    try {
-      const body: CreateEmprestimoRequest = {
-        idAluno: Number(formDataCadastrarEmprestimo.idAluno),
-        idExemplar: Number(formDataCadastrarEmprestimo.idExemplar),
-        idUsuario: 1,
-        observacao: formDataCadastrarEmprestimo.observacao
-      }
-      await createEmprestimo(body);
-
-      listarEmprestimos();
-      setShowToastSuccess(true);
-      setFormDataCadastrarEmprestimo({
-        idAluno: null as number,
-        idExemplar: null as number,
-        idUsuario: null as number,
-        observacao: ""
-      });
-      handleCloseCadastrar();
-    } catch (err) {
-      setShowToastError(true);
+    const body: CreateEmprestimoRequest = {
+      idAluno: Number(formDataCadastrarEmprestimo.idAluno),
+      idExemplar: Number(formDataCadastrarEmprestimo.idExemplar),
+      idUsuario: 1,
+      observacao: formDataCadastrarEmprestimo.observacao
     }
+    await createEmprestimo(body);
+
+    listarEmprestimos();
+    setFormDataCadastrarEmprestimo({
+      idAluno: null as number,
+      idExemplar: null as number,
+      idUsuario: null as number,
+      observacao: ""
+    });
+    handleCloseCadastrar();
   };
 
   const handleSubmitRenovarEmprestimo = async (): Promise<void> => {
-    try {
-      await renovarPrazo(editingEmprestimo.id);
-      setShowToastSuccess(true);
-      setEditingEmprestimo(null);
-      listarEmprestimos();
-      handleCloseRenovar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+    await renovarPrazo(editingEmprestimo.id);
+    setEditingEmprestimo(null);
+    listarEmprestimos();
+    handleCloseRenovar();
   };
 
   const handleSubmitCancelarEmprestimo = async (): Promise<void> => {
-    try {
-      await cancelarEmprestimo(editingEmprestimo.id);
-      setShowToastSuccess(true);
-      setEditingEmprestimo(null);
-      listarEmprestimos();
-      handleCloseCancelar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+    await cancelarEmprestimo(editingEmprestimo.id);
+    setEditingEmprestimo(null);
+    listarEmprestimos();
+    handleCloseCancelar();
   };
 
   const [formDataReceberEmprestimo, setformDataReceberEmprestimo] = useState({
@@ -188,72 +159,19 @@ const Emprestimo: React.FC = () => {
   };
 
   const handleSubmitReceberEmprestimo = async (): Promise<void> => {
-    try {
-      await concluirEmprestimo(editingEmprestimo.id, formDataReceberEmprestimo)
-      setShowToastSuccess(true);
-      setformDataReceberEmprestimo({
-        extraviado: false,
-        observacao: ''
-      });
-      setEditingEmprestimo(null);
-      listarEmprestimos();
-      handleCloseCancelar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+    await concluirEmprestimo(editingEmprestimo.id, formDataReceberEmprestimo)
+    setformDataReceberEmprestimo({
+      extraviado: false,
+      observacao: ''
+    });
+    setEditingEmprestimo(null);
+    listarEmprestimos();
+    handleCloseCancelar();
   };
-
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
 
   return (
     <section className="indentacaoPadrao">
       <div className="indentacaoPadrao-acoes">
-        <ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-          <Toast
-            bg="success"
-            onClose={() => setShowToastSuccess(false)}
-            show={showToastSuccess}
-            delay={3000}
-            autohide
-          >
-            <Toast.Header>
-              <strong className="me-auto">
-                Operação realizada com sucesso!
-              </strong>
-            </Toast.Header>
-          </Toast>
-        </ToastContainer>
-
-        <ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-          <Toast
-            bg="danger"
-            onClose={() => setShowToastError(false)}
-            show={showToastError}
-            delay={3000}
-            autohide
-          >
-            <Toast.Header>
-              <strong className="me-auto">
-                Não foi possível concluir a operação. Tente novamente.
-              </strong>
-            </Toast.Header>
-          </Toast>
-        </ToastContainer>
-
         <Button
           variant="info"
           className="btn-blue"

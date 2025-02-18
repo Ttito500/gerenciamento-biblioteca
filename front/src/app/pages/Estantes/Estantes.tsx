@@ -3,9 +3,6 @@ import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -32,10 +29,6 @@ function transformEstantes(lista: GetEstantePrateleiraResponse[]): Estante[] {
 
 const Estantes: React.FC = () => {
   const [estantes, setEstantes] = useState<Estante[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   const [showGerenciar, setShowGerenciar] = useState(false);
   const handleCloseGerenciar = () => setShowGerenciar(false);
@@ -60,7 +53,6 @@ const Estantes: React.FC = () => {
   };
 
   const handleSubmitEditarEstantePrateleira = async (): Promise<void> => {
-    try {
       const body: UpdateEstantePrateleiraRequest = {
         estante: formDataEditarEstantePrateleira.estante,
         prateleira: Number(formDataEditarEstantePrateleira.prateleira),
@@ -68,15 +60,11 @@ const Estantes: React.FC = () => {
       const estantePrateleiraUpdated: UpdateEstantePrateleiraResponse = await updateEstantePrateleira(editingEstantePrateleira.id, body);
 
       listarEstantes();
-      setShowToastSuccess(true);
       setFormDataEditarEstantePrateleira({
         estante: estantePrateleiraUpdated.estante,
         prateleira: String(estantePrateleiraUpdated.prateleira),
       });
-      setEditingEstantePrateleira(estantePrateleiraUpdated)
-    } catch (err) {
-      setShowToastError(true);
-    }
+      setEditingEstantePrateleira(estantePrateleiraUpdated);
   };
 
   const [showExcluirEstantePrateleira, setShowExcluirEstantePrateleira] = useState(false);
@@ -87,16 +75,11 @@ const Estantes: React.FC = () => {
   };
 
   const handleSubmitExcluirEstantePrateleira = async (): Promise<void> => {
-    try {
-      await deleteEstantePrateleira(deletingEstantePrateleira);
+    await deleteEstantePrateleira(deletingEstantePrateleira);
 
-      listarEstantes();
-      setShowToastSuccess(true);
-      handleCloseExcluirEstantePrateleira();
-      handleCloseGerenciar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+    listarEstantes();
+    handleCloseExcluirEstantePrateleira();
+    handleCloseGerenciar();
   };
 
   useEffect(() => {
@@ -104,18 +87,9 @@ const Estantes: React.FC = () => {
   }, []);
 
   const listarEstantes = async (): Promise<void> => {
-    setLoading(true);
-
-    try {
-      const data = await getEstantePrateleiras();
-      const estantesTransfom = transformEstantes(data);
-
-      setEstantes(estantesTransfom);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+    const data = await getEstantePrateleiras();
+    const estantesTransfom = transformEstantes(data);
+    setEstantes(estantesTransfom);
   };
 
   const [formDataCadastrarEstantePrateleira, setFormDataCadastrarEstantePrateleira] = useState({
@@ -131,73 +105,22 @@ const Estantes: React.FC = () => {
   };
 
   const handleSubmitCadastrarEstantePrateleira = async (): Promise<void> => {
-    try {
-      const body: CreateEstantePrateleiraRequest = {
-        estante: formDataCadastrarEstantePrateleira.estante,
-        prateleira: Number(formDataCadastrarEstantePrateleira.prateleira),
-      };
+    const body: CreateEstantePrateleiraRequest = {
+      estante: formDataCadastrarEstantePrateleira.estante,
+      prateleira: Number(formDataCadastrarEstantePrateleira.prateleira),
+    };
 
-      await createEstantePrateleira(body);
+    await createEstantePrateleira(body);
 
-      listarEstantes();
-      setShowToastSuccess(true);
-      setFormDataCadastrarEstantePrateleira({
-        estante: "",
-        prateleira: "",
-      });
-    } catch (err) {
-      setShowToastError(true);
-    }
+    listarEstantes();
+    setFormDataCadastrarEstantePrateleira({
+      estante: "",
+      prateleira: "",
+    });
   };
-
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
 
   return (
     <section className={styles.estantes}>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="success"
-          onClose={() => setShowToastSuccess(false)}
-          show={showToastSuccess}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="danger"
-          onClose={() => setShowToastError(false)}
-          show={showToastError}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Não foi possível concluir a operação. Tente novamente.
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
       <Modal
         show={showGerenciar}
         onHide={handleCloseGerenciar}

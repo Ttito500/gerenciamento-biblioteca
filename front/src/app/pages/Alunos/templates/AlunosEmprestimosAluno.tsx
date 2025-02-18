@@ -1,9 +1,6 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import Badge from "react-bootstrap/Badge";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 const AlunosEmprestimosAluno: React.FC = () => {
   return (

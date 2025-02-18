@@ -8,9 +8,6 @@ import Modal from 'react-bootstrap/Modal';
 import AlunosCadastrarAluno from "./templates/AlunosCadastrarAluno";
 import { AlunoFiltros, CreateAlunoRequest, GetAlunoResponse, UpdateAlunoRequest } from "./../../interfaces/aluno";
 import { createAluno, inativarAluno, getAlunos, updateAluno, ativarAluno } from "../../api/AlunosApi";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
 import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
 import GerenciarTurmas from "./turmas/GerenciarTurmas";
@@ -61,35 +58,24 @@ const Alunos: React.FC = () => {
 	}
 
 	const [alunos, setAlunos] = useState<GetAlunoResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 	const [editingAluno, setEditingAluno] = useState<GetAlunoResponse | null>(null);
 	const [activatingAluno, setActivatingAluno] = useState<number | null>(null);
 	const [inactivatingAluno, setInactivatingAluno] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(false);
-	const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   useEffect(() => {
     listarAlunos();
   }, []);
 
   const listarAlunos = async (): Promise<void> => {
-		setLoading(true);
-
-    try {
-      const filtros: AlunoFiltros = {
-        nome: formDataFiltrar.nome,
-        situacao: formDataFiltrar.situacao,
-        serie: formDataFiltrar.serie,
-        turma: formDataFiltrar.turma,
-        ativo: formDataFiltrar.ativo
-      }
-      const data = await getAlunos(filtros);
-      setAlunos(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
+    const filtros: AlunoFiltros = {
+      nome: formDataFiltrar.nome,
+      situacao: formDataFiltrar.situacao,
+      serie: formDataFiltrar.serie,
+      turma: formDataFiltrar.turma,
+      ativo: formDataFiltrar.ativo
     }
+    const data = await getAlunos(filtros);
+    setAlunos(data.content);
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -129,27 +115,22 @@ const Alunos: React.FC = () => {
   };
 
   const handleSubmitCadastrarAluno = async (): Promise<void> => {
-    try {
-			const body: CreateAlunoRequest = {
-				email: formDataCadastrarAluno.email,
-				idTurma: Number(formDataCadastrarAluno.idTurma),
-				nome: formDataCadastrarAluno.nome,
-				telefone: formDataCadastrarAluno.telefone
-			}
-      await createAluno(body);
-
-      listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataCadastrarAluno({
-        idTurma: null as number,
-        nome: '',
-        telefone: '',
-        email: '',
-      });
-      handleCloseCadastrar();
-    } catch (err) {
-			setShowToastError(true);
+    const body: CreateAlunoRequest = {
+      email: formDataCadastrarAluno.email,
+      idTurma: Number(formDataCadastrarAluno.idTurma),
+      nome: formDataCadastrarAluno.nome,
+      telefone: formDataCadastrarAluno.telefone
     }
+    await createAluno(body);
+
+    listarAlunos();
+    setFormDataCadastrarAluno({
+      idTurma: null as number,
+      nome: '',
+      telefone: '',
+      email: '',
+    });
+    handleCloseCadastrar();
   };
 
 	const [formDataEditarAluno, setFormDataEditarAluno] = useState({
@@ -166,80 +147,40 @@ const Alunos: React.FC = () => {
   };
 
   const handleSubmitEditarAluno = async (): Promise<void> => {
-    try {
-			const body: UpdateAlunoRequest = {
-				email: formDataEditarAluno.email,
-				situacao: formDataEditarAluno.situacao,
-				idTurma: Number(formDataEditarAluno.idTurma),
-				nome: formDataEditarAluno.nome,
-				telefone: formDataEditarAluno.telefone
-			}
-      await updateAluno(editingAluno.id, body);
-
-      listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataEditarAluno({
-        idTurma: null as number,
-        nome: '',
-        telefone: '',
-        email: '',
-        situacao: ''
-      });
-      handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
+    const body: UpdateAlunoRequest = {
+      email: formDataEditarAluno.email,
+      situacao: formDataEditarAluno.situacao,
+      idTurma: Number(formDataEditarAluno.idTurma),
+      nome: formDataEditarAluno.nome,
+      telefone: formDataEditarAluno.telefone
     }
+    await updateAluno(editingAluno.id, body);
+
+    listarAlunos();
+    setFormDataEditarAluno({
+      idTurma: null as number,
+      nome: '',
+      telefone: '',
+      email: '',
+      situacao: ''
+    });
+    handleCloseEditar();
   };
 
 	const handleSubmitActiveInactiveAluno = async (ativo: boolean): Promise<void> => {
-    try {
-
-      if(ativo) {
-        await inativarAluno(inactivatingAluno);
-        handleCloseInactiveAluno();
-      } else {
-        await ativarAluno(activatingAluno);
-        handleCloseActiveAluno();
-      }
-
-      listarAlunos();
-			setShowToastSuccess(true);
-      
-    } catch (err) {
-      setShowToastError(true);
+    if(ativo) {
+      await inativarAluno(inactivatingAluno);
+      handleCloseInactiveAluno();
+    } else {
+      await ativarAluno(activatingAluno);
+      handleCloseActiveAluno();
     }
-  };
 
-	if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
+    listarAlunos();
+  };
 
 	return (
 		<section className="alunos">
-			<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-      >
-        <Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-			</ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-				
 			<Modal
         show={showEditar}
         onHide={handleCloseEditar}
