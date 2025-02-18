@@ -1,56 +1,54 @@
 import React from "react";
-import Table from "react-bootstrap/Table";
-import Badge from "react-bootstrap/Badge";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/esm/Form";
+import { GetEmprestimoResponse } from "./../../../interfaces/emprestimo";
 
-const DesistirEmprestimo: React.FC = () => {
+interface CancelarEmprestimoProps {
+  emprestimo: GetEmprestimoResponse
+}
+
+const DesistirEmprestimo: React.FC<CancelarEmprestimoProps> = ({ emprestimo }) => {
   return (
     <Form>
       <Row>
         <Col xs={3}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Aluno: </strong>
+              <strong>Aluno: </strong>{emprestimo.nomeAluno}
             </Form.Label>
-            <Form.Text className="ms-2">Maria Oliveira</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={3}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Livro: </strong>
+              <strong>Livro: </strong>{emprestimo.tituloLivro}
             </Form.Label>
-            <Form.Text className="ms-2">A Hora da Estrela</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Exemplar: </strong>
+              <strong>Exemplar: </strong>{emprestimo.numeroExemplar}
             </Form.Label>
-            <Form.Text className="ms-2">3</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Estante: </strong>
+              <strong>Estante: </strong>TO DO
             </Form.Label>
-            <Form.Text className="ms-2">A</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Prateleira: </strong>
+              <strong>Prateleira: </strong>TO DO
             </Form.Label>
-            <Form.Text className="ms-2">2</Form.Text>
           </Form.Group>
         </Col>
       </Row>
