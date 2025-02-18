@@ -54,14 +54,19 @@ const Secoes: React.FC = () => {
       nome: formDataEditarSecao.nome,
       descricao: formDataEditarSecao.descricao,
     };
-    const secaoUpdated: UpdateSecaoResponse = await updateSecao(editingSecao.id, body);
 
-    listarSecoes();
-    setFormDataEditarSecao({
-      nome: secaoUpdated.nome,
-      descricao: secaoUpdated.descricao,
-    });
-    setEditingSecao(secaoUpdated)
+    try {
+      const secaoUpdated: UpdateSecaoResponse = await updateSecao(editingSecao.id, body);
+  
+      listarSecoes();
+      setFormDataEditarSecao({
+        nome: secaoUpdated.nome,
+        descricao: secaoUpdated.descricao,
+      });
+      setEditingSecao(secaoUpdated)
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [showExcluirSecao, setShowExcluirSecao] = useState(false);
@@ -72,11 +77,15 @@ const Secoes: React.FC = () => {
   };
 
   const handleSubmitExcluirSecao = async (): Promise<void> => {
-    await deleteSecao(deletingSecao);
-
-    listarSecoes();
-    handleCloseExcluirSecao();
-    handleCloseGerenciar();
+    try {
+      await deleteSecao(deletingSecao);
+  
+      listarSecoes();
+      handleCloseExcluirSecao();
+      handleCloseGerenciar();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   useEffect(() => {
@@ -84,8 +93,12 @@ const Secoes: React.FC = () => {
   }, []);
 
   const listarSecoes = async (): Promise<void> => {
-    const data = await getSecoes();
-    setSecoes(data);
+    try {
+      const data = await getSecoes();
+      setSecoes(data);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [formDataCadastrarSecao, setFormDataCadastrarSecao] = useState({
@@ -106,13 +119,18 @@ const Secoes: React.FC = () => {
       nome: formDataCadastrarSecao.nome,
     };
 
-    await createSecao(body);
+    try {
+      await createSecao(body);
+  
+      listarSecoes();
+      setFormDataCadastrarSecao({
+        nome: "",
+        descricao: "",
+      });
+		} catch(err) {
+			console.log(err)
+		}
 
-    listarSecoes();
-    setFormDataCadastrarSecao({
-      nome: "",
-      descricao: "",
-    });
   };
 
   return (

@@ -56,8 +56,12 @@ const Acervo: React.FC = () => {
   }, []);
 
   const listarLivros = async (): Promise<void> => {
-		const data = await getLivros();
-		setLivros(data);
+		try {
+			const data = await getLivros();
+			setLivros(data);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -92,11 +96,15 @@ const Acervo: React.FC = () => {
 				nome: "literatura portuguesa"
 			}
 		}
-		await createLivro(body);
+		try {
+			await createLivro(body);
+			listarLivros();
+			setFormDataCadastrarLivro(null);
+			handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
 
-		listarLivros();
-		setFormDataCadastrarLivro(null);
-		handleCloseCadastrar();
   };
 
 	const [formDataEditarLivro, setFormDataEditarLivro] = useState({
@@ -127,18 +135,27 @@ const Acervo: React.FC = () => {
 				nome: "literatura portuguesa"
 			}
 		}
-		await updateLivro(editingLivro.id, body);
 
-		listarLivros();
-		setFormDataEditarLivro(null);
-		handleCloseEditar();
+		try {
+			await updateLivro(editingLivro.id, body);
+			listarLivros();
+			setFormDataEditarLivro(null);
+			handleCloseEditar();
+		} catch(err) {
+			console.log(err)
+		}
+
   };
 
 	const handleSubmitExcluirLivro = async (): Promise<void> => {
-		await deleteLivro(deletingLivro);
-
-		listarLivros();
-		handleCloseExcluirLivro();
+		try {
+			await deleteLivro(deletingLivro);
+	
+			listarLivros();
+			handleCloseExcluirLivro();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	return (

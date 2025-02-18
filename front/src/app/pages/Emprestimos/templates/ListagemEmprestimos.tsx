@@ -42,7 +42,7 @@ const ListagemEmprestimos: React.FC<ListagemEmprestimosProps> = ({ emprestimos, 
           </tr>
         </thead>
         <tbody>
-          {emprestimos.content.map((emprestimo) => (
+          {emprestimos?.content.map((emprestimo) => (
             <tr key={emprestimo.id} className="tabela-tr">
               <td>{emprestimo.isbn}</td>
               <td className="text-center">{emprestimo.numeroExemplar}</td>

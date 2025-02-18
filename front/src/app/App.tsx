@@ -55,12 +55,20 @@ const App: React.FC = () => {
         break;
       case 3:
         await new Promise(resolve => setTimeout(resolve, 1200));
-        await deleteAutoresSemAssociacao();
-        await deleteGeneroesSemAssociacao()
+        try {
+          await deleteAutoresSemAssociacao();
+          await deleteGeneroesSemAssociacao()
+        } catch(err) {
+          console.log(err)
+        }
         break;
       case 4:
         await new Promise(resolve => setTimeout(resolve, 1200));
-        // await notificarAtrasos()
+        try {
+          // await notificarAtrasos()
+        } catch(err) {
+          console.log(err)
+        }
         break;
       default:
         break;

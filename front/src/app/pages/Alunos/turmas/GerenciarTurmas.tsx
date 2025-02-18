@@ -95,15 +95,19 @@ const GerenciarTurmas: React.FC = () => {
       turma: formDataCadastrarTurma.turma,
       anoDeEntrada: formDataCadastrarTurma.anoDeEntrada,
     }
-    await createTurma(body);
 
-    listarTurmas();
-    setFormDataCadastrarTurma({
-      serie: null as number,
-      turma: '',
-      anoDeEntrada: null as number,
-    });
-    handleCloseCadastrar();
+    try {
+      await createTurma(body);
+      listarTurmas();
+      setFormDataCadastrarTurma({
+        serie: null as number,
+        turma: '',
+        anoDeEntrada: null as number,
+      });
+      handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const handleSubmitEditarTurma = async (): Promise<void> => {
@@ -113,24 +117,37 @@ const GerenciarTurmas: React.FC = () => {
       anoDeEntrada: formDataEditarTurma.anoDeEntrada,
     }
 
-    await updateTurma(editingTurma.id, body);
+    try {
+      await updateTurma(editingTurma.id, body);
+  
+      listarTurmas();
+      setFormDataEditarTurma({
+        serie: null as number,
+        turma: '',
+        anoDeEntrada: null as number
+      });
+      handleCloseEditar();
+		} catch(err) {
+			console.log(err)
+		}
 
-    listarTurmas();
-    setFormDataEditarTurma({
-      serie: null as number,
-      turma: '',
-      anoDeEntrada: null as number
-    });
-    handleCloseEditar();
   };
 
   const handleSubmitActiveInactiveTurma = async (ativo: boolean): Promise<void> => {
     if(ativo) {
-      await inativarTurma(inactivatingTurma);
-      handleCloseInativar();
+      try {
+        await inativarTurma(inactivatingTurma);
+        handleCloseInativar();
+      } catch(err) {
+        console.log(err)
+      }
     } else {
-      await ativarTurma(activatingTurma);
-      handleCloseAtivar();
+      try {
+        await ativarTurma(activatingTurma);
+        handleCloseAtivar();
+      } catch(err) {
+        console.log(err)
+      }
     }
 
     listarTurmas();
@@ -143,8 +160,13 @@ const GerenciarTurmas: React.FC = () => {
       anoDeEntrada: formDataFiltrar.anoDeEntrada,
       ativo: formDataFiltrar.ativo
     }
-    const data = await getTurmas(filtros);
-    setTurmas(data);
+
+    try {
+      const data = await getTurmas(filtros);
+      setTurmas(data);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   useEffect(() => {

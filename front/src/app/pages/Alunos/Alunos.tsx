@@ -74,8 +74,13 @@ const Alunos: React.FC = () => {
       turma: formDataFiltrar.turma,
       ativo: formDataFiltrar.ativo
     }
-    const data = await getAlunos(filtros);
-    setAlunos(data.content);
+
+    try {
+      const data = await getAlunos(filtros);
+      setAlunos(data.content);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -121,16 +126,21 @@ const Alunos: React.FC = () => {
       nome: formDataCadastrarAluno.nome,
       telefone: formDataCadastrarAluno.telefone
     }
-    await createAluno(body);
 
-    listarAlunos();
-    setFormDataCadastrarAluno({
-      idTurma: null as number,
-      nome: '',
-      telefone: '',
-      email: '',
-    });
-    handleCloseCadastrar();
+    try {
+      await createAluno(body);
+  
+      listarAlunos();
+      setFormDataCadastrarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+      });
+      handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [formDataEditarAluno, setFormDataEditarAluno] = useState({
@@ -154,26 +164,39 @@ const Alunos: React.FC = () => {
       nome: formDataEditarAluno.nome,
       telefone: formDataEditarAluno.telefone
     }
-    await updateAluno(editingAluno.id, body);
 
-    listarAlunos();
-    setFormDataEditarAluno({
-      idTurma: null as number,
-      nome: '',
-      telefone: '',
-      email: '',
-      situacao: ''
-    });
-    handleCloseEditar();
+    try {
+      await updateAluno(editingAluno.id, body);
+  
+      listarAlunos();
+      setFormDataEditarAluno({
+        idTurma: null as number,
+        nome: '',
+        telefone: '',
+        email: '',
+        situacao: ''
+      });
+      handleCloseEditar();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const handleSubmitActiveInactiveAluno = async (ativo: boolean): Promise<void> => {
     if(ativo) {
-      await inativarAluno(inactivatingAluno);
-      handleCloseInactiveAluno();
+      try {
+        await inativarAluno(inactivatingAluno);
+        handleCloseInactiveAluno();
+      } catch(err) {
+        console.log(err)
+      }
     } else {
-      await ativarAluno(activatingAluno);
-      handleCloseActiveAluno();
+      try {
+        await ativarAluno(activatingAluno);
+        handleCloseActiveAluno();
+      } catch(err) {
+        console.log(err)
+      }
     }
 
     listarAlunos();

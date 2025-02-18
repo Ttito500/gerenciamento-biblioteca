@@ -27,8 +27,14 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
     const filtros: TurmaFiltros = {
       ativo: true
     }
-    const data = await getTurmas(filtros);
-    setTurmas(data);
+
+    try {
+      const data = await getTurmas(filtros);
+      setTurmas(data);
+		} catch(err) {
+			console.log(err)
+		}
+    
   };
 
   return (
@@ -49,7 +55,7 @@ const AlunosCadastrarAluno: React.FC<AlunosCadastrarAlunoProps> = ({ formData, o
                 required
               >
                 <option value="">Selecione</option>
-                {turmas.map((turma) => (
+                {turmas?.map((turma) => (
                   <option key={turma.id} value={turma.id}>
                     Série: {turma.serie}ª / Turma: {turma.turma} / Ano de Entrada: {turma.anoDeEntrada}
                   </option>

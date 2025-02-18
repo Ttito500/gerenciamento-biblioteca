@@ -5,7 +5,7 @@ import { getQueryString } from "../shared/utils";
 
 const API_URL = "http://localhost:8090/emprestimos";
 
-export const getEmprestimos = async (filtros: EmprestimosFiltros): Promise<ResponsePagination<GetEmprestimoResponse>> => {
+export const getEmprestimos = async (filtros?: EmprestimosFiltros): Promise<ResponsePagination<GetEmprestimoResponse>> => {
   try {
     const queryString = getQueryString(filtros);
     const url = queryString ? `${API_URL}?${queryString}` : `${API_URL}`;

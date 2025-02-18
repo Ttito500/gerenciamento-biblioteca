@@ -23,7 +23,7 @@ const Emprestimo: React.FC = () => {
     setEditingEmprestimo(emprestimo);
     setformDataReceberEmprestimo({
       extraviado: false,
-      observacao: editingEmprestimo.observacao
+      observacao: emprestimo.observacao
     });
     setShowReceber(true);
   }
@@ -80,23 +80,26 @@ const Emprestimo: React.FC = () => {
   }, [currentPage]);
 
   const listarEmprestimos = async (): Promise<void> => {
-    const filtros: EmprestimosFiltros = {
-      isbn: formDataFiltrar.isbn,
-      nomeAluno: formDataFiltrar.nomeAluno,
-      tituloLivro: formDataFiltrar.tituloLivro,
-      situacao: formDataFiltrar.situacao,
-      nomeRealizadoPor: formDataFiltrar.nomeRealizadoPor,
-      nomeConcluidoPor: formDataFiltrar.nomeConcluidoPor,
-      dataEmprestimo: formDataFiltrar.dataEmprestimo,
-      dataConclusao: formDataFiltrar.dataConclusao,
-      dataPrazo: formDataFiltrar.dataPrazo,
-      page: (currentPage - 1),
-      size: sizePage
-    }
-    console.log(filtros)
-    const data = await getEmprestimos(filtros);
-    setEmprestimos(data);
-    setTotalPages(data.totalPages);
+    try {
+      const filtros: EmprestimosFiltros = {
+        isbn: formDataFiltrar.isbn,
+        nomeAluno: formDataFiltrar.nomeAluno,
+        tituloLivro: formDataFiltrar.tituloLivro,
+        situacao: formDataFiltrar.situacao,
+        nomeRealizadoPor: formDataFiltrar.nomeRealizadoPor,
+        nomeConcluidoPor: formDataFiltrar.nomeConcluidoPor,
+        dataEmprestimo: formDataFiltrar.dataEmprestimo,
+        dataConclusao: formDataFiltrar.dataConclusao,
+        dataPrazo: formDataFiltrar.dataPrazo,
+        page: (currentPage - 1),
+        size: sizePage
+      }
+      const data = await getEmprestimos(filtros);
+      setEmprestimos(data);
+      setTotalPages(data.totalPages);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [showCadastrar, setShowCadastrar] = useState(false);
@@ -119,33 +122,45 @@ const Emprestimo: React.FC = () => {
     const body: CreateEmprestimoRequest = {
       idAluno: Number(formDataCadastrarEmprestimo.idAluno),
       idExemplar: Number(formDataCadastrarEmprestimo.idExemplar),
-      idUsuario: 1,
+      idUsuario: 1, // TO DO
       observacao: formDataCadastrarEmprestimo.observacao
     }
-    await createEmprestimo(body);
-
-    listarEmprestimos();
-    setFormDataCadastrarEmprestimo({
-      idAluno: null as number,
-      idExemplar: null as number,
-      idUsuario: null as number,
-      observacao: ""
-    });
-    handleCloseCadastrar();
+    try {
+      await createEmprestimo(body);
+      handleCloseCadastrar();
+      listarEmprestimos();
+      setFormDataCadastrarEmprestimo({
+        idAluno: null as number,
+        idExemplar: null as number,
+        idUsuario: null as number,
+        observacao: ""
+      });
+		} catch(err) {
+			console.log(err)
+		}
+    
   };
 
   const handleSubmitRenovarEmprestimo = async (): Promise<void> => {
-    await renovarPrazo(editingEmprestimo.id);
-    setEditingEmprestimo(null);
-    listarEmprestimos();
-    handleCloseRenovar();
+    try {
+      await renovarPrazo(editingEmprestimo.id);
+      handleCloseRenovar();
+      setEditingEmprestimo({} as GetEmprestimoResponse );
+      listarEmprestimos();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const handleSubmitCancelarEmprestimo = async (): Promise<void> => {
-    await cancelarEmprestimo(editingEmprestimo.id);
-    setEditingEmprestimo(null);
-    listarEmprestimos();
-    handleCloseCancelar();
+    try {
+      await cancelarEmprestimo(editingEmprestimo.id);
+      handleCloseCancelar();
+      setEditingEmprestimo({} as GetEmprestimoResponse );
+      listarEmprestimos();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [formDataReceberEmprestimo, setformDataReceberEmprestimo] = useState({
@@ -155,18 +170,28 @@ const Emprestimo: React.FC = () => {
 
   const handleChangeReceberEmprestimo = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setformDataReceberEmprestimo({ ...formDataReceberEmprestimo, [name]: value });
+    if(name == "extraviado") {
+      setformDataReceberEmprestimo({...formDataReceberEmprestimo,
+        extraviado: value === "true" ? true : value === "false" ? false : null,
+      });
+    } else {
+      setformDataReceberEmprestimo({ ...formDataReceberEmprestimo, [name]: value });
+    }
   };
 
   const handleSubmitReceberEmprestimo = async (): Promise<void> => {
-    await concluirEmprestimo(editingEmprestimo.id, formDataReceberEmprestimo)
-    setformDataReceberEmprestimo({
-      extraviado: false,
-      observacao: ''
-    });
-    setEditingEmprestimo(null);
-    listarEmprestimos();
-    handleCloseCancelar();
+    try {
+      await concluirEmprestimo(editingEmprestimo.id, formDataReceberEmprestimo)
+      handleCloseReceber();
+      setformDataReceberEmprestimo({
+        extraviado: false,
+        observacao: ''
+      });
+      setEditingEmprestimo({} as GetEmprestimoResponse );
+      listarEmprestimos();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   return (

@@ -59,21 +59,33 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
   const handleSubmitExcluirPrateleira = async (
     idEstantePrateleira: number
   ): Promise<void> => {
-    await deleteSecaoEstantePrateleira(idSecao, idEstantePrateleira);
-    listarEstantesPorSecao();
+    try {
+      await deleteSecaoEstantePrateleira(idSecao, idEstantePrateleira);
+      listarEstantesPorSecao();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const listarEstantes = async (): Promise<void> => {
-    const data = await getEstantePrateleiras();
-    const dataTransform = transformEstantes(data);
-    console.log(dataTransform)
-    setEstantes(dataTransform);
+    try {
+      const data = await getEstantePrateleiras();
+      const dataTransform = transformEstantes(data);
+      console.log(dataTransform)
+      setEstantes(dataTransform);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const listarEstantesPorSecao = async (): Promise<void> => {
-    const data = await getSecaoEstantePrateleiras(idSecao);
-    const dataTransform = transformEstantes(data);
-    setEstantesPorSecao(dataTransform);
+    try {
+      const data = await getSecaoEstantePrateleiras(idSecao);
+      const dataTransform = transformEstantes(data);
+      setEstantesPorSecao(dataTransform);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const handleChangeSelectEstantePrateleira = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -88,8 +100,12 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
       console.log("Prateleira selecionada:", selectedEstantePrateleira);
 
       if(selectedEstantePrateleira && !isNaN(Number(selectedEstantePrateleira))) {
-        await addSecaoEstantePrateleira(idSecao, Number(selectedEstantePrateleira));
-        listarEstantesPorSecao();
+        try {
+          await addSecaoEstantePrateleira(idSecao, Number(selectedEstantePrateleira));
+          listarEstantesPorSecao();
+        } catch(err) {
+          console.log(err)
+        }
       }
     }
   };
@@ -181,8 +197,8 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
                   required
                 >
                   <option value="">Selecione</option>
-                  {estantes.map((estante) => (
-                    estante.prateleiras.map((prateleira) => (
+                  {estantes?.map((estante) => (
+                    estante.prateleiras?.map((prateleira) => (
                       <option key={prateleira.id} value={prateleira.id}>
                         Estante {estante.estante} / Prateleira {prateleira.prateleira}
                       </option>
@@ -207,13 +223,13 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
         </Form>
 
         <div className={styles.estantes_listagem}>
-          {estantesPorSecao.map((estante) => (
+          {estantesPorSecao?.map((estante) => (
             <div key={estante.estante} className={styles.estantes_listagem_item}>
               <div className={styles.estantes_listagem_item_estante}>
                 Estante {estante.estante}
               </div>
 
-              {estante.prateleiras.map((prateleira) => (
+              {estante.prateleiras?.map((prateleira) => (
                 <div
                   key={prateleira.prateleira}
                   className={styles.estantes_listagem_item_prateleira}

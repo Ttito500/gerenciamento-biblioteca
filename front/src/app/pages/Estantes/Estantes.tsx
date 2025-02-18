@@ -57,14 +57,19 @@ const Estantes: React.FC = () => {
         estante: formDataEditarEstantePrateleira.estante,
         prateleira: Number(formDataEditarEstantePrateleira.prateleira),
       };
-      const estantePrateleiraUpdated: UpdateEstantePrateleiraResponse = await updateEstantePrateleira(editingEstantePrateleira.id, body);
 
-      listarEstantes();
-      setFormDataEditarEstantePrateleira({
-        estante: estantePrateleiraUpdated.estante,
-        prateleira: String(estantePrateleiraUpdated.prateleira),
-      });
-      setEditingEstantePrateleira(estantePrateleiraUpdated);
+      try {
+        const estantePrateleiraUpdated: UpdateEstantePrateleiraResponse = await updateEstantePrateleira(editingEstantePrateleira.id, body);
+  
+        listarEstantes();
+        setFormDataEditarEstantePrateleira({
+          estante: estantePrateleiraUpdated.estante,
+          prateleira: String(estantePrateleiraUpdated.prateleira),
+        });
+        setEditingEstantePrateleira(estantePrateleiraUpdated);
+      } catch(err) {
+        console.log(err)
+      }
   };
 
   const [showExcluirEstantePrateleira, setShowExcluirEstantePrateleira] = useState(false);
@@ -75,11 +80,15 @@ const Estantes: React.FC = () => {
   };
 
   const handleSubmitExcluirEstantePrateleira = async (): Promise<void> => {
-    await deleteEstantePrateleira(deletingEstantePrateleira);
-
-    listarEstantes();
-    handleCloseExcluirEstantePrateleira();
-    handleCloseGerenciar();
+    try {
+      await deleteEstantePrateleira(deletingEstantePrateleira);
+  
+      listarEstantes();
+      handleCloseExcluirEstantePrateleira();
+      handleCloseGerenciar();
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   useEffect(() => {
@@ -87,9 +96,13 @@ const Estantes: React.FC = () => {
   }, []);
 
   const listarEstantes = async (): Promise<void> => {
-    const data = await getEstantePrateleiras();
-    const estantesTransfom = transformEstantes(data);
-    setEstantes(estantesTransfom);
+    try {
+      const data = await getEstantePrateleiras();
+      const estantesTransfom = transformEstantes(data);
+      setEstantes(estantesTransfom);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [formDataCadastrarEstantePrateleira, setFormDataCadastrarEstantePrateleira] = useState({
@@ -110,13 +123,18 @@ const Estantes: React.FC = () => {
       prateleira: Number(formDataCadastrarEstantePrateleira.prateleira),
     };
 
-    await createEstantePrateleira(body);
+    try {
+      await createEstantePrateleira(body);
+  
+      listarEstantes();
+      setFormDataCadastrarEstantePrateleira({
+        estante: "",
+        prateleira: "",
+      });
+		} catch(err) {
+			console.log(err)
+		}
 
-    listarEstantes();
-    setFormDataCadastrarEstantePrateleira({
-      estante: "",
-      prateleira: "",
-    });
   };
 
   return (

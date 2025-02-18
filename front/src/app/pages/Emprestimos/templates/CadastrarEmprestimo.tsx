@@ -199,7 +199,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                   maxHeight: '200px',
                   overflowY: 'auto',
                 }}>
-                  {suggestionsLivros.map((livro) => (
+                  {suggestionsLivros?.map((livro) => (
                     <ListGroup.Item action style={{cursor: 'pointer'}} key={livro.id} onClick={() => handleSelectLivro(livro)}>
                       {livro.titulo}
                     </ListGroup.Item>
@@ -221,7 +221,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                 required
               >
                 <option value="">Selecione</option>
-                {exemplares.map((exemplar) => (
+                {exemplares?.map((exemplar) => (
                   <option key={exemplar.id} value={exemplar.id}>
                     Número: {exemplar.numero}
                   </option>
@@ -316,7 +316,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                 maxHeight: '200px',
                 overflowY: 'auto',
               }}>
-                {suggestionsAlunos.map((aluno) => (
+                {suggestionsAlunos?.map((aluno) => (
                   <ListGroup.Item style={{cursor: 'pointer'}} key={aluno.id} onClick={() => handleSelectAluno(aluno)}>
                     {aluno.nome}
                   </ListGroup.Item>
