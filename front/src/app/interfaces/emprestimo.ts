@@ -23,6 +23,11 @@ export interface CreateEmprestimoRequest {
   idUsuario: number
 }
 
+export interface ConcluirEmprestimoRequest {
+  observacao: string
+  extraviado: boolean
+}
+
 export interface GetEmprestimoPorAlunoResponse {
   id: number
   exemplarId: number

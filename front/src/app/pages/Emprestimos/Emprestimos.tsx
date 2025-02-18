@@ -12,8 +12,8 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import ConfirmarEntrega from "./templates/ConfirmarEntrega";
 import RenovarPrazo from "./templates/RenovarPrazo";
 import CancelarEmprestimo from "./templates/CancelarEmprestimo";
-import { CreateEmprestimoRequest, EmprestimosFiltros, GetEmprestimoResponse } from "./../../interfaces/emprestimo";
-import { createEmprestimo, getEmprestimos } from "./../../api/EmprestimoApi";
+import { ConcluirEmprestimoRequest, CreateEmprestimoRequest, EmprestimosFiltros, GetEmprestimoResponse } from "./../../interfaces/emprestimo";
+import { cancelarEmprestimo, concluirEmprestimo, createEmprestimo, getEmprestimos, renovarPrazo } from "./../../api/EmprestimoApi";
 import { ResponsePagination } from "./../../interfaces/pagination";
 import Pagination from "react-bootstrap/Pagination";
 
@@ -21,18 +21,32 @@ const Emprestimo: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [showToastError, setShowToastError] = useState(false);
   const [showToastSuccess, setShowToastSuccess] = useState(false);
+  const [editingEmprestimo, setEditingEmprestimo] = useState<GetEmprestimoResponse | null>(null);
 
   const [showReceber, setShowReceber] = useState(false);
   const handleCloseReceber = () => setShowReceber(false);
-  const handleShowReceber = () => setShowReceber(true);
+  const handleShowReceber = (emprestimo: GetEmprestimoResponse) => {
+    setEditingEmprestimo(emprestimo);
+    setformDataReceberEmprestimo({
+      extraviado: false,
+      observacao: editingEmprestimo.observacao
+    });
+    setShowReceber(true);
+  }
 
   const [showRenovar, setShowRenovar] = useState(false);
   const handleCloseRenovar = () => setShowRenovar(false);
-  const handleShowRenovar = () => setShowRenovar(true);
+  const handleShowRenovar = (emprestimo: GetEmprestimoResponse) => {
+    setEditingEmprestimo(emprestimo);
+    setShowRenovar(true);
+  }
 
   const [showCancelar, setShowCancelar] = useState(false);
   const handleCloseCancelar = () => setShowCancelar(false);
-  const handleShowCancelar = () => setShowCancelar(true);
+  const handleShowCancelar = (emprestimo: GetEmprestimoResponse) => {
+    setEditingEmprestimo(emprestimo);
+    setShowCancelar(true);
+  }
 
   const [emprestimos, setEmprestimos] = useState<ResponsePagination<GetEmprestimoResponse>>();
 
@@ -139,6 +153,56 @@ const Emprestimo: React.FC = () => {
     }
   };
 
+  const handleSubmitRenovarEmprestimo = async (): Promise<void> => {
+    try {
+      await renovarPrazo(editingEmprestimo.id);
+      setShowToastSuccess(true);
+      setEditingEmprestimo(null);
+      listarEmprestimos();
+      handleCloseRenovar();
+    } catch (err) {
+      setShowToastError(true);
+    }
+  };
+
+  const handleSubmitCancelarEmprestimo = async (): Promise<void> => {
+    try {
+      await cancelarEmprestimo(editingEmprestimo.id);
+      setShowToastSuccess(true);
+      setEditingEmprestimo(null);
+      listarEmprestimos();
+      handleCloseCancelar();
+    } catch (err) {
+      setShowToastError(true);
+    }
+  };
+
+  const [formDataReceberEmprestimo, setformDataReceberEmprestimo] = useState({
+    extraviado: false,
+    observacao: ""
+  } as ConcluirEmprestimoRequest);
+
+  const handleChangeReceberEmprestimo = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setformDataReceberEmprestimo({ ...formDataReceberEmprestimo, [name]: value });
+  };
+
+  const handleSubmitReceberEmprestimo = async (): Promise<void> => {
+    try {
+      await concluirEmprestimo(editingEmprestimo.id, formDataReceberEmprestimo)
+      setShowToastSuccess(true);
+      setformDataReceberEmprestimo({
+        extraviado: false,
+        observacao: ''
+      });
+      setEditingEmprestimo(null);
+      listarEmprestimos();
+      handleCloseCancelar();
+    } catch (err) {
+      setShowToastError(true);
+    }
+  };
+
   if (loading) {
     return (
       <Spinner animation="border" role="status">
@@ -237,14 +301,14 @@ const Emprestimo: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <ConfirmarEntrega />
+            <ConfirmarEntrega emprestimo={editingEmprestimo} formData={formDataReceberEmprestimo} onChange={handleChangeReceberEmprestimo} />
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseReceber}>
               Cancelar
             </Button>
-            <Button variant="success">
+            <Button variant="success" onClick={handleSubmitReceberEmprestimo}>
               <FontAwesomeIcon icon={faCheck} /> Concluir Empréstimo
             </Button>
           </Modal.Footer>
@@ -263,14 +327,14 @@ const Emprestimo: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <RenovarPrazo />
+            <RenovarPrazo emprestimo={editingEmprestimo} />
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseRenovar}>
               Cancelar
             </Button>
-            <Button variant="success">
+            <Button variant="success" onClick={handleSubmitRenovarEmprestimo}>
               <FontAwesomeIcon icon={faCheck} /> Renovar Prazo
             </Button>
           </Modal.Footer>
@@ -289,14 +353,14 @@ const Emprestimo: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <CancelarEmprestimo />
+            <CancelarEmprestimo emprestimo={editingEmprestimo} />
           </Modal.Body>
 
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseCancelar}>
               Cancelar
             </Button>
-            <Button variant="danger">
+            <Button variant="danger" onClick={handleSubmitCancelarEmprestimo}>
               <FontAwesomeIcon icon={faCheck} /> Cancelar Empréstimo
             </Button>
           </Modal.Footer>
