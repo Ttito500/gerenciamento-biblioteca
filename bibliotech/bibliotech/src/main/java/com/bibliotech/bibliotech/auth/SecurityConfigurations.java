@@ -21,9 +21,11 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/livros").hasRole("ROLE_BIBLIOTECARIO")
-                        .requestMatchers(HttpMethod.PATCH, "/livros").hasRole("ROLE_BIBLIOTECARIO")
-                        .requestMatchers(HttpMethod.GET, "/livros").hasAnyRole("ROLE_BIBLIOTECARIO", "ROLE_ALUNO_MONITOR")
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()  //MUDAR ISSO, permitir apenas bilbiotecario
+                        .requestMatchers(HttpMethod.POST, "/livros").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/livros").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/livros").hasAnyRole("bibliotecario", "aluno_monitor")
 
                 )
                 .build();

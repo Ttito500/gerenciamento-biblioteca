@@ -1,11 +1,14 @@
+/*
 package com.bibliotech.bibliotech.controllers;
 
 import com.bibliotech.bibliotech.dtos.AutenticacaoDTO;
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
 import com.bibliotech.bibliotech.exception.ValidationException;
+import com.bibliotech.bibliotech.models.Usuario;
 import com.bibliotech.bibliotech.repositories.UsuarioRepository;
+import com.bibliotech.bibliotech.services.UsuarioService;
 import jakarta.validation.Valid;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,22 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/autenticacao")
 public class AuthenticationController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private
+    private UsuarioRequestMapper requestMapper;
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AutenticacaoDTO autenticacaoDTO) {
-        var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
-        var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
+    @Autowired
+    private UsuarioService usuarioService;
 
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/cadastrar")
     public ResponseEntity cadastrar(UsuarioRequestDTO usuarioRequestDTO){
@@ -44,7 +42,13 @@ public class AuthenticationController {
         }
 
         String senhaEncriptada = new BCryptPasswordEncoder().encode(usuarioRequestDTO.getSenha());
+        usuarioRequestDTO.setSenha(senhaEncriptada);
+
+        Usuario novoUsuario = requestMapper.toEntity(usuarioRequestDTO);
+
+        usuarioService.cadastrarUsuario(novoUsuario);
 
         return ResponseEntity.ok().build();
     }
 }
+*/

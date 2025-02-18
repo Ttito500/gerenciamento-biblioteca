@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Usuario;
@@ -18,28 +19,18 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Usuario cadastrarUsuario(UsuarioRequestDTO usuario) {
-        if (usuario.getNome() == null) {
-            throw new ValidationException("O nome do usuário é obrigatório.");
-        }
-        if (usuario.getEmail() == null) {
-            throw new ValidationException("O email do usuário é obrigatório.");
-        }
-        if (usuario.getSenha() == null) {
-            throw new ValidationException("A senha do usuário é obrigatória.");
-        }
-        if (!usuario.getCargo().equals("aluno_monitor") && !usuario.getCargo().equals("bibliotecario")) {
-            throw new ValidationException("Cargo invalido! Cargos válidos: 'aluno_monitor', 'bibliotecario'.");
-        }
-        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+    @Autowired
+    UsuarioRequestMapper requestMapper;
+
+    public Usuario cadastrarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
+        if (usuarioRepository.existsByEmail(usuarioRequestDTO.getEmail())) {
             throw new ValidationException("Já existe um usuário cadastrado com esse e-mail.");
         }
 
-        usuario.setAtivo(true);
+        Usuario usuario = requestMapper.toEntity(usuarioRequestDTO);
 
         return usuarioRepository.save(usuario);
     }
-
     public Usuario getUsuarioById(Integer id){
         return usuarioRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
