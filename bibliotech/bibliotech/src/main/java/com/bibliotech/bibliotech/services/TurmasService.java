@@ -64,6 +64,15 @@ public class TurmasService {
         Turma turmaExistente = turmaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Turma com ID " + id + " não encontrada."));
 
+        if (novaTurmaDTO.getSerie() == null || novaTurmaDTO.getSerie() < 1) {
+            throw new ValidationException("Série é obrigatória e deve ser maior que zero.");
+        }
+        if (novaTurmaDTO.getTurma() == null || novaTurmaDTO.getTurma().length() > 1) {
+            throw new ValidationException("Turma é obrigatória e deve ter no máximo 1 caractere.");
+        }
+        if (novaTurmaDTO.getAnoDeEntrada() == null || novaTurmaDTO.getAnoDeEntrada() <= 0) {
+            throw new ValidationException("Ano de entrada é obrigatório e deve ser maior que zero.");
+        }
         if (turmaRepository.existsBySerieAndTurmaAndAnoDeEntrada(novaTurmaDTO.getSerie(), novaTurmaDTO.getTurma(), novaTurmaDTO.getAnoDeEntrada())) {
             throw new ValidationException("Já existe uma turma com essa combinação de série, turma e ano de entrada.");
         }

@@ -113,10 +113,10 @@ public class LivrosService {
             }
             livro.setIsbn(livroRequest.getIsbn());
         }
-        if (livroRequest.getAutores().isEmpty()) {
+        if (livroRequest.getAutores().isEmpty() || livroRequest.getAutores().getFirst().getNome().isEmpty()) {
             throw new ValidationException("Os nomes autores não podom ser vazios ou nulos.");
         }
-        if (livroRequest.getGeneros().isEmpty()) {
+        if (livroRequest.getGeneros().isEmpty() || livroRequest.getGeneros().getFirst().getGenero().isEmpty()) {
             throw new ValidationException("Os generos não podom ser vazios ou nulos.");
         }
         if (livroRequest.getTitulo() != null && !livroRequest.getTitulo().isEmpty()) {
