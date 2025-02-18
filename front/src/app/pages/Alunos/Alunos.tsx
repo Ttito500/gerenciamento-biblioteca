@@ -9,7 +9,6 @@ import AlunosCadastrarAluno from "./templates/AlunosCadastrarAluno";
 import { AlunoFiltros, CreateAlunoRequest, GetAlunoResponse, UpdateAlunoRequest } from "./../../interfaces/aluno";
 import { createAluno, inativarAluno, getAlunos, updateAluno, ativarAluno } from "../../api/AlunosApi";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
-import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
 import GerenciarTurmas from "./turmas/GerenciarTurmas";
 import EmprestimosAluno from "./templates/EmprestimosAluno";
 import Pagination from "react-bootstrap/esm/Pagination";
@@ -23,8 +22,10 @@ const Alunos: React.FC = () => {
 
   const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
   const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
-  const handleShowVerEmprestimos = () => setShowVerEmprestimos(true);
-
+  const handleShowVerEmprestimos = (aluno: GetAlunoResponse) => {
+    setEditingAluno(aluno);
+    setShowVerEmprestimos(true);
+  }
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
@@ -39,10 +40,6 @@ const Alunos: React.FC = () => {
     });
 		setShowEditar(true);
 	}
-
-  const [showEmprestimos, setShowEmprestimos] = useState(false);
-  const handleCloseEmprestimos = () => setShowEmprestimos(false);
-  const handleShowEmprestimos = () => setShowEmprestimos(true);
 
   const [showActiveAluno, setShowActiveAluno] = useState(false);
   const handleCloseActiveAluno = () => setShowActiveAluno(false);
@@ -248,27 +245,6 @@ const Alunos: React.FC = () => {
       </Modal>
 
       <Modal
-        show={showEmprestimos}
-        onHide={handleCloseEmprestimos}
-        size="xl"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Empréstimos do Aluno</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <AlunosEmprestimosAluno />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="info" className="btn-blue" onClick={handleCloseEmprestimos}>Ok</Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
         show={showActiveAluno}
         onHide={handleCloseActiveAluno}
         size="lg"
@@ -374,15 +350,19 @@ const Alunos: React.FC = () => {
         >
 
           <Modal.Header closeButton>
-              <Modal.Title>Emprestimos do Aluno: <span className="custom-variavel">Nome do Aluno - SªT</span></Modal.Title>
+            {editingAluno && 
+              <Modal.Title>
+                Emprestimos do Aluno: <span className="custom-variavel">{editingAluno.nome} - {editingAluno.turma.serie}ª{editingAluno.turma.turma}</span>
+              </Modal.Title>         
+            }
           </Modal.Header>
 
           <Modal.Body>
-              <EmprestimosAluno/>
+            <EmprestimosAluno aluno={editingAluno}/>
           </Modal.Body>
 
           <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+            <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
           </Modal.Footer>
         </Modal>
 			</div>
@@ -397,7 +377,7 @@ const Alunos: React.FC = () => {
 					onEdit={handleShowEditar} 
 					onActive={handleShowActiveAluno} 
           onInactive={handleShowInactiveAluno}
-					onEmprestimos={handleShowEmprestimos} 
+					onEmprestimos={handleShowVerEmprestimos} 
 				/>
 
         <Pagination>
