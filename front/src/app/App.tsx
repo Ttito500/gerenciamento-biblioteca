@@ -14,6 +14,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { deleteAutoresSemAssociacao } from "./api/AutorApi";
 import { deleteGeneroesSemAssociacao } from "./api/GeneroApi";
 import { notificarAtrasos } from "./api/EmprestimoApi";
+import Cronograma from "./pages/Cronograma/Cronograma";
 
 const App: React.FC = () => {
 
@@ -126,6 +127,7 @@ const App: React.FC = () => {
             <Route path="/secoes" element={isAuthenticated ? <><Menu /><Secoes /></> : <Navigate to="/" />} />
             <Route path="/estantes" element={isAuthenticated ? <><Menu /><Estantes /></> : <Navigate to="/" />} />
             <Route path="/usuarios" element={isAuthenticated ? <><Menu /><Usuarios /></> : <Navigate to="/" />} />
+            <Route path="/cronograma" element={isAuthenticated ? <><Menu /><Cronograma /></> : <Navigate to="/" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
