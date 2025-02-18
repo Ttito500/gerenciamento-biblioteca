@@ -10,9 +10,10 @@ import Badge from "react-bootstrap/Badge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
 import { GetAlunoResponse } from "./../../../interfaces/aluno";
+import { ResponsePagination } from "./../../../interfaces/pagination";
 
 interface AlunosListagemProps {
-  alunos: GetAlunoResponse[];
+  alunos: ResponsePagination<GetAlunoResponse>;
   onEdit: (aluno: GetAlunoResponse) => void;
   onActive: (id: number) => void;
   onInactive: (id: number) => void;
@@ -37,7 +38,7 @@ const AlunosListagem: React.FC<AlunosListagemProps> = ({ alunos, onEdit, onActiv
           </tr>
         </thead>
         <tbody>
-          {alunos?.map((aluno) => (
+          {alunos?.content.map((aluno) => (
             <tr key={aluno.id} className="tabela-tr">
               <td>{aluno.turma.serie}ª</td>
               <td>{aluno.turma.turma}</td>
