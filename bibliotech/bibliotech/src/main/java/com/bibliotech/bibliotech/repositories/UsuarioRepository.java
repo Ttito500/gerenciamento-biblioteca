@@ -1,6 +1,5 @@
 package com.bibliotech.bibliotech.repositories;
 
-import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.models.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +21,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByEmail(String email);
 
     Optional<Usuario> findById(Integer id);
+
+    Optional<Usuario> findByIdAndCargo(Integer id, String alunoMonitor);
 }

@@ -14,8 +14,12 @@ import java.util.Locale;
 @Service
 public class UsuarioService {
 
-    @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     public Usuario cadastrarUsuario(Usuario usuario) {
         if (usuario.getNome() == null) {
@@ -42,6 +46,11 @@ public class UsuarioService {
     public Usuario getUsuarioById(Integer id){
         return usuarioRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
+    }
+
+    public Usuario buscarUsuarioAlunoMonitorPorId(Integer id) {
+        return usuarioRepository.findByIdAndCargo(id, "aluno_monitor")
+                .orElseThrow(() -> new NotFoundException("Usuário com o cargo de aluno_monitor não encontrado."));
     }
 
     public List<Usuario> filtrarUsuarios(String nome, String cargo, Boolean ativo) {
