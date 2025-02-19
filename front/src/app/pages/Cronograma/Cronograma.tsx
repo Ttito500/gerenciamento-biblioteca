@@ -70,32 +70,21 @@ const Cronograma: React.FC = () => {
                     </thead>
                     <tbody>
                     <tr className="cronograma-tr">
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                    </tr>
-                    <tr className="cronograma-tr">
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                    </tr>
-                    <tr className="cronograma-tr">
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                    </tr>
-                    <tr className="cronograma-tr">
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center">Aluno Monitor</td>
-                        <td className="text-center"></td>
-                        <td className="text-center">Aluno Monitor</td>
+                        <td className="text-center" style={{ backgroundColor: "white" }}>
+                            Aluno Monitor <br /> Aluno Monitor
+                        </td>
+                        <td className="text-center">
+                            Aluno Monitor <br />
+                        </td>
+                        <td className="text-center">
+                            Aluno Monitor <br/> Aluno Monitor <br /> Aluno Monitor
+                        </td>
+                        <td className="text-center">
+                            Aluno Monitor <br />
+                        </td>
+                        <td className="text-center">
+                            Aluno Monitor <br /> Aluno Monitor
+                        </td>
                     </tr>
                     </tbody>
                 </Table>

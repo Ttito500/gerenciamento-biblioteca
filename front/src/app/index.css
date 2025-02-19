@@ -361,13 +361,14 @@ body {
 .cronograma td {
   padding: 10px;
   text-align: center;
+  border: 2px solid #00A54F;
   background-color: white !important;
-  border-left: 2px solid #00A54F;
-  border-right: 2px solid #00A54F;
+  --bs-table-bg-type: transparent !important;
 }
 
 .cronograma th {
   border-bottom: 2px solid #00A54F;
+  color: #00A54F;
 }
 
 .cronograma th:first-child,
@@ -378,28 +379,4 @@ body {
 .cronograma th:last-child,
 .cronograma td:last-child {
   border-right: none;
-}
-
-.cronograma tr:not(:first-child) td {
-  border-top: none !important;
-}
-
-.cronograma tr:first-child th:first-child {
-  border-top-left-radius: 10px;
-}
-
-.cronograma tr:first-child th:last-child {
-  border-top-right-radius: 10px;
-}
-
-.cronograma tr:last-child td:first-child {
-  border-bottom-left-radius: 10px;
-}
-
-.cronograma tr:last-child td:last-child {
-  border-bottom-right-radius: 10px;
-}
-
-.cronograma tr:nth-child(even) td {
-  background-color: white !important;
 }
