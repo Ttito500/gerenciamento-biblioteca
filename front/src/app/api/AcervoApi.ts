@@ -9,7 +9,7 @@ const API_URL = 'http://localhost:8090/livros';
 export const getLivros = async (filtros: LivroFiltros): Promise<ResponsePagination<GetLivroResponse>> => {
   try {
     const queryString = getQueryString(filtros);
-    const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtros`;
+    const url = queryString ? `${API_URL}/filtrar?${queryString}` : `${API_URL}/filtrar`;
     
     const response = await api.get<ResponsePagination<GetLivroResponse>>(url);
     return response.data;
@@ -39,11 +39,20 @@ export const updateLivro = async (id: number, livro: UpdateLivroRequest): Promis
   }
 };
 
-export const deleteLivro = async (id: number): Promise<void> => {
+export const inativarLivro = async (id: number): Promise<void> => {
   try {
-    await api.delete(`${API_URL}/${id}`);
+    await api.patch(`${API_URL}/inativar/${id}`);
   } catch (error) {
-    console.error('Erro ao deletar livro:', error);
+    console.error('Erro ao inativar Livro:', error);
+    throw error;
+  }
+};
+
+export const ativarLivro = async (id: number): Promise<void> => {
+  try {
+    await api.patch(`${API_URL}/ativar/${id}`);
+  } catch (error) {
+    console.error('Erro ao ativar Livro:', error);
     throw error;
   }
 };
