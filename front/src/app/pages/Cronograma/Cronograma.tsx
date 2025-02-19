@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import CadastraAlunoMonitor from "./Templates/CadastraAlunoMonitor";
+import Confirmacao from "./Templates/Confirmacao";
 
 const Cronograma: React.FC = () => {
 
@@ -13,9 +14,12 @@ const Cronograma: React.FC = () => {
     const handleShowCadastrar = () => setShowCadastrar(true);
 
 
+    const [showExcluir, setShowExcluir] = useState(false);
+    const handleCloseExcluir = () => setShowExcluir(false);
+    const handleShowExcluir = () => setShowExcluir(true);
+
     return (
         <section className="Exemplar">
-            <div className="Exemplar-acoes"></div>
 
             <div className="w-100">
 
@@ -69,24 +73,90 @@ const Cronograma: React.FC = () => {
                     </thead>
                     <tbody>
                     <tr className="cronograma-tr">
-                        <td className="text-center" style={{ backgroundColor: "white" }}>
-                            Aluno Monitor <br /> Aluno Monitor
+                        <td className="text-center">
+                            <div className="balao-monitor">
+                                <div className="texto">Pedro Rivaldo</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Kauan</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Gabriel Alves</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
                         </td>
                         <td className="text-center">
-                            Aluno Monitor <br />
+                            <div className="balao-monitor">
+                                <div className="texto">Luis</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
                         </td>
                         <td className="text-center">
-                            Aluno Monitor <br/> Aluno Monitor <br /> Aluno Monitor
+                            <div className="balao-monitor">
+                                <div className="texto">Tiago Tito</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Pedro Rivaldo</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Gabriel Alves</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
                         </td>
                         <td className="text-center">
-                            Aluno Monitor <br />
+                            <div className="balao-monitor">
+                                <div className="texto">Robson José</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Daniel Lucas</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
                         </td>
                         <td className="text-center">
-                            Aluno Monitor <br /> Aluno Monitor
+                            <div className="balao-monitor">
+                                <div className="texto">Gustavo</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
+                            <div className="balao-monitor">
+                                <div className="texto">Matheus Mendes</div>
+                                <FontAwesomeIcon icon={faTrash} className="icone-lixo" onClick={handleShowExcluir} />
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </Table>
+
+                <Modal
+                    show={showExcluir}
+                    onHide={handleCloseExcluir}
+                    size="lg"
+                    backdrop="static"
+                    centered
+                    keyboard={false}
+                    className="Modais-Confirmacao-Custon"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmação</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Confirmacao />
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseExcluir}>
+                            Cancelar
+                        </Button>
+                        <Button variant="danger">
+                            <FontAwesomeIcon icon={faTrash} /> Excluir
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
 
         </section>

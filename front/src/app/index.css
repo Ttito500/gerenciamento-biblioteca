@@ -396,3 +396,26 @@ body {
 .cronograma td:last-child {
   border-right: none;
 }
+
+.balao-monitor {
+  background-color: #D1E7DD;
+  color: black;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.balao-monitor .texto {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.balao-monitor .icone-lixo {
+  color: #DC3545;
+  cursor: pointer;
+  margin-left: 10px;
+}
+

@@ -78,7 +78,6 @@ const Inicio: React.FC = () => {
 
   return (
     <section className="Exemplar">
-      <div className="Exemplar-acoes"></div>
 
       <div className="w-100">
 
