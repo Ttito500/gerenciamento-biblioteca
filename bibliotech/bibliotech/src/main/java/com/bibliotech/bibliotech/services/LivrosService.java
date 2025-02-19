@@ -8,6 +8,7 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
+import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
@@ -168,5 +169,9 @@ public class LivrosService {
 
     public Exemplar atualizarExemplar(Integer id, ExemplarRequestPatchDTO exemplarDTO) {
         return exemplaresService.atualizarExemplar(id, exemplarDTO);
+    }
+
+    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos() {
+        return livroRepository.buscarLivrosMaisLidos();
     }
 }

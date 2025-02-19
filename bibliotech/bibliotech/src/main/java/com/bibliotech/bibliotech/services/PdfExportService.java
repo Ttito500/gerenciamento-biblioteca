@@ -2,10 +2,12 @@ package com.bibliotech.bibliotech.services;
 
 import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 
+import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
 
+import com.bibliotech.bibliotech.repositories.LivroRepository;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
@@ -20,6 +22,11 @@ import java.util.List;
 
 @Service
 public class PdfExportService {
+    private final LivroRepository livroRepository;
+
+    public PdfExportService(LivroRepository livroRepository) {
+        this.livroRepository = livroRepository;
+    }
 
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
@@ -193,6 +200,46 @@ public class PdfExportService {
 
             document.add(table);
             document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportLivrosMaisLidos(List<LivrosMaisLidosDTO> livrosMaisLidos) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+
+        // Fonte em negrito para o título, tamanho 18
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+
+        PdfPCell cell = new PdfPCell(new Phrase("Livros Mais Lidos", fontBold18));
+        cell.setColspan(2);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        // Fonte em negrito para os headers da tabela, tamanho 12
+        Font fontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Título", fontBold12));
+        table.addCell(new Phrase("Quantidade de Empréstimos", fontBold12));
+
+        for (LivrosMaisLidosDTO livro : livrosMaisLidos) {
+            table.addCell(livro.getTitulo());
+            table.addCell(livro.getQuantidadeEmprestimos().toString());
+        }
+
+        document.add(table);
+        document.close();
 
         return out.toByteArray();
     }

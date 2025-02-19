@@ -8,14 +8,19 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseGetDTO;
+import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseGetMapper;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
 import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
+import com.bibliotech.bibliotech.services.PdfExportService;
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +35,15 @@ public class LivrosController {
     private final LivroResponseMapper livroResponseMapper;
     private final LivroResponseGetMapper livroResponseGetMapper;
     private final ExemplarMapper exemplarMapper;
+    private final PdfExportService pdfExportService;
 
     @Autowired
-    public LivrosController(LivrosService livrosService, LivroResponseMapper livroResponseMapper, ExemplarMapper exemplarMapper, LivroResponseGetMapper livroResponseGetMapper) {
+    public LivrosController(LivrosService livrosService, LivroResponseMapper livroResponseMapper, ExemplarMapper exemplarMapper, LivroResponseGetMapper livroResponseGetMapper, PdfExportService pdfExportService) {
         this.livrosService = livrosService;
         this.livroResponseMapper = livroResponseMapper;
         this.livroResponseGetMapper = livroResponseGetMapper;
         this.exemplarMapper = exemplarMapper;
+        this.pdfExportService = pdfExportService;
     }
 
     @PostMapping("")
@@ -109,5 +116,19 @@ public class LivrosController {
     public ResponseEntity<ExemplarDTO> atualizarExemplar(@PathVariable Integer id, @RequestBody ExemplarRequestPatchDTO body){
         ExemplarDTO exemplarDTO = exemplarMapper.toDTO(livrosService.atualizarExemplar(id, body));
         return ResponseEntity.ok(exemplarDTO);
+    }
+
+    @GetMapping("/relatorio/export/pdf")
+    public ResponseEntity<byte[]> exportLivrosMaisEmprestadosPdf() throws DocumentException {
+        List<LivrosMaisLidosDTO> livrosMaisEmprestados = livrosService.obterLivrosMaisLidos();
+        byte[] pdfBytes = pdfExportService.exportLivrosMaisLidos(livrosMaisEmprestados);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "livros-mais-emprestados.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }
