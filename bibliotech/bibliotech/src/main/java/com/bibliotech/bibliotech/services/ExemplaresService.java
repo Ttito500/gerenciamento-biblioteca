@@ -38,7 +38,11 @@ public class ExemplaresService {
         Livro livroCadastrado = livroRepository.findLivroById(livro.getId());
         List<Exemplar> exemplaresSalvos = new ArrayList<>();
 
-        int qtd_exemplares_ja_existente = livroCadastrado.getExemplares().size();
+        int qtd_exemplares_ja_existente = 0;
+        if (!livroRepository.existsLivroByIsbn(livro.getIsbn())) {
+            qtd_exemplares_ja_existente = livroCadastrado.getExemplares().size();
+        }
+
         int qtd_exemplares_final = qtd_exemplares_ja_existente + qtdExemplaresNovos;
 
         for (int i = qtd_exemplares_ja_existente; i < qtd_exemplares_final; i++) {
