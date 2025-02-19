@@ -53,13 +53,12 @@ public class AutorService {
         return autoresAssociados;
     }
 
-    public Optional<Autor> buscarPorNome(String nome) {
-        Optional<Autor> autor = autorRepository.findFirstByNomeIgnoreCase(nome);
-        if (autor.isEmpty() ) {
-            throw new NotFoundException("Autor com o nome: "+ nome +" não encontrado.");
+    public List<Autor> buscarPorNomeQueContem(String nome) {
+        List<Autor> autores = autorRepository.findByNomeContainingIgnoreCase(nome);
+        if (autores.isEmpty()) {
+            throw new NotFoundException("Nenhum autor encontrado contendo: " + nome);
         }
-
-        return autor;
+        return autores;
     }
 
     public void deletarAutoresSemAssociacao() {

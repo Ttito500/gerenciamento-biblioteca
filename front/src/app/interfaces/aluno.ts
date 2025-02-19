@@ -51,4 +51,6 @@ export interface AlunoFiltros {
   nome?: string
   situacao?: string
   ativo?: boolean
+  page?: number
+  size?: number
 }

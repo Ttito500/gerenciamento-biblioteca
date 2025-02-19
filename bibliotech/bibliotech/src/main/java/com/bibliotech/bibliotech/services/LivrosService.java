@@ -84,7 +84,8 @@ public class LivrosService {
     public Page<Livro> getLivros(String titulo, String isbn, String autor, String genero, Boolean ativo, Pageable pageable){
         Page<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, genero, ativo, pageable);
 
-        for (Livro livro : livrosSalvos.getContent()) {
+        for (Livro livro : livrosSalvos) {
+            livro.setExemplares(listarExemplaresDeUmLivro(livro.getId()));
             livro.setGeneros(generosService.findGenerosByLivroId(livro.getId()));
             livro.setAutores(autorService.findAutorByLivroId(livro.getId()));
         }
@@ -113,10 +114,10 @@ public class LivrosService {
             }
             livro.setIsbn(livroRequest.getIsbn());
         }
-        if (livroRequest.getAutores().isEmpty()) {
+        if (livroRequest.getAutores().isEmpty() || livroRequest.getAutores().getFirst().getNome().isEmpty()) {
             throw new ValidationException("Os nomes autores não podom ser vazios ou nulos.");
         }
-        if (livroRequest.getGeneros().isEmpty()) {
+        if (livroRequest.getGeneros().isEmpty() || livroRequest.getGeneros().getFirst().getGenero().isEmpty()) {
             throw new ValidationException("Os generos não podom ser vazios ou nulos.");
         }
         if (livroRequest.getTitulo() != null && !livroRequest.getTitulo().isEmpty()) {

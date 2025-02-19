@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 import styles from "./EstantesGerenciarEstantePrateleira.module.css";
 
 import Col from "react-bootstrap/Col";
@@ -7,9 +7,6 @@ import Row from "react-bootstrap/Row";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 
 interface EstantesGerenciarEstantePrateleiraProps {
   idEstantePrateleira: number;
@@ -29,63 +26,8 @@ const SecoesGerenciarSecao: React.FC<EstantesGerenciarEstantePrateleiraProps> = 
   onEdit,
   onDelete,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
-
   return (
     <>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="success"
-          onClose={() => setShowToastSuccess(false)}
-          show={showToastSuccess}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="danger"
-          onClose={() => setShowToastError(false)}
-          show={showToastError}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Não foi possível concluir a operação. Tente novamente.
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
       <div className={styles.editar}>
         <div className={styles.editar_title}>Editar</div>
 

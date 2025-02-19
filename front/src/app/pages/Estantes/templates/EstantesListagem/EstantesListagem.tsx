@@ -17,13 +17,13 @@ const EstantesListagem: React.FC<EstantesListagemProps> = ({
   return (
     <>
       <div className={styles.estantes_listagem}>
-        {estantes.map((estante) => (
+        {estantes?.map((estante) => (
           <div key={estante.estante} className={styles.estantes_listagem_item}>
             <div className={styles.estantes_listagem_item_estante}>
               Estante {estante.estante}
             </div>
 
-            {estante.prateleiras.map((prateleira) => (
+            {estante.prateleiras?.map((prateleira) => (
               <div
                 key={prateleira.prateleira}
                 className={styles.estantes_listagem_item_prateleira}

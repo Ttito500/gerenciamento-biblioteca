@@ -6,8 +6,6 @@ import { getExemplares, getLivros } from "./../../../api/AcervoApi";
 import { GetLivroResponse, LivroFiltros } from "./../../../interfaces/acervo";
 import ListGroup from "react-bootstrap/ListGroup";
 import { GetExemplarResponse } from "./../../../interfaces/exemplar";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 import { AlunoFiltros, GetAlunoResponse } from "./../../../interfaces/aluno";
 import { getAlunos } from "./../../../api/AlunosApi";
 import Button from "react-bootstrap/esm/Button";
@@ -40,9 +38,6 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
   const [serie, setSerie] = useState<number>(null);
   const [turma, setTurma] = useState<string>('');
   const [prazoCalculado, setPrazoCalculado] = useState<string>('');
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   const handleChangeSerie = (e: ChangeEvent<any>): void => {
     const { value } = e.target;
@@ -83,7 +78,6 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
           setSuggestionsLivros(response.content);
         } catch (error) {
           console.error('Erro ao buscar livros:', error);
-          setShowToastError(true);
         }
       } else {
         setSuggestionsLivros([]);
@@ -108,7 +102,6 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
           setExemplares(responseFilter)
         } catch (error) {
           console.error('Erro ao buscar livros:', error);
-          setShowToastError(true);
         }
       }
     };
@@ -130,7 +123,6 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
           setSuggestionsAlunos(response.content);
         } catch (error) {
           console.error('Erro ao buscar alunos:', error);
-          setShowToastError(true);
         }
       } else {
         setSuggestionsAlunos([]);
@@ -207,7 +199,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                   maxHeight: '200px',
                   overflowY: 'auto',
                 }}>
-                  {suggestionsLivros.map((livro) => (
+                  {suggestionsLivros?.map((livro) => (
                     <ListGroup.Item action style={{cursor: 'pointer'}} key={livro.id} onClick={() => handleSelectLivro(livro)}>
                       {livro.titulo}
                     </ListGroup.Item>
@@ -229,7 +221,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                 required
               >
                 <option value="">Selecione</option>
-                {exemplares.map((exemplar) => (
+                {exemplares?.map((exemplar) => (
                   <option key={exemplar.id} value={exemplar.id}>
                     Número: {exemplar.numero}
                   </option>
@@ -324,7 +316,7 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
                 maxHeight: '200px',
                 overflowY: 'auto',
               }}>
-                {suggestionsAlunos.map((aluno) => (
+                {suggestionsAlunos?.map((aluno) => (
                   <ListGroup.Item style={{cursor: 'pointer'}} key={aluno.id} onClick={() => handleSelectAluno(aluno)}>
                     {aluno.nome}
                   </ListGroup.Item>
@@ -360,30 +352,6 @@ const CadastrarEmprestimo: React.FC<CadastrarEmprestimoProps> = ({ formData, onC
           </Col>
         </Row>
       </Form>
-
-      <ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-      >
-        <Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
     </>
   );
 };

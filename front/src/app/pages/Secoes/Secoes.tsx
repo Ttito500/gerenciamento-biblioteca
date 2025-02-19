@@ -15,9 +15,6 @@ import {
   getSecoes,
   updateSecao,
 } from "./../../api/SecoesApi";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 import SecoesListagem from "./templates/SecoesListagem/SecoesListagem";
 
 import Col from "react-bootstrap/Col";
@@ -29,10 +26,6 @@ import SecoesGerenciarSecao from "./templates/SecoesGerenciarSecao/SecoesGerenci
 
 const Secoes: React.FC = () => {
   const [secoes, setSecoes] = useState<GetSecaoResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   const [showGerenciar, setShowGerenciar] = useState(false);
   const handleCloseGerenciar = () => setShowGerenciar(false);
@@ -57,23 +50,23 @@ const Secoes: React.FC = () => {
   };
 
   const handleSubmitEditarSecao = async (): Promise<void> => {
-    try {
-      const body: UpdateSecaoRequest = {
-        nome: formDataEditarSecao.nome,
-        descricao: formDataEditarSecao.descricao,
-      };
-      const secaoUpdated: UpdateSecaoResponse = await updateSecao(editingSecao.id, body);
+    const body: UpdateSecaoRequest = {
+      nome: formDataEditarSecao.nome,
+      descricao: formDataEditarSecao.descricao,
+    };
 
+    try {
+      const secaoUpdated: UpdateSecaoResponse = await updateSecao(editingSecao.id, body);
+  
       listarSecoes();
-      setShowToastSuccess(true);
       setFormDataEditarSecao({
         nome: secaoUpdated.nome,
         descricao: secaoUpdated.descricao,
       });
       setEditingSecao(secaoUpdated)
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [showExcluirSecao, setShowExcluirSecao] = useState(false);
@@ -86,14 +79,13 @@ const Secoes: React.FC = () => {
   const handleSubmitExcluirSecao = async (): Promise<void> => {
     try {
       await deleteSecao(deletingSecao);
-
+  
       listarSecoes();
-      setShowToastSuccess(true);
       handleCloseExcluirSecao();
       handleCloseGerenciar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   useEffect(() => {
@@ -101,16 +93,12 @@ const Secoes: React.FC = () => {
   }, []);
 
   const listarSecoes = async (): Promise<void> => {
-    setLoading(true);
-
     try {
       const data = await getSecoes();
       setSecoes(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const [formDataCadastrarSecao, setFormDataCadastrarSecao] = useState({
@@ -126,73 +114,27 @@ const Secoes: React.FC = () => {
   };
 
   const handleSubmitCadastrarSecao = async (): Promise<void> => {
+    const body: CreateSecaoRequest = {
+      descricao: formDataCadastrarSecao.descricao,
+      nome: formDataCadastrarSecao.nome,
+    };
+
     try {
-      const body: CreateSecaoRequest = {
-        descricao: formDataCadastrarSecao.descricao,
-        nome: formDataCadastrarSecao.nome,
-      };
-
       await createSecao(body);
-
+  
       listarSecoes();
-      setShowToastSuccess(true);
       setFormDataCadastrarSecao({
         nome: "",
         descricao: "",
       });
-    } catch (err) {
-      setShowToastError(true);
-    }
-  };
+		} catch(err) {
+			console.log(err)
+		}
 
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
+  };
 
   return (
     <section className={styles.secoes}>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="success"
-          onClose={() => setShowToastSuccess(false)}
-          show={showToastSuccess}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="danger"
-          onClose={() => setShowToastError(false)}
-          show={showToastError}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Não foi possível concluir a operação. Tente novamente.
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
       <Modal
         show={showGerenciar}
         onHide={handleCloseGerenciar}

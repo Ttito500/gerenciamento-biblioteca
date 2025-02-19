@@ -59,13 +59,12 @@ public class GenerosService {
         generoRepository.deleteAll(generosSemAssociacao);
     }
 
-    public Optional<Genero> findGeneroByGenero(String genero) {
-        Optional<Genero> generoOptional = generoRepository.findByGenero(genero);
-        if (generoOptional.isEmpty()) {
-            throw new NotFoundException("Genero " + genero + " não encontrado.");
+    public List<Genero> findGenerosByGeneroContaining(String genero) {
+        List<Genero> generos = generoRepository.findByGeneroContainingIgnoreCase(genero);
+        if (generos.isEmpty()) {
+            throw new NotFoundException("Nenhum gênero encontrado contendo: " + genero);
         }
-
-        return generoOptional;
+        return generos;
     }
 
     public List<Genero> findGenerosByLivroId(Integer id) {
