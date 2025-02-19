@@ -349,12 +349,22 @@ body {
   width: 60%;
 }
 
+.cronograma-titulo {
+  font-weight: bold;
+  color: black;
+  font-size: 1.3rem;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+
 .cronograma {
   background-color: white;
   border-collapse: collapse;
   width: 100%;
   border-radius: 10px;
   border: 2px solid #00A54F;
+  table-layout: fixed;
 }
 
 .cronograma th,

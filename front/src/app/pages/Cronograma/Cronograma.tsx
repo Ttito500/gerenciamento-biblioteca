@@ -19,15 +19,14 @@ const Cronograma: React.FC = () => {
 
             <div className="w-100">
 
-            </div>
+                <h2 className="cronograma-titulo">Cronograma de Alunos Monitores</h2>
 
-            <div className="w-100">
                 <Button
                     variant="info"
                     className="btn-orange"
                     onClick={handleShowCadastrar}
                 >
-                    <FontAwesomeIcon icon={faPlus} /> Adicionar Monitor ao Cronograma
+                    <FontAwesomeIcon icon={faPlus}/> Adicionar Monitor ao Cronograma
                 </Button>
 
                 <Modal
@@ -43,7 +42,7 @@ const Cronograma: React.FC = () => {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <CadastraAlunoMonitor />
+                        <CadastraAlunoMonitor/>
                     </Modal.Body>
 
                     <Modal.Footer>
@@ -51,7 +50,7 @@ const Cronograma: React.FC = () => {
                             Cancelar
                         </Button>
                         <Button variant="success">
-                            <FontAwesomeIcon icon={faCheck} /> Salvar
+                            <FontAwesomeIcon icon={faCheck}/> Salvar
                         </Button>
                     </Modal.Footer>
                 </Modal>
