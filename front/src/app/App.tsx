@@ -65,7 +65,7 @@ const App: React.FC = () => {
       case 4:
         await new Promise(resolve => setTimeout(resolve, 1200));
         try {
-          // await notificarAtrasos()
+          await notificarAtrasos()
         } catch(err) {
           console.log(err)
         }
