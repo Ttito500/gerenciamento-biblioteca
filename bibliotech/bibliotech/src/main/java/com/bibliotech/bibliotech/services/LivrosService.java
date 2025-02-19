@@ -8,6 +8,7 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
+import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Estanteprateleira;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -168,5 +171,9 @@ public class LivrosService {
 
     public Exemplar atualizarExemplar(Integer id, ExemplarRequestPatchDTO exemplarDTO) {
         return exemplaresService.atualizarExemplar(id, exemplarDTO);
+    }
+
+    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos(LocalDate dataInicio, LocalDate dataFim) {
+        return livroRepository.buscarLivrosMaisLidos(dataInicio, dataFim);
     }
 }
