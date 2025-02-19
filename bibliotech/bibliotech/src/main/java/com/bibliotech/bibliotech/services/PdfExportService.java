@@ -22,11 +22,6 @@ import java.util.List;
 
 @Service
 public class PdfExportService {
-    private final LivroRepository livroRepository;
-
-    public PdfExportService(LivroRepository livroRepository) {
-        this.livroRepository = livroRepository;
-    }
 
     public byte[] exportFrequenciaAlunosToPdf(List<FrequenciaAlunos> frequenciaAlunosList) throws DocumentException {
         Document document = new Document();
