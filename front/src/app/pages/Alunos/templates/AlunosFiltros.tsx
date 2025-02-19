@@ -171,7 +171,7 @@ const AlunosFiltros: React.FC<AlunosFitrosAlunoProps> = ({ formData, onChange, o
 
               <Col>
                 <div className="w-100 h-100 d-flex justify-content-end align-items-end">
-                  <Button type="submit" className="btn-orange" onClick={onSearch}>
+                  <Button className="btn-orange" onClick={onSearch}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} /> Filtrar
                   </Button>
                 </div>

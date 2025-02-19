@@ -2,6 +2,7 @@ export interface GetEmprestimoResponse {
   id: number
   alunoId: number
   exemplarId: number
+  numeroExemplar: number
   isbn: string
   tituloLivro: string
   nomeAluno: string
@@ -22,9 +23,15 @@ export interface CreateEmprestimoRequest {
   idUsuario: number
 }
 
+export interface ConcluirEmprestimoRequest {
+  observacao: string
+  extraviado: boolean
+}
+
 export interface GetEmprestimoPorAlunoResponse {
   id: number
   exemplarId: number
+  numeroExemplar: number
   tituloLivro: string
   isbn: string
   dataEmprestimo: string
@@ -36,6 +43,7 @@ export interface GetEmprestimoPorLivroResponse {
   id: number
   alunoId: number
   exemplarId: number
+  numeroExemplar: number
   nomeAluno: string
   serieAluno: number
   turmaAluno: string

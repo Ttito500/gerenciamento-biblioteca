@@ -12,7 +12,6 @@ import Accordion from "react-bootstrap/esm/Accordion";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import Spinner from "react-bootstrap/esm/Spinner";
 import Modal from "react-bootstrap/esm/Modal";
 import VerFrequencias from "./templates/VerFrequencias";
 import VerOcorrencias from "./templates/VerOcorrencias";
@@ -66,14 +65,6 @@ const Inicio: React.FC = () => {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Carregando...</span>
-      </Spinner>
-    );
-  }
 
   return (
     <section className="Exemplar">

@@ -43,7 +43,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onDelet
           </tr>
         </thead>
         <tbody>
-          {livros.map((livro) => (
+          {livros?.map((livro) => (
             <tr key={livro.id} className="tabela-tr">
               <td className="text-center">{livro.id}</td>
               <td>{livro.isbn}</td>

@@ -2,35 +2,37 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import { GetEmprestimoResponse } from "./../../../interfaces/emprestimo";
 
-const RenovarPrazo: React.FC = () => {
+interface RenovarEmprestimoProps {
+  emprestimo: GetEmprestimoResponse
+}
+
+const RenovarPrazo: React.FC<RenovarEmprestimoProps> = ({ emprestimo }) => {
   return (
     <Form>
       <Row>
         <Col xs={3}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Aluno: </strong>
+              <strong>Aluno: </strong>{emprestimo.nomeAluno}
             </Form.Label>
-            <Form.Text className="ms-2">Maria Oliveira</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={3}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Livro: </strong>
+              <strong>Livro: </strong>{emprestimo.tituloLivro}
             </Form.Label>
-            <Form.Text className="ms-2">A Hora da Estrela</Form.Text>
           </Form.Group>
         </Col>
 
         <Col xs={2}>
           <Form.Group className="mb-3">
             <Form.Label>
-              <strong>Exemplar: </strong>
+              <strong>Exemplar: </strong>{emprestimo.numeroExemplar}
             </Form.Label>
-            <Form.Text className="ms-2">3</Form.Text>
           </Form.Group>
         </Col>
       </Row>

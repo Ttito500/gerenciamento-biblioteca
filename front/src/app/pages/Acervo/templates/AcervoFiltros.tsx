@@ -100,7 +100,7 @@ const AcervoFiltros: React.FC = () => {
 
               <Col>
                 <div className="w-100 h-100 d-flex justify-content-end align-items-end">
-                  <Button type="submit" className="btn-orange">
+                  <Button className="btn-orange">
                     <FontAwesomeIcon icon={faMagnifyingGlass} /> Filtrar
                   </Button>
                 </div>

@@ -8,12 +8,9 @@ import Modal from 'react-bootstrap/Modal';
 import AcervoCadastrarLivro from "./templates/AcervoCadastrarLivro";
 import { createLivro, deleteLivro, getLivros, updateLivro } from './../../api/AcervoApi';
 import { CreateLivroRequest, GetLivroResponse, UpdateLivroRequest } from "./../../interfaces/acervo";
-import Spinner from "react-bootstrap/Spinner";
 import AcervoEditarLivro from "./templates/AcervoEditarLivro";
 import AcervoEmprestimosLivro from "./templates/AcervoEmprestimosLivro";
 import AcervoRealizarEmprestimo from "./templates/AcervoRealizarEmprestimo";
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
 import Exemplares from "./Exemplares/Exemplares";
 import EmprestimosLivro from "./templates/EmprestimosLivro";
 
@@ -43,11 +40,8 @@ const Acervo: React.FC = () => {
 	}
 
 	const [livros, setLivros] = useState<GetLivroResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 	const [editingLivro, setEditingLivro] = useState<GetLivroResponse | null>(null);
 	const [deletingLivro, setDeletingLivro] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(false);
-	const [showToastSuccess, setShowToastSuccess] = useState(false);
 
 	const [showExemplares, setShowExemplares] = useState(false);
 	const handleCloseExemplares = () => setShowExemplares(false);
@@ -62,16 +56,12 @@ const Acervo: React.FC = () => {
   }, []);
 
   const listarLivros = async (): Promise<void> => {
-		setLoading(true);
-
-    try {
-      const data = await getLivros();
-      setLivros(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+		try {
+			const data = await getLivros();
+			setLivros(data);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -90,32 +80,31 @@ const Acervo: React.FC = () => {
   };
 
   const handleSubmitCadastrarLivro = async (): Promise<void> => {
-    try {
-			const body: CreateLivroRequest = {
-				isbn: formDataCadastrarLivro.isbn,
-				autor: formDataCadastrarLivro.autor,
-				titulo: formDataCadastrarLivro.titulo,
-				observacao: "",
-				situacao: "disponivel",
-				idEstantePrateleira: {
-					id: 1,
-					estante: 3,
-					prateleira: 6
-				},
-				idSecao: {
-					id: 1,
-					nome: "literatura portuguesa"
-				}
+		const body: CreateLivroRequest = {
+			isbn: formDataCadastrarLivro.isbn,
+			autor: formDataCadastrarLivro.autor,
+			titulo: formDataCadastrarLivro.titulo,
+			observacao: "",
+			situacao: "disponivel",
+			idEstantePrateleira: {
+				id: 1,
+				estante: 3,
+				prateleira: 6
+			},
+			idSecao: {
+				id: 1,
+				nome: "literatura portuguesa"
 			}
-      await createLivro(body);
-
-      listarLivros();
-			setShowToastSuccess(true);
+		}
+		try {
+			await createLivro(body);
+			listarLivros();
 			setFormDataCadastrarLivro(null);
-      handleCloseCadastrar();
-    } catch (err) {
-			setShowToastError(true);
-    }
+			handleCloseCadastrar();
+		} catch(err) {
+			console.log(err)
+		}
+
   };
 
 	const [formDataEditarLivro, setFormDataEditarLivro] = useState({
@@ -130,78 +119,48 @@ const Acervo: React.FC = () => {
   };
 
   const handleSubmitEditarLivro = async (): Promise<void> => {
-    try {
-			const body: UpdateLivroRequest = {
-				isbn: formDataEditarLivro.isbn,
-				autor: formDataEditarLivro.autor,
-				titulo: formDataEditarLivro.titulo,
-				observacao: "",
-				situacao: "disponivel",
-				idEstantePrateleira: {
-					id: 1,
-					estante: 3,
-					prateleira: 6
-				},
-				idSecao: {
-					id: 1,
-					nome: "literatura portuguesa"
-				}
+		const body: UpdateLivroRequest = {
+			isbn: formDataEditarLivro.isbn,
+			autor: formDataEditarLivro.autor,
+			titulo: formDataEditarLivro.titulo,
+			observacao: "",
+			situacao: "disponivel",
+			idEstantePrateleira: {
+				id: 1,
+				estante: 3,
+				prateleira: 6
+			},
+			idSecao: {
+				id: 1,
+				nome: "literatura portuguesa"
 			}
-      await updateLivro(editingLivro.id, body);
+		}
 
-      listarLivros();
-			setShowToastSuccess(true);
+		try {
+			await updateLivro(editingLivro.id, body);
+			listarLivros();
 			setFormDataEditarLivro(null);
-      handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+			handleCloseEditar();
+		} catch(err) {
+			console.log(err)
+		}
+
   };
 
 	const handleSubmitExcluirLivro = async (): Promise<void> => {
-    try {
-      await deleteLivro(deletingLivro);
-
-      listarLivros();
-			setShowToastSuccess(true);
-      handleCloseExcluirLivro();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		try {
+			await deleteLivro(deletingLivro);
+	
+			listarLivros();
+			handleCloseExcluirLivro();
+		} catch(err) {
+			console.log(err)
+		}
   };
-
-	if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
 
 	return (
 		<section className="indentacaoPadrao">
 			<div className="indentacaoPadrao-acoes">
-
-				<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Operação realizada com sucesso!</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-
-				<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-        >
-					<Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-						<Toast.Header>
-							<strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-						</Toast.Header>
-					</Toast>
-				</ToastContainer>
-
 				<Button variant="info" className="btn-blue" onClick={handleShowCadastrar}>
 					<FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Livro
 				</Button>

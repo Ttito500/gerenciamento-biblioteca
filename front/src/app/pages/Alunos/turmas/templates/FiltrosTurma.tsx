@@ -106,7 +106,7 @@ const FiltrosTurma: React.FC<TurmaFitrosAlunoProps> = ({ formData, onChange, onS
                 </Col>
                 <Col>
                   <div className="w-100 h-100 d-flex justify-content-end align-items-end">
-                    <Button type="submit" className="btn-orange" onClick={onSearch}>
+                    <Button className="btn-orange" onClick={onSearch}>
                       <FontAwesomeIcon icon={faMagnifyingGlass} /> Filtrar
                     </Button>
                   </div>
