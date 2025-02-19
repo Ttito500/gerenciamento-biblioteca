@@ -14,7 +14,7 @@ public class UsuarioResponseMapper {
         UsuarioResponseDTO dto = new UsuarioResponseDTO();
         dto.setId(usuario.getId());
         dto.setNome(usuario.getNome());
-        dto.setCargo(usuario.getCargo());
+        dto.setCargo(usuario.getCargo().getCargo()); // primeiro get pega o enum e o segundo get pega o valor do enum
         dto.setAtivo(usuario.getAtivo());
         dto.setEmail(usuario.getEmail());
         dto.setDataUltimoAcesso(usuario.getDataUltimoAcesso());

@@ -1,5 +1,8 @@
 package com.bibliotech.bibliotech.controllers;
 
+import com.bibliotech.bibliotech.dtos.AutenticacaoDTO;
+import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
+import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.models.Usuario;
@@ -7,6 +10,8 @@ import com.bibliotech.bibliotech.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +25,14 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private UsuarioRequestMapper usuarioRequestMapper;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @PostMapping("")
-    public ResponseEntity<Usuario> criarUsuario (@Valid @RequestBody Usuario body, BindingResult result){
+    public ResponseEntity<Usuario> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
         if (result.hasErrors()) {
             throw new ValidationException(result);
         }
@@ -58,6 +69,14 @@ public class UsuarioController {
     public ResponseEntity<Void> inativarUsuario(@PathVariable Integer id) {
         usuarioService.inativarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid AutenticacaoDTO autenticacaoDTO) {
+        var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
+        var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
+
+        return ResponseEntity.ok().build();
     }
 
 }
