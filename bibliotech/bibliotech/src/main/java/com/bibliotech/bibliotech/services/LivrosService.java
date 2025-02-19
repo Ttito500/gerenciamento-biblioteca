@@ -84,7 +84,8 @@ public class LivrosService {
     public Page<Livro> getLivros(String titulo, String isbn, String autor, String genero, Boolean ativo, Pageable pageable){
         Page<Livro> livrosSalvos = livroRepository.filtrarLivros(titulo, isbn, autor, genero, ativo, pageable);
 
-        for (Livro livro : livrosSalvos.getContent()) {
+        for (Livro livro : livrosSalvos) {
+            livro.setExemplares(listarExemplaresDeUmLivro(livro.getId()));
             livro.setGeneros(generosService.findGenerosByLivroId(livro.getId()));
             livro.setAutores(autorService.findAutorByLivroId(livro.getId()));
         }
