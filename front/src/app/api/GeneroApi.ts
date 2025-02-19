@@ -3,7 +3,7 @@ import { GetGeneroResponse } from "../interfaces/genero";
 
 const API_URL = "http://localhost:8090/generos";
 
-export const getGeneroes = async (genero: string): Promise<GetGeneroResponse[]> => {
+export const getGeneros = async (genero: string): Promise<GetGeneroResponse[]> => {
   try {
     const url =`${API_URL}/buscar?genero=${genero}`;
     

@@ -19,6 +19,16 @@ export const getEstantePrateleiras = async (): Promise<GetEstantePrateleiraRespo
   }
 };
 
+export const getEstantePrateleirasPorSecao = async (idSecao: number): Promise<GetEstantePrateleiraResponse[]> => {
+  try {
+    const response = await api.get<GetEstantePrateleiraResponse[]>(`/estantesecao/${idSecao}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar estantes e prateleiras por seção:", error);
+    throw error;
+  }
+};
+
 export const createEstantePrateleira = async (
   secao: CreateEstantePrateleiraRequest
 ): Promise<CreateEstantePrateleiraResponse> => {
