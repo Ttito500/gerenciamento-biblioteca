@@ -22,6 +22,7 @@ public class LivroResponseGetMapper {
         livroResponseGetDTO.setId(livro.getId());
         livroResponseGetDTO.setTitulo(livro.getTitulo());
         livroResponseGetDTO.setIsbn(livro.getIsbn());
+        livroResponseGetDTO.setAtivo(livro.getAtivo());
         livroResponseGetDTO.setGeneros(generoMapper.toDTOList(livro.getGeneros()));
         livroResponseGetDTO.setAutores(autorMapper.toDTOList(livro.getAutores()));
         livroResponseGetDTO.setTotalExemplares(livro.getExemplares().size());
