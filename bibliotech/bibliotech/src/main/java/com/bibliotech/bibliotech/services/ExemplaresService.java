@@ -60,7 +60,7 @@ public class ExemplaresService {
     }
 
     public List<Exemplar> listarExemplaresDeUmLivro(Integer id) {
-        return exemplarRepository.findExemplarByLivro_Id(id);
+        return exemplarRepository.findExemplarByLivro_IdOrderByNumero(id);
     }
 
     public Exemplar findExemplarById(Integer id) {
