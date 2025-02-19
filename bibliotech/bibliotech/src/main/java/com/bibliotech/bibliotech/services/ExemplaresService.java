@@ -39,7 +39,8 @@ public class ExemplaresService {
         List<Exemplar> exemplaresSalvos = new ArrayList<>();
 
         int qtd_exemplares_ja_existente = 0;
-        if (!livroRepository.existsLivroByIsbn(livro.getIsbn())) {
+
+        if (livroCadastrado.getExemplares() != null) {
             qtd_exemplares_ja_existente = livroCadastrado.getExemplares().size();
         }
 
