@@ -21,6 +21,7 @@ api.interceptors.request.use(
 
 const successMethods = ['post', 'put', 'patch', 'delete'];
 const ignoredSuccessEndpoints = ['/auth/login', '/generos/sem-associacao', '/autor/sem-associacao', '/emprestimos/enviar-email'];
+const ignoredErrorEndpoints = ['?'];
 
 api.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -36,6 +37,12 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     NProgress.done();
     const errorMessage = (error.response.data as any).messages[0] || 'Não foi possível concluir a operação. Tente novamente.';
+    const shouldIgnore = ignoredErrorEndpoints.some(endpoint => error.response.config.url.includes(endpoint));
+
+    if(shouldIgnore) {
+      return Promise.reject(error);
+    }
+
     if (errorMessage) {
       showError(errorMessage);
     } else if (error.request) {
