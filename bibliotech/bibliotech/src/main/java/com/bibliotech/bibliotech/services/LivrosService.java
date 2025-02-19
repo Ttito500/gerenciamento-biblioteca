@@ -22,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -171,7 +173,7 @@ public class LivrosService {
         return exemplaresService.atualizarExemplar(id, exemplarDTO);
     }
 
-    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos() {
-        return livroRepository.buscarLivrosMaisLidos();
+    public List<LivrosMaisLidosDTO> obterLivrosMaisLidos(LocalDate dataInicio, LocalDate dataFim) {
+        return livroRepository.buscarLivrosMaisLidos(dataInicio, dataFim);
     }
 }

@@ -25,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -119,13 +122,25 @@ public class LivrosController {
     }
 
     @GetMapping("/relatorio/export/pdf")
-    public ResponseEntity<byte[]> exportLivrosMaisEmprestadosPdf() throws DocumentException {
-        List<LivrosMaisLidosDTO> livrosMaisEmprestados = livrosService.obterLivrosMaisLidos();
-        byte[] pdfBytes = pdfExportService.exportLivrosMaisLidos(livrosMaisEmprestados);
+    public ResponseEntity<byte[]> exportLivrosMaisLidosPdf(
+            @RequestParam(value = "dataInicio") LocalDate dataInicio,
+            @RequestParam(value = "dataFim") LocalDate dataFim,
+            @RequestParam(value = "qtdMaxLivros") Integer qtdMaxLivros) throws DocumentException {
+        List<LivrosMaisLidosDTO> livrosMaisLidos = livrosService.obterLivrosMaisLidos(dataInicio, dataFim);
+
+        int quantidadeARetornar = Math.min(qtdMaxLivros, livrosMaisLidos.size());
+
+        List<LivrosMaisLidosDTO> livrosSelecionados = new ArrayList<>();
+
+        for (int i = 0; i < quantidadeARetornar; i++) {
+            livrosSelecionados.add(livrosMaisLidos.get(i));
+        }
+
+        byte[] pdfBytes = pdfExportService.exportLivrosMaisLidos(livrosSelecionados);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "livros-mais-emprestados.pdf");
+        headers.setContentDispositionFormData("attachment", "Relatório de Livros mais Lidos.pdf");
 
         return ResponseEntity.ok()
                 .headers(headers)
