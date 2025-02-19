@@ -21,7 +21,9 @@ import com.bibliotech.bibliotech.utils.FormatarData;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -183,46 +185,63 @@ public class EmprestimosService {
         return "Prazo renovado com sucesso.";
     }
 
-    public Page<EmprestimoResponseDTO> consultarEmprestimos(String nomeAluno, String tituloLivro, String isbn, String situacao, String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor, LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
+    public Page<EmprestimoResponseDTO> consultarEmprestimos(
+            String nomeAluno, String tituloLivro, String isbn, String situacao,
+            String nomeRealizadoPor, LocalDate dataEmprestimo, String nomeConcluidoPor,
+            LocalDate dataPrazo, LocalDate dataConclusao, Pageable pageable) {
 
         Specification<Emprestimo> spec = emprestimoSpecification.buildSpecification(
                 nomeAluno, tituloLivro, isbn, situacao, nomeRealizadoPor,
                 dataEmprestimo, nomeConcluidoPor, dataPrazo, dataConclusao);
 
-        Page<Emprestimo> emprestimos = emprestimoRepository.findAll(spec, pageable);
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "dataEmprestimo")
+        );
+
+        Page<Emprestimo> emprestimos = emprestimoRepository.findAll(spec, sortedPageable);
 
         return emprestimos.map(emprestimoResponseMapper::toDto);
     }
 
     public Page<EmprestimoResponseDTOAluno> consultarEmprestimosPorAlunoEPeriodo(
-            Integer idAluno,
-            LocalDate dataEmprestimoInicio,
-            LocalDate dataEmprestimoFim,
-            Pageable pageable
-    ) {
+            Integer idAluno, LocalDate dataEmprestimoInicio, LocalDate dataEmprestimoFim, Pageable pageable) {
+
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "dataEmprestimo")
+        );
+
         Page<Emprestimo> emprestimos;
 
         if (dataEmprestimoInicio != null && dataEmprestimoFim != null) {
-            emprestimos = emprestimoRepository.findByAlunoIdAndDataEmprestimoBetween(idAluno, dataEmprestimoInicio, dataEmprestimoFim, pageable);
+            emprestimos = emprestimoRepository.findByAlunoIdAndDataEmprestimoBetween(
+                    idAluno, dataEmprestimoInicio, dataEmprestimoFim, sortedPageable);
         } else {
-            emprestimos = emprestimoRepository.findByAlunoId(idAluno, pageable);
+            emprestimos = emprestimoRepository.findByAlunoId(idAluno, sortedPageable);
         }
 
         return emprestimos.map(emprestimoResponseMapper::toDTOAluno);
     }
 
     public Page<EmprestimoResponseDTOLivro> consultarEmprestimosPorLivroEPeriodo(
-            Integer idLivro,
-            LocalDate dataEmprestimoInicio,
-            LocalDate dataEmprestimoFim,
-            Pageable pageable
-    ) {
+            Integer idLivro, LocalDate dataEmprestimoInicio, LocalDate dataEmprestimoFim, Pageable pageable) {
+
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "dataEmprestimo")
+        );
+
         Page<Emprestimo> emprestimos;
 
         if (dataEmprestimoInicio != null && dataEmprestimoFim != null) {
-            emprestimos = emprestimoRepository.findByExemplar_LivroIdAndDataEmprestimoBetween(idLivro, dataEmprestimoInicio, dataEmprestimoFim, pageable);
+            emprestimos = emprestimoRepository.findByExemplar_LivroIdAndDataEmprestimoBetween(
+                    idLivro, dataEmprestimoInicio, dataEmprestimoFim, sortedPageable);
         } else {
-            emprestimos = emprestimoRepository.findByExemplar_LivroId(idLivro, pageable);
+            emprestimos = emprestimoRepository.findByExemplar_LivroId(idLivro, sortedPageable);
         }
 
         return emprestimos.map(emprestimoResponseMapper::toDTOLivro);

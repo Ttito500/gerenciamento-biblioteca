@@ -12,6 +12,8 @@ public class EmprestimoResponseDTO {
     private Integer alunoId;
     private Integer exemplarId;
     private Integer numeroExemplar;
+    private String estante;
+    private Integer prateleira;
     private String isbn;
     private String tituloLivro;
     private String nomeAluno;
