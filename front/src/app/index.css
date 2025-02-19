@@ -364,11 +364,17 @@ body {
   border: 2px solid #00A54F;
   background-color: white !important;
   --bs-table-bg-type: transparent !important;
+  font-weight: bold;
 }
 
 .cronograma th {
   border-bottom: 2px solid #00A54F;
   color: #00A54F;
+  font-size: 1.3rem;
+}
+
+.cronograma td {
+  color: #6C757D;
 }
 
 .cronograma th:first-child,
