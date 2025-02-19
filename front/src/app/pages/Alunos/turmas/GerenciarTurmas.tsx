@@ -1,6 +1,4 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import ToastContainer from "react-bootstrap/esm/ToastContainer";
-import Toast from "react-bootstrap/esm/Toast";
 import Button from "react-bootstrap/esm/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -11,15 +9,10 @@ import CadastrarTurma from "./templates/CadastrarTurma";
 import InativarTurma from "./templates/InativarTurma";
 import AtivarTurma from "./templates/AtivarTurma";
 import EditarTurma from "./templates/EditarTurma";
-import Spinner from "react-bootstrap/esm/Spinner";
 import { GetTurmaResponse, TurmaFiltros, CreateTurmaRequest, UpdateTurmaRequest } from "./../../../interfaces/turma";
 import { ativarTurma, createTurma, getTurmas, inativarTurma, updateTurma } from "./../../../api/TurmaApi";
 
 const GerenciarTurmas: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
-
   const [showCadastrar, setShowCadastrar] = useState(false);
   const handleCloseCadastrar = () => setShowCadastrar(false);
   const handleShowCadastrar = () => setShowCadastrar(true);
@@ -97,138 +90,91 @@ const GerenciarTurmas: React.FC = () => {
   };
 
   const handleSubmitCadastrarTurma = async (): Promise<void> => {
-    try {
-      const body: CreateTurmaRequest = {
-        serie: formDataCadastrarTurma.serie,
-        turma: formDataCadastrarTurma.turma,
-        anoDeEntrada: formDataCadastrarTurma.anoDeEntrada,
-      }
-      await createTurma(body);
+    const body: CreateTurmaRequest = {
+      serie: formDataCadastrarTurma.serie,
+      turma: formDataCadastrarTurma.turma,
+      anoDeEntrada: formDataCadastrarTurma.anoDeEntrada,
+    }
 
+    try {
+      await createTurma(body);
       listarTurmas();
-      setShowToastSuccess(true);
       setFormDataCadastrarTurma({
         serie: null as number,
         turma: '',
         anoDeEntrada: null as number,
       });
       handleCloseCadastrar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   const handleSubmitEditarTurma = async (): Promise<void> => {
+    const body: UpdateTurmaRequest = {
+      serie: formDataEditarTurma.serie,
+      turma: formDataEditarTurma.turma,
+      anoDeEntrada: formDataEditarTurma.anoDeEntrada,
+    }
+
     try {
-      const body: UpdateTurmaRequest = {
-        serie: formDataEditarTurma.serie,
-        turma: formDataEditarTurma.turma,
-        anoDeEntrada: formDataEditarTurma.anoDeEntrada,
-      }
-
       await updateTurma(editingTurma.id, body);
-
+  
       listarTurmas();
-      setShowToastSuccess(true);
       setFormDataEditarTurma({
         serie: null as number,
         turma: '',
         anoDeEntrada: null as number
       });
       handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
+
   };
 
   const handleSubmitActiveInactiveTurma = async (ativo: boolean): Promise<void> => {
-    try {
-
-      if(ativo) {
+    if(ativo) {
+      try {
         await inativarTurma(inactivatingTurma);
         handleCloseInativar();
-      } else {
+      } catch(err) {
+        console.log(err)
+      }
+    } else {
+      try {
         await ativarTurma(activatingTurma);
         handleCloseAtivar();
+      } catch(err) {
+        console.log(err)
       }
-
-      listarTurmas();
-      setShowToastSuccess(true);
-      
-    } catch (err) {
-      setShowToastError(true);
     }
+
+    listarTurmas();
   };
 
   const listarTurmas = async (): Promise<void> => {
-    setLoading(true);
+    const filtros: TurmaFiltros = {
+      serie: formDataFiltrar.serie,
+      turma: formDataFiltrar.turma,
+      anoDeEntrada: formDataFiltrar.anoDeEntrada,
+      ativo: formDataFiltrar.ativo
+    }
 
     try {
-      const filtros: TurmaFiltros = {
-        serie: formDataFiltrar.serie,
-        turma: formDataFiltrar.turma,
-        anoDeEntrada: formDataFiltrar.anoDeEntrada,
-        ativo: formDataFiltrar.ativo
-      }
       const data = await getTurmas(filtros);
       setTurmas(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
   useEffect(() => {
     listarTurmas();
   }, []);
 
-  if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
-
   return (
     <>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="success"
-          onClose={() => setShowToastSuccess(false)}
-          show={showToastSuccess}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Operação realizada com sucesso!
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast
-          bg="danger"
-          onClose={() => setShowToastError(false)}
-          show={showToastError}
-          delay={3000}
-          autohide
-        >
-          <Toast.Header>
-            <strong className="me-auto">
-              Não foi possível concluir a operação. Tente novamente.
-            </strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-      
       <Modal
         show={showEditar}
         onHide={handleCloseEditar}

@@ -7,7 +7,10 @@ import com.bibliotech.bibliotech.dtos.request.ExemplarRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPatchDTO;
 import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.LivroResponseGetDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseGetMapper;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
+import com.bibliotech.bibliotech.models.Livro;
 import com.bibliotech.bibliotech.services.LivrosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,12 +28,14 @@ public class LivrosController {
 
     private final LivrosService livrosService;
     private final LivroResponseMapper livroResponseMapper;
+    private final LivroResponseGetMapper livroResponseGetMapper;
     private final ExemplarMapper exemplarMapper;
 
     @Autowired
-    public LivrosController(LivrosService livrosService, LivroResponseMapper livroResponseMapper, ExemplarMapper exemplarMapper) {
+    public LivrosController(LivrosService livrosService, LivroResponseMapper livroResponseMapper, ExemplarMapper exemplarMapper, LivroResponseGetMapper livroResponseGetMapper) {
         this.livrosService = livrosService;
         this.livroResponseMapper = livroResponseMapper;
+        this.livroResponseGetMapper = livroResponseGetMapper;
         this.exemplarMapper = exemplarMapper;
     }
 
@@ -49,7 +54,7 @@ public class LivrosController {
     }
 
     @GetMapping("/filtrar")
-    public ResponseEntity<Page<LivroResponseDTO>> getLivros(
+    public ResponseEntity<Page<LivroResponseGetDTO>> getLivros(
             @RequestParam(value = "titulo", required = false) String titulo,
             @RequestParam(value = "isbn", required = false) String isbn,
             @RequestParam(value = "autor", required = false) String autor,
@@ -57,10 +62,11 @@ public class LivrosController {
             @RequestParam(value = "ativo", required = false) Boolean ativo,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
-        Page<LivroResponseDTO> livroResponseDTOPage = livrosService.getLivros(titulo, isbn, autor, genero, ativo, pageable)
-                .map(livroResponseMapper::toDTO);
+        Page<Livro> livros = livrosService.getLivros(titulo, isbn, autor, genero, ativo, pageable);
 
-        return ResponseEntity.ok(livroResponseDTOPage);
+        Page<LivroResponseGetDTO> livroResponseGetDTO = livros.map(livroResponseGetMapper::toDTO);
+
+        return ResponseEntity.ok(livroResponseGetDTO);
     }
 
     @GetMapping("/{id}")

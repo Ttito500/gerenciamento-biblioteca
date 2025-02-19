@@ -15,6 +15,8 @@ import { deleteAutoresSemAssociacao } from "./api/AutorApi";
 import { deleteGeneroesSemAssociacao } from "./api/GeneroApi";
 import { notificarAtrasos } from "./api/EmprestimoApi";
 import Cronograma from "./pages/Cronograma/Cronograma";
+import LoadingBar from "./shared/components/loading-bar/LoadingBar";
+import ErrorToast from "./shared/components/error-toast/ErrorToast";
 
 const App: React.FC = () => {
 
@@ -54,12 +56,20 @@ const App: React.FC = () => {
         break;
       case 3:
         await new Promise(resolve => setTimeout(resolve, 1200));
-        await deleteAutoresSemAssociacao();
-        await deleteGeneroesSemAssociacao()
+        try {
+          await deleteAutoresSemAssociacao();
+          await deleteGeneroesSemAssociacao()
+        } catch(err) {
+          console.log(err)
+        }
         break;
       case 4:
         await new Promise(resolve => setTimeout(resolve, 1200));
-        // await notificarAtrasos()
+        try {
+          await notificarAtrasos()
+        } catch(err) {
+          console.log(err)
+        }
         break;
       default:
         break;
@@ -116,6 +126,9 @@ const App: React.FC = () => {
   }
   
   return (
+    <>
+      <LoadingBar />
+      <ErrorToast />
       <Router>
         <div className="w-100">
           <Routes>
@@ -132,6 +145,8 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </Router>
+  
+    </>
   );
 };
 

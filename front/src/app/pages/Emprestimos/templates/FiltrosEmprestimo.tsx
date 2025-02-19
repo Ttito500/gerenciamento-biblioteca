@@ -109,6 +109,7 @@ const FiltrosEmprestimo: React.FC<FiltrosEmprestimoProps> = ({ formData, onChang
                     <option value="entregue">Entregue</option>
                     <option value="pendente">Pendente</option>
                     <option value="atrasado">Atrasado</option>
+                    <option value="cancelado">Cancelado</option>
                     <option value="extraviado">Extraviado</option>
                   </Form.Select>
                 </Form.Group>
@@ -223,7 +224,7 @@ const FiltrosEmprestimo: React.FC<FiltrosEmprestimoProps> = ({ formData, onChang
             <Row>
               <Col>
                 <div className="w-100 h-100 d-flex justify-content-end align-items-end">
-                  <Button type="submit" className="btn-orange" onClick={onSearch}>
+                  <Button className="btn-orange" onClick={onSearch}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} /> Filtrar
                   </Button>
                 </div>

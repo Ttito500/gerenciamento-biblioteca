@@ -19,4 +19,6 @@ public interface AutorRepository extends JpaRepository<Autor, Integer> {
 
     @Query("SELECT g FROM Autor g JOIN Livroautor lg ON g.id = lg.autor.id WHERE lg.livro.id = :livroId")
     List<Autor> findAutoresByLivroId(@Param("livroId") Integer livroId);
+
+    List<Autor> findByNomeContainingIgnoreCase(String nome);
 }

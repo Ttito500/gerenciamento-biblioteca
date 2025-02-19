@@ -128,6 +128,20 @@ body {
   width: auto;
 }
 
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: #29d;
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+}
+
 .tabela tr {
   font-size: 14px;
 }
@@ -349,5 +363,193 @@ body {
   width: 60%;
 }
 
+.cronograma-titulo {
+  font-weight: bold;
+  color: black;
+  font-size: 1.3rem;
+  text-align: left;
+  margin-bottom: 15px;
+}
 
-{/*preparando arquivos para o conflito*/}
+
+.cronograma {
+  background-color: white;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #00A54F;
+  table-layout: fixed;
+}
+
+.cronograma th,
+.cronograma td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #00A54F;
+  background-color: white !important;
+  --bs-table-bg-type: transparent !important;
+  font-weight: bold;
+}
+
+.cronograma th {
+  border-bottom: 2px solid #00A54F;
+  color: #00A54F;
+  font-size: 1.3rem;
+}
+
+.cronograma td {
+  color: #6C757D;
+}
+
+.cronograma th:first-child,
+.cronograma td:first-child {
+  border-left: none;
+}
+
+.cronograma th:last-child,
+.cronograma td:last-child {
+  border-right: none;
+}
+
+.balao-monitor {
+  background-color: #D1E7DD;
+  color: black;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.balao-monitor .texto {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.balao-monitor .icone-lixo {
+  color: #DC3545;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.ReactTags__tags {
+  position: relative;
+}
+
+.ReactTags__clearAll {
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px;
+  background: #f88d8d;
+  color: #fff;
+  border: none;
+}
+
+.ReactTags__tagInput {
+  border-radius: 2px;
+  width: 100%;
+  display: inline-block;
+}
+
+.ReactTags__tagInput input.ReactTags__tagInputField {
+  height: 38px;
+  margin: 0;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #eee;
+  min-width: 180px;
+  width: 100%;
+}
+
+.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+  height: 32px;
+  margin: 0;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #eee;
+  min-width: 180px;
+}
+
+.ReactTags__editInput {
+  border-radius: 1px;
+}
+
+.ReactTags__editTagInput {
+  display: inline-flex;
+}
+
+.ReactTags__remove {
+  display: flex;
+}
+
+.ReactTags__selected {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ReactTags__selected span.ReactTags__tag {
+  border: 1px solid #ddd;
+  background: #63bcfd;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px;
+  margin: 0 5px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.ReactTags__suggestions {
+  position: absolute;
+}
+
+.ReactTags__suggestions ul {
+  list-style-type: none;
+  box-shadow: 0.05em 0.01em 0.5em rgba(0, 0, 0, 0.2);
+  background: white;
+  width: 200px;
+  padding: 5px 0;
+}
+
+.ReactTags__suggestions li {
+  padding: 5px 10px;
+  margin: 0;
+  text-align: left;
+}
+
+.ReactTags__suggestions li mark {
+  text-decoration: underline;
+  background: none;
+}
+
+.ReactTags__suggestions li.ReactTags__activeSuggestion {
+  background: #4dabf7;
+  color: #fff;
+  cursor: pointer;
+}
+
+.ReactTags__suggestions li.ReactTags__activeSuggestion span mark {
+  color: #fff;
+}
+
+.ReactTags__remove {
+  border: none;
+  cursor: pointer;
+  background: none;
+  color: #fff;
+  padding: 5px;
+}
+
+.ReactTags__error {
+  color: #e03131;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ReactTags__error svg {
+  padding: 0 5px;
+}

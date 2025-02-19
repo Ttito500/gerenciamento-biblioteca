@@ -1,9 +1,7 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 
 interface EditarTurmaProps {
   formData: {
@@ -16,34 +14,8 @@ interface EditarTurmaProps {
 
 const EditarTurma: React.FC<EditarTurmaProps> = ({ formData, onChange }) => {
 
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
-
   return (
     <>
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
       <Form>
         <Row>
           <Col xs={3}>

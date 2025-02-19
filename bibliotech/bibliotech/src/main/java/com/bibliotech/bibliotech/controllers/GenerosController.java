@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/generos")
@@ -16,8 +16,8 @@ public class GenerosController {
     private GenerosService generosService;
 
     @GetMapping("/buscar")
-    public ResponseEntity<Optional<Genero>> buscarGeneroPorGenero(@RequestParam String genero) {
-        return ResponseEntity.ok(generosService.findGeneroByGenero(genero));
+    public ResponseEntity<List<Genero>> buscarGeneroPorGenero(@RequestParam String genero) {
+        return ResponseEntity.ok(generosService.findGenerosByGeneroContaining(genero));
     }
 
     @DeleteMapping("/sem-associacao")

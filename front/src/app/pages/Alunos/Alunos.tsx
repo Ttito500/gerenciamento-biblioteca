@@ -1,21 +1,18 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPlus, faCheck, faUsersRectangle, faClipboardList} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faCheck, faUsersRectangle, faClipboardList } from '@fortawesome/free-solid-svg-icons';
 import AlunosListagem from './templates/AlunosListagem';
 import AlunosFiltros from "./templates/AlunosFiltros";
 import Modal from 'react-bootstrap/Modal';
 import AlunosCadastrarAluno from "./templates/AlunosCadastrarAluno";
 import { AlunoFiltros, CreateAlunoRequest, GetAlunoResponse, UpdateAlunoRequest } from "./../../interfaces/aluno";
 import { createAluno, inativarAluno, getAlunos, updateAluno, ativarAluno } from "../../api/AlunosApi";
-import Spinner from "react-bootstrap/Spinner";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import Toast from "react-bootstrap/Toast";
 import AlunosEditarAluno from "./templates/AlunosEditarAluno";
-import AlunosEmprestimosAluno from "./templates/AlunosEmprestimosAluno";
 import GerenciarTurmas from "./turmas/GerenciarTurmas";
-import EmprestimosLivro from "../Acervo/templates/EmprestimosLivro";
 import EmprestimosAluno from "./templates/EmprestimosAluno";
+import Pagination from "react-bootstrap/esm/Pagination";
+import { ResponsePagination } from "./../../interfaces/pagination";
 
 const Alunos: React.FC = () => {
 
@@ -25,8 +22,10 @@ const Alunos: React.FC = () => {
 
   const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
   const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
-  const handleShowVerEmprestimos = () => setShowVerEmprestimos(true);
-
+  const handleShowVerEmprestimos = (aluno: GetAlunoResponse) => {
+    setEditingAluno(aluno);
+    setShowVerEmprestimos(true);
+  }
 
 	const [showEditar, setShowEditar] = useState(false);
   const handleCloseEditar = () => setShowEditar(false);
@@ -42,10 +41,6 @@ const Alunos: React.FC = () => {
 		setShowEditar(true);
 	}
 
-  const [showEmprestimos, setShowEmprestimos] = useState(false);
-  const handleCloseEmprestimos = () => setShowEmprestimos(false);
-  const handleShowEmprestimos = () => setShowEmprestimos(true);
-
   const [showActiveAluno, setShowActiveAluno] = useState(false);
   const handleCloseActiveAluno = () => setShowActiveAluno(false);
   const handleShowActiveAluno = (id: number) => {
@@ -60,36 +55,46 @@ const Alunos: React.FC = () => {
 		setShowInactiveAluno(true);
 	}
 
-	const [alunos, setAlunos] = useState<GetAlunoResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+	const [alunos, setAlunos] = useState<ResponsePagination<GetAlunoResponse>>();
 	const [editingAluno, setEditingAluno] = useState<GetAlunoResponse | null>(null);
 	const [activatingAluno, setActivatingAluno] = useState<number | null>(null);
 	const [inactivatingAluno, setInactivatingAluno] = useState<number | null>(null);
-	const [showToastError, setShowToastError] = useState(false);
-	const [showToastSuccess, setShowToastSuccess] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const sizePage = 10;
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+  
+  useEffect(() => {
+    listarAlunos();
+  }, [currentPage]);
 
   useEffect(() => {
     listarAlunos();
   }, []);
 
+
   const listarAlunos = async (): Promise<void> => {
-		setLoading(true);
+    const filtros: AlunoFiltros = {
+      nome: formDataFiltrar.nome,
+      situacao: formDataFiltrar.situacao,
+      serie: formDataFiltrar.serie,
+      turma: formDataFiltrar.turma,
+      ativo: formDataFiltrar.ativo,
+      page: (currentPage - 1),
+      size: sizePage
+    }
 
     try {
-      const filtros: AlunoFiltros = {
-        nome: formDataFiltrar.nome,
-        situacao: formDataFiltrar.situacao,
-        serie: formDataFiltrar.serie,
-        turma: formDataFiltrar.turma,
-        ativo: formDataFiltrar.ativo
-      }
       const data = await getAlunos(filtros);
       setAlunos(data);
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
+      setTotalPages(data.totalPages);
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [showCadastrar, setShowCadastrar] = useState(false);
@@ -129,27 +134,27 @@ const Alunos: React.FC = () => {
   };
 
   const handleSubmitCadastrarAluno = async (): Promise<void> => {
-    try {
-			const body: CreateAlunoRequest = {
-				email: formDataCadastrarAluno.email,
-				idTurma: Number(formDataCadastrarAluno.idTurma),
-				nome: formDataCadastrarAluno.nome,
-				telefone: formDataCadastrarAluno.telefone
-			}
-      await createAluno(body);
+    const body: CreateAlunoRequest = {
+      email: formDataCadastrarAluno.email,
+      idTurma: Number(formDataCadastrarAluno.idTurma),
+      nome: formDataCadastrarAluno.nome,
+      telefone: formDataCadastrarAluno.telefone
+    }
 
+    try {
+      await createAluno(body);
+  
       listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataCadastrarAluno({
+      setFormDataCadastrarAluno({
         idTurma: null as number,
         nome: '',
         telefone: '',
         email: '',
       });
       handleCloseCadastrar();
-    } catch (err) {
-			setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const [formDataEditarAluno, setFormDataEditarAluno] = useState({
@@ -166,19 +171,19 @@ const Alunos: React.FC = () => {
   };
 
   const handleSubmitEditarAluno = async (): Promise<void> => {
-    try {
-			const body: UpdateAlunoRequest = {
-				email: formDataEditarAluno.email,
-				situacao: formDataEditarAluno.situacao,
-				idTurma: Number(formDataEditarAluno.idTurma),
-				nome: formDataEditarAluno.nome,
-				telefone: formDataEditarAluno.telefone
-			}
-      await updateAluno(editingAluno.id, body);
+    const body: UpdateAlunoRequest = {
+      email: formDataEditarAluno.email,
+      situacao: formDataEditarAluno.situacao,
+      idTurma: Number(formDataEditarAluno.idTurma),
+      nome: formDataEditarAluno.nome,
+      telefone: formDataEditarAluno.telefone
+    }
 
+    try {
+      await updateAluno(editingAluno.id, body);
+  
       listarAlunos();
-			setShowToastSuccess(true);
-			setFormDataEditarAluno({
+      setFormDataEditarAluno({
         idTurma: null as number,
         nome: '',
         telefone: '',
@@ -186,60 +191,33 @@ const Alunos: React.FC = () => {
         situacao: ''
       });
       handleCloseEditar();
-    } catch (err) {
-      setShowToastError(true);
-    }
+		} catch(err) {
+			console.log(err)
+		}
   };
 
 	const handleSubmitActiveInactiveAluno = async (ativo: boolean): Promise<void> => {
-    try {
-
-      if(ativo) {
+    if(ativo) {
+      try {
         await inativarAluno(inactivatingAluno);
         handleCloseInactiveAluno();
-      } else {
+      } catch(err) {
+        console.log(err)
+      }
+    } else {
+      try {
         await ativarAluno(activatingAluno);
         handleCloseActiveAluno();
+      } catch(err) {
+        console.log(err)
       }
-
-      listarAlunos();
-			setShowToastSuccess(true);
-      
-    } catch (err) {
-      setShowToastError(true);
     }
-  };
 
-	if (loading) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Carregando...</span></Spinner>;
-  }
+    listarAlunos();
+  };
 
 	return (
 		<section className="alunos">
-			<ToastContainer
-          className="p-3"
-          position="bottom-center"
-          style={{ zIndex: 10 }}
-      >
-        <Toast bg="success" onClose={() => setShowToastSuccess(false)} show={showToastSuccess} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Operação realizada com sucesso!</strong>
-          </Toast.Header>
-        </Toast>
-			</ToastContainer>
-
-      <ToastContainer
-        className="p-3"
-        position="bottom-center"
-        style={{ zIndex: 10 }}
-      >
-        <Toast bg="danger" onClose={() => setShowToastError(false)} show={showToastError} delay={3000} autohide>
-          <Toast.Header>
-            <strong className="me-auto">Não foi possível concluir a operação. Tente novamente.</strong>
-          </Toast.Header>
-        </Toast>
-      </ToastContainer>
-				
 			<Modal
         show={showEditar}
         onHide={handleCloseEditar}
@@ -263,27 +241,6 @@ const Alunos: React.FC = () => {
           <Button variant="success" onClick={handleSubmitEditarAluno}>
             <FontAwesomeIcon icon={faCheck} /> Salvar
           </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={showEmprestimos}
-        onHide={handleCloseEmprestimos}
-        size="xl"
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Empréstimos do Aluno</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <AlunosEmprestimosAluno />
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="info" className="btn-blue" onClick={handleCloseEmprestimos}>Ok</Button>
         </Modal.Footer>
       </Modal>
 
@@ -383,35 +340,31 @@ const Alunos: React.FC = () => {
           </Modal.Footer>
         </Modal>
 
-                {/*botap para teste(LEMBRAR DE APAGAR)*/}
-        <Button variant="info" className="btn-blue" onClick={handleShowVerEmprestimos	}>
-            <FontAwesomeIcon icon={faClipboardList} />
-        </Button>
+        <Modal
+          show={showVerEmprestimos}
+          onHide={handleCloseVerEmprestimos}
+          size="xl"
+          backdrop="static"
+          centered
+          keyboard={false}
+        >
 
-                <Modal
-                    show={showVerEmprestimos}
-                    onHide={handleCloseVerEmprestimos}
-                    size="xl"
-                    backdrop="static"
-                    centered
-                    keyboard={false}
-                >
+          <Modal.Header closeButton>
+            {editingAluno && 
+              <Modal.Title>
+                Emprestimos do Aluno: <span className="custom-variavel">{editingAluno.nome} - {editingAluno.turma.serie}ª{editingAluno.turma.turma}</span>
+              </Modal.Title>         
+            }
+          </Modal.Header>
 
-                    <Modal.Header closeButton>
-                        <Modal.Title>Emprestimos do Aluno: <span className="custom-variavel">Nome do Aluno - SªT</span></Modal.Title>
-                    </Modal.Header>
+          <Modal.Body>
+            <EmprestimosAluno aluno={editingAluno}/>
+          </Modal.Body>
 
-                    <Modal.Body>
-                        <EmprestimosAluno/>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
-
-                    </Modal.Footer>
-                </Modal>
-
-
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseVerEmprestimos}>Ok</Button>
+          </Modal.Footer>
+        </Modal>
 			</div>
 
 			<div className="w-100">
@@ -424,8 +377,20 @@ const Alunos: React.FC = () => {
 					onEdit={handleShowEditar} 
 					onActive={handleShowActiveAluno} 
           onInactive={handleShowInactiveAluno}
-					onEmprestimos={handleShowEmprestimos} 
+					onEmprestimos={handleShowVerEmprestimos} 
 				/>
+
+        <Pagination>
+          <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+          <Pagination.Prev onClick={() => handlePageChange((currentPage - 1))} disabled={currentPage === 1} />
+          <Pagination.Item
+            active={true}
+          >
+            {currentPage}
+          </Pagination.Item>
+          <Pagination.Next onClick={() => handlePageChange((currentPage + 1))} disabled={currentPage === totalPages} />
+          <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
+        </Pagination>
 			</div>
 		</section>
 	);
