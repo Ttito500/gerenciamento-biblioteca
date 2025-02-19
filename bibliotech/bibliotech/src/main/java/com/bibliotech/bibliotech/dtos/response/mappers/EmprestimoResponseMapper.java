@@ -12,15 +12,11 @@ public class EmprestimoResponseMapper {
     public EmprestimoResponseDTO toDto(Emprestimo emprestimo) {
         EmprestimoResponseDTO dto = new EmprestimoResponseDTO();
 
-        if (emprestimo.getConcluidoPor() != null && emprestimo.getConcluidoPor().getNome() != null) {
-            dto.setConcluidoPor(emprestimo.getConcluidoPor().getNome());
-        } else {
-            dto.setConcluidoPor("Não concluído");
-        }
-
         dto.setId(emprestimo.getId());
         dto.setAlunoId(emprestimo.getAluno().getId());
         dto.setExemplarId(emprestimo.getExemplar().getId());
+        dto.setEstante(emprestimo.getExemplar().getEstanteprateleira().getEstante());
+        dto.setPrateleira(emprestimo.getExemplar().getEstanteprateleira().getPrateleira());
         dto.setIsbn(emprestimo.getExemplar().getLivro().getIsbn());
         dto.setTituloLivro(emprestimo.getExemplar().getLivro().getTitulo());
         dto.setNumeroExemplar(emprestimo.getExemplar().getNumero());
