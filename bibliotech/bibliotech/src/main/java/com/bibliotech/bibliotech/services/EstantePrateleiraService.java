@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,12 +38,11 @@ public class EstantePrateleiraService {
         if(ep.getEstante().length() > 1){
             throw new ValidationException("A estante só pode conter um caractere.");
         }
-        if(estantePrateleiraRepository.existsByEstante(ep.getEstante().toUpperCase())){
-            throw new ValidationException("Ja existe Estante-Prateleira com essa estante");
+
+        ep.setEstante(ep.getEstante().trim().toUpperCase());
+        if (estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).isPresent()){
+            throw new ValidationException("Já existe uma Estante-Prateleira com esses valores.");
         }
-
-
-        ep.setEstante(ep.getEstante().toUpperCase());
 
         return estantePrateleiraRepository.save(ep);
     }
@@ -75,10 +75,10 @@ public class EstantePrateleiraService {
             throw new ValidationException("A estante só pode conter um caractere.");
         }
 
-        if (!ep_existente.getEstante().equalsIgnoreCase(ep.getEstante())) {
-            if(estantePrateleiraRepository.existsByEstante(ep.getEstante())) {
-                throw new ValidationException("Já existe Estante-Prateleira com essa estante.");
-            }
+        ep.setEstante(ep.getEstante().trim().toUpperCase());
+        if (estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).isPresent()
+                && !estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).get().getId().equals(id)){
+            throw new ValidationException("Já existe uma Estante-Prateleira com esses valores.");
         }
 
         ep_existente.setEstante(ep.getEstante().toUpperCase());
