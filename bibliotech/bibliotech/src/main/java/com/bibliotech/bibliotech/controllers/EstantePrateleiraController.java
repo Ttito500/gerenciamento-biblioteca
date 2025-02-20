@@ -27,7 +27,7 @@ public class EstantePrateleiraController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estanteprateleira> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
+    public ResponseEntity<String> atualizarEstanteprateleira(@PathVariable Integer id, @RequestBody Estanteprateleira body) {
         return ResponseEntity.ok(estantePrateleiraService.atualizarEstanteprateleira(id, body));
     }
 
