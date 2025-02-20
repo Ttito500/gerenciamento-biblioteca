@@ -21,9 +21,10 @@ interface AcervoListagemProps {
   onAtivar: (id: number) => void;
   onInativar: (id: number) => void;
   onEmprestimos: (livro: GetLivroResponse) => void;
+  onExemplares: (livro: GetLivroResponse) => void;
 }
 
-const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtivar, onInativar, onEmprestimos }) => {
+const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtivar, onInativar, onEmprestimos, onExemplares }) => {
 
   const renderTooltipGerenciarExemplares = (props: any) => (
     <Tooltip id="button-tooltip-1" {...props}>
@@ -136,6 +137,7 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
                     <Button
                       variant="btn-outline-secondary"
                       className="color-orange"
+                      onClick={() => onExemplares(livro)}
                     >
                       <FontAwesomeIcon icon={faTableList} />
                     </Button>
