@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
 import { GetLivroResponse } from "./../../../interfaces/acervo";
 import { ResponsePagination } from "./../../../interfaces/pagination";
+import Tooltip from "react-bootstrap/esm/Tooltip";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 
 interface AcervoListagemProps {
   livros: ResponsePagination<GetLivroResponse>;
@@ -19,9 +21,40 @@ interface AcervoListagemProps {
   onAtivar: (id: number) => void;
   onInativar: (id: number) => void;
   onEmprestimos: (livro: GetLivroResponse) => void;
+  onExemplares: (livro: GetLivroResponse) => void;
 }
 
-const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtivar, onInativar, onEmprestimos }) => {
+const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtivar, onInativar, onEmprestimos, onExemplares }) => {
+
+  const renderTooltipGerenciarExemplares = (props: any) => (
+    <Tooltip id="button-tooltip-1" {...props}>
+      Gerenciar Exemplares
+    </Tooltip>
+  );
+
+  const renderTooltipVerEmprestimos = (props: any) => (
+    <Tooltip id="button-tooltip-2" {...props}>
+      Ver Empréstimos
+    </Tooltip>
+  );
+
+  const renderTooltipInativar = (props: any) => (
+    <Tooltip id="button-tooltip-3" {...props}>
+      Inativar
+    </Tooltip>
+  );
+
+  const renderTooltipAtivar = (props: any) => (
+    <Tooltip id="button-tooltip-4" {...props}>
+      Ativar
+    </Tooltip>
+  );
+
+  const renderTooltipEditar = (props: any) => (
+    <Tooltip id="button-tooltip-5" {...props}>
+      Editar
+    </Tooltip>
+  );
 
   return (
     <>
@@ -96,47 +129,78 @@ const AcervoListagem: React.FC<AcervoListagemProps> = ({ livros, onEdit, onAtiva
               </td>
               <td>
                 <ButtonGroup aria-label="Ações" className="tabela-acoes">
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-orange"
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipGerenciarExemplares}
                   >
-                    <FontAwesomeIcon icon={faTableList} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-orange"
+                      onClick={() => onExemplares(livro)}
+                    >
+                      <FontAwesomeIcon icon={faTableList} />
+                    </Button>
+                  </OverlayTrigger>
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-blue"
-                    onClick={() => onEmprestimos(livro)}
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipVerEmprestimos}
                   >
-                    <FontAwesomeIcon icon={faClipboardList} />
-                  </Button>
+                    <Button
+                      variant="btn-outline-secondary"
+                      className="color-blue"
+                      onClick={() => onEmprestimos(livro)}
+                    >
+                      <FontAwesomeIcon icon={faClipboardList} />
+                    </Button>
+                  </OverlayTrigger>
 
-                  <Button
-                    variant="btn-outline-secondary"
-                    className="color-green"
-                    onClick={() => onEdit(livro)}
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipEditar}
                   >
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                  </Button>
-
-                  { !livro.ativo &&
                     <Button
                       variant="btn-outline-secondary"
                       className="color-green"
-                      onClick={() => onAtivar(livro.id)}
+                      onClick={() => onEdit(livro)}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
+                      <FontAwesomeIcon icon={faPenToSquare} />
                     </Button>
+                  </OverlayTrigger>
+
+                  { !livro.ativo &&
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipAtivar}
+                    >
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-green"
+                        onClick={() => onAtivar(livro.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
 
                   { livro.ativo &&
-                    <Button
-                      variant="btn-outline-secondary"
-                      className="color-red"
-                      onClick={() => onInativar(livro.id)}
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltipInativar}
                     >
-                      <FontAwesomeIcon icon={faPowerOff} />
-                    </Button>
+                      <Button
+                        variant="btn-outline-secondary"
+                        className="color-red"
+                        onClick={() => onInativar(livro.id)}
+                      >
+                        <FontAwesomeIcon icon={faPowerOff} />
+                      </Button>
+                    </OverlayTrigger>
                   }
                 </ButtonGroup>
               </td>
