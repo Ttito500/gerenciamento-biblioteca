@@ -46,7 +46,10 @@ const Acervo: React.FC = () => {
 
 	const [showExemplares, setShowExemplares] = useState(false);
 	const handleCloseExemplares = () => setShowExemplares(false);
-	const handleShowExemplares = () => setShowExemplares(true);
+	const handleShowExemplares = (livro: GetLivroResponse) => {
+		setEditingLivro(livro);
+		setShowExemplares(true);
+	}
 
 	const [showVerEmprestimos, setShowVerEmprestimos] = useState(false);
 	const handleCloseVerEmprestimos = () => setShowVerEmprestimos(false);
@@ -308,12 +311,11 @@ const Acervo: React.FC = () => {
 					</Modal.Header>
 
 					<Modal.Body>
-						<Exemplares/>
+						<Exemplares livro={editingLivro}/>
 					</Modal.Body>
 
 					<Modal.Footer>
 						<Button variant="secondary" onClick={handleCloseExemplares}>Ok</Button>
-
 					</Modal.Footer>
 				</Modal>
 
@@ -378,6 +380,7 @@ const Acervo: React.FC = () => {
 					onAtivar={handleShowAtivarLivro} 
           onInativar={handleShowInativarLivro}
 					onEmprestimos={handleShowVerEmprestimos} 
+					onExemplares={handleShowExemplares}
 				/>
 
 				<Pagination>
