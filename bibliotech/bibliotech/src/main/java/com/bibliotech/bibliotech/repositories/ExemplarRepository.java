@@ -21,4 +21,7 @@ public interface ExemplarRepository extends JpaRepository<Exemplar, Integer> {
 
     @Query("SELECT COUNT(e) > 0 FROM Emprestimo e WHERE e.exemplar.id = :idExemplar AND e.situacao IN ('pendente', 'atrasado')")
     boolean existsByExemplarAndSituacaoPendenteOuAtrasado(@Param("idExemplar") Integer idExemplar);
+
+    @Query("SELECT e FROM Exemplar e WHERE e.livro.id = :idLivro AND e.situacao <> 'extraviado'")
+    List<Exemplar> findByLivroIdAndSituacaoNotExtraviado(@Param("idLivro") Integer idLivro);
 }

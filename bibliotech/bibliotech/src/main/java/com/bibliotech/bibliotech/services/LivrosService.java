@@ -9,12 +9,10 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPatchMapper;
 import com.bibliotech.bibliotech.dtos.request.mappers.LivroRequestPostMapper;
 import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
 import com.bibliotech.bibliotech.exception.NotFoundException;
 import com.bibliotech.bibliotech.exception.ValidationException;
-import com.bibliotech.bibliotech.models.Estanteprateleira;
-import com.bibliotech.bibliotech.models.Exemplar;
-import com.bibliotech.bibliotech.models.Livro;
-import com.bibliotech.bibliotech.models.Secao;
+import com.bibliotech.bibliotech.models.*;
 import com.bibliotech.bibliotech.repositories.LivroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -176,4 +175,31 @@ public class LivrosService {
     public List<LivrosMaisLidosDTO> obterLivrosMaisLidos(LocalDate dataInicio, LocalDate dataFim) {
         return livroRepository.buscarLivrosMaisLidos(dataInicio, dataFim);
     }
+
+    public List<RelatorioAcervoDTO> buscarRelatorioAcervo() {
+        List<Livro> livros = livroRepository.findByAtivoOrderByTitulo(true);
+
+        for (Livro livro : livros) {
+            livro.setExemplares(exemplaresService.findByLivroIdAndSituacaoNotExtraviado(livro.getId()));
+            livro.setAutores(autorService.findAutorByLivroId(livro.getId()));
+        }
+
+        List<RelatorioAcervoDTO> livrosDTOs = new ArrayList<>();
+        for (int i=0; i<livros.size(); i++) {
+            livrosDTOs.add(new RelatorioAcervoDTO(livros.get(i).getTitulo(), livros.get(i).getExemplares().size(), formAutores(livros.get(i).getAutores())));
+        }
+
+        return livrosDTOs;
+    }
+
+    private String formAutores(List<Autor> autores) {
+        String autor = autores.getFirst().getNome();
+
+        if (autores.size() > 1) {
+            autor = autor + " e mais...";
+        }
+
+        return autor;
+    }
+
 }

@@ -9,6 +9,7 @@ import com.bibliotech.bibliotech.dtos.request.LivroRequestPostDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseDTO;
 import com.bibliotech.bibliotech.dtos.response.LivroResponseGetDTO;
 import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseGetMapper;
 import com.bibliotech.bibliotech.dtos.response.mappers.LivroResponseMapper;
 import com.bibliotech.bibliotech.models.Livro;
@@ -141,6 +142,21 @@ public class LivrosController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attachment", "Relatório de Livros mais Lidos.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/relatorio/acervo/export/pdf")
+    public ResponseEntity<byte[]> exportRelatorioAcervoPdf() throws DocumentException {
+        List<RelatorioAcervoDTO> relatorioAcervo = livrosService.buscarRelatorioAcervo();
+
+        byte[] pdfBytes = pdfExportService.exportRelatorioAcervo(relatorioAcervo);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "Relatório Completo do Acervo.pdf");
 
         return ResponseEntity.ok()
                 .headers(headers)
