@@ -61,31 +61,53 @@ public class EstantePrateleiraService {
         return exemplares.stream().map(exemplarResponseMapper::toDTO)
                 .collect(Collectors.toList());
     }
-    public Estanteprateleira atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
+
+    public String atualizarEstanteprateleira(Integer id, Estanteprateleira ep) {
         Estanteprateleira ep_existente = estantePrateleiraRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estante-Prateleira com ID " + id + " não encontrado."));
 
-        if(ep.getEstante() == null || ep.getEstante().isEmpty()){
+        if (ep.getEstante() == null || ep.getEstante().isEmpty()) {
             throw new ValidationException("A estante não pode ser vazia.");
         }
-        if(ep.getPrateleira() == null){
+        if (ep.getPrateleira() == null) {
             throw new ValidationException("A prateleira não pode ser vazia.");
         }
-        if(ep.getEstante().length() > 1){
+        if (ep.getEstante().length() > 1) {
             throw new ValidationException("A estante só pode conter um caractere.");
         }
 
-        ep.setEstante(ep.getEstante().trim().toUpperCase());
-        if (estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).isPresent()
-                && !estantePrateleiraRepository.findByEstanteAndPrateleira(ep.getEstante(), ep.getPrateleira()).get().getId().equals(id)){
+        String novaEstante = ep.getEstante().trim().toUpperCase();
+        Integer novaPrateleira = ep.getPrateleira();
+
+        if (estantePrateleiraRepository.findByEstanteAndPrateleira(novaEstante, novaPrateleira).isPresent()
+                && !estantePrateleiraRepository.findByEstanteAndPrateleira(novaEstante, novaPrateleira).get().getId().equals(id)) {
             throw new ValidationException("Já existe uma Estante-Prateleira com esses valores.");
         }
 
-        ep_existente.setEstante(ep.getEstante().toUpperCase());
-        ep_existente.setPrateleira(ep.getPrateleira());
+        boolean estanteAtualizada = !ep_existente.getEstante().equals(novaEstante);
+        boolean prateleiraAtualizada = !ep_existente.getPrateleira().equals(novaPrateleira);
 
-        return estantePrateleiraRepository.save(ep_existente);
+        if (estanteAtualizada) {
+            ep_existente.setEstante(novaEstante);
+        }
+        if (prateleiraAtualizada) {
+            ep_existente.setPrateleira(novaPrateleira);
+        }
+
+        if (estanteAtualizada || prateleiraAtualizada) {
+            estantePrateleiraRepository.save(ep_existente);
+            if (estanteAtualizada && prateleiraAtualizada) {
+                return "Estante e Prateleira atualizadas com sucesso.";
+            } else if (estanteAtualizada) {
+                return "Estante atualizada com sucesso.";
+            } else {
+                return "Prateleira atualizada com sucesso.";
+            }
+        }
+
+        return "Nada foi atualizado.";
     }
+
 
     public String deletarEstanteprateleira (Integer id) {
         Estanteprateleira estanteprateleira = estantePrateleiraRepository.findById(id)
