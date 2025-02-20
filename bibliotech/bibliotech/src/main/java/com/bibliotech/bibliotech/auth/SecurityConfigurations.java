@@ -30,7 +30,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()  //MUDAR ISSO, permitir apenas bilbiotecario
                         .requestMatchers(HttpMethod.POST, "/livros").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.PATCH, "/livros").hasRole("bibliotecario")
-                        .requestMatchers(HttpMethod.GET, "/livros").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/livros/filtrar").hasAnyRole("bibliotecario", "aluno_monitor")
 
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

@@ -43,9 +43,9 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (cargo.equals("bibliotecario")) {
-            return List.of(new SimpleGrantedAuthority("BIBLIOTECARIO"), new SimpleGrantedAuthority("ALUNO_MONITOR"));
+            return List.of(new SimpleGrantedAuthority("bibliotecario"), new SimpleGrantedAuthority("aluno_monitor"));
         } else {
-            return List.of(new SimpleGrantedAuthority("ALUNO_MONITOR"));
+            return List.of(new SimpleGrantedAuthority("aluno_monitor"));
         }
     }
 
