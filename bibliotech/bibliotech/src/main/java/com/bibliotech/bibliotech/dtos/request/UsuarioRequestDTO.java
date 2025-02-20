@@ -1,7 +1,5 @@
 package com.bibliotech.bibliotech.dtos.request;
 
-import com.bibliotech.bibliotech.models.CargosUsuario;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;

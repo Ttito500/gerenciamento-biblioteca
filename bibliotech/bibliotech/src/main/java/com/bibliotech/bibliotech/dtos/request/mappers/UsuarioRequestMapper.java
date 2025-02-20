@@ -1,7 +1,6 @@
 package com.bibliotech.bibliotech.dtos.request.mappers;
 
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
-import com.bibliotech.bibliotech.models.CargosUsuario;
 import com.bibliotech.bibliotech.models.Usuario;
 import com.bibliotech.bibliotech.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class UsuarioRequestMapper {
 
         //usuario.setId(requestDTO.getId());
         usuario.setNome(requestDTO.getNome());
-        usuario.setCargo(CargosUsuario.valueOf(requestDTO.getCargo()));
+        usuario.setCargo(requestDTO.getCargo());
         usuario.setEmail(requestDTO.getEmail());
         usuario.setSenha(requestDTO.getSenha());
         usuario.setAtivo(true);

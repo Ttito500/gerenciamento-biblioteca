@@ -3,15 +3,19 @@ package com.bibliotech.bibliotech.controllers;
 import com.bibliotech.bibliotech.dtos.AutenticacaoDTO;
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
+import com.bibliotech.bibliotech.dtos.response.LoginResponseDTO;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.models.Usuario;
+import com.bibliotech.bibliotech.services.TokenService;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +35,17 @@ public class UsuarioController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("")
     public ResponseEntity<Usuario> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
         if (result.hasErrors()) {
             throw new ValidationException(result);
         }
+
+        String senhaEncriptada = new BCryptPasswordEncoder().encode(body.getSenha());
+        body.setSenha(senhaEncriptada);
 
         Usuario usuario = usuarioService.cadastrarUsuario(body);
         URI location = URI.create("/usuarios/" + usuario.getId());
@@ -76,7 +86,9 @@ public class UsuarioController {
         var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
         var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
 }

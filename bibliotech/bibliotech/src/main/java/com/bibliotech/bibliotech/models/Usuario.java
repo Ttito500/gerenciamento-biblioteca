@@ -26,7 +26,7 @@ public class Usuario implements UserDetails {
     private String nome;
 
     @Column(name = "cargo", nullable = false, length = 50)
-    private CargosUsuario cargo;
+    private String cargo;
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
@@ -42,10 +42,10 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (cargo == CargosUsuario.BIBLIOTECARIO) {
-            return List.of(new SimpleGrantedAuthority("ROLE_BIBLIOTECARIO"), new SimpleGrantedAuthority("ROLE_ALUNO_MONITOR"));
+        if (cargo.equals("bibliotecario")) {
+            return List.of(new SimpleGrantedAuthority("BIBLIOTECARIO"), new SimpleGrantedAuthority("ALUNO_MONITOR"));
         } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_ALUNO_MONITOR"));
+            return List.of(new SimpleGrantedAuthority("ALUNO_MONITOR"));
         }
     }
 
