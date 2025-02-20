@@ -37,7 +37,7 @@ export const updateSecao = async (
   secao: UpdateSecaoRequest
 ): Promise<UpdateSecaoResponse> => {
   try {
-    const response = await api.put<UpdateSecaoResponse>(
+    const response = await api.patch<UpdateSecaoResponse>(
       `${API_URL}/${id}`,
       secao
     );
@@ -57,11 +57,11 @@ export const deleteSecao = async (id: number): Promise<void> => {
   }
 };
 
-export const deleteSecaoEstantePrateleira = async (idSecao: number, idPrateleira: number): Promise<void> => {
+export const deleteSecaoEstantePrateleira = async (idSecao: number, idEstantePrateleira: number): Promise<void> => {
   try {
-    await api.delete(`${API_URL}/${idSecao}/prateleira/${idPrateleira}`);
+    await api.delete(`http://localhost:8090/estantesecao`, { data: { idSecao, idEstantePrateleira } });
   } catch (error) {
-    console.error("Erro ao deletar seção:", error);
+    console.error("Erro ao deletar prateleira da seção:", error);
     throw error;
   }
 };
@@ -78,7 +78,7 @@ export const getSecaoEstantePrateleiras = async (idSecao: number): Promise<GetSe
 
 export const addSecaoEstantePrateleira = async (idSecao: number, idEstantePrateleira: number): Promise<any> => {
   try {
-    const response = await api.post<any>(`${API_URL}/${idSecao}/estanteprateleiras/${idEstantePrateleira}`);
+    const response = await api.post<any>(`http://localhost:8090/estantesecao`, { idSecao, idEstantePrateleira });
     return response.data;
   } catch (error) {
     console.error("Erro ao adicionar estante-prateleira na seção:", error);
