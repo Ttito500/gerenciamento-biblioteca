@@ -97,4 +97,8 @@ public class ExemplaresService {
 
         return exemplarRepository.save(exemplar);
     }
+
+    public List<Exemplar> findByLivroIdAndSituacaoNotExtraviado(Integer id) {
+        return exemplarRepository.findByLivroIdAndSituacaoNotExtraviado(id);
+    }
 }

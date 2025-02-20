@@ -1,6 +1,7 @@
 package com.bibliotech.bibliotech.repositories;
 
 import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
 import com.bibliotech.bibliotech.models.Livro;
 import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Page;
@@ -8,11 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface LivroRepository extends JpaRepository<Livro, Integer> {
     Livro findLivroById(Integer id);
     boolean existsLivroByIsbn(String isbn);
@@ -52,4 +54,6 @@ public interface LivroRepository extends JpaRepository<Livro, Integer> {
     List<LivrosMaisLidosDTO> buscarLivrosMaisLidos(
             @Param("dataInicio") LocalDate dataInicio,
             @Param("dataFim") LocalDate dataFim);
+
+    List<Livro> findByAtivoOrderByTitulo(Boolean ativo);
 }
