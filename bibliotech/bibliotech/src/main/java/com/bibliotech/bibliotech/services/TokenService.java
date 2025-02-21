@@ -41,7 +41,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            return ""; //se retornar nada da para ver que o token foi invalido onde ele chamou
+            throw new TokenExeption(exception.getMessage());
         }
     }
 
