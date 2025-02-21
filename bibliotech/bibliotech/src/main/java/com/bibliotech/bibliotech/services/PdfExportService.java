@@ -3,6 +3,7 @@ package com.bibliotech.bibliotech.services;
 import com.bibliotech.bibliotech.dtos.response.AlunoLeiturasDTO;
 
 import com.bibliotech.bibliotech.dtos.response.LivrosMaisLidosDTO;
+import com.bibliotech.bibliotech.dtos.response.RelatorioAcervoDTO;
 import com.bibliotech.bibliotech.dtos.response.TurmaLeiturasDTO;
 import com.bibliotech.bibliotech.models.FrequenciaAlunos;
 import com.bibliotech.bibliotech.models.Ocorrencia;
@@ -231,6 +232,47 @@ public class PdfExportService {
         for (LivrosMaisLidosDTO livro : livrosMaisLidos) {
             table.addCell(livro.getTitulo());
             table.addCell(livro.getQuantidadeEmprestimos().toString());
+        }
+
+        document.add(table);
+        document.close();
+
+        return out.toByteArray();
+    }
+
+    public byte[] exportRelatorioAcervo(List<RelatorioAcervoDTO> relatorioAcervo) throws DocumentException {
+        Document document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        PdfWriter writer = PdfWriter.getInstance(document, out);
+        document.open();
+
+        addHeader(document, writer);
+
+        PdfPTable table = new PdfPTable(3);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+        table.setWidths(new float[]{5, 3, 2});
+
+        Font fontBold18 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+        PdfPCell cell = new PdfPCell(new Phrase("Relatório Completo do Acervo", fontBold18));
+        cell.setColspan(3); // Span across all 3 columns
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8.0f);
+        table.addCell(cell);
+
+        Font fontBold12 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+
+        table.addCell(new Phrase("Título", fontBold12));
+        table.addCell(new Phrase("Autor", fontBold12));
+        table.addCell(new Phrase("Quantidade", fontBold12));
+
+
+        for (RelatorioAcervoDTO livro : relatorioAcervo) {
+            table.addCell(livro.getTitulo());
+            table.addCell(livro.getAutor());
+            table.addCell(livro.getQtdExemplares().toString());
         }
 
         document.add(table);

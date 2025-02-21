@@ -114,7 +114,7 @@ const EmprestimosAluno: React.FC<AlunoEmprestimosProps> = ({ aluno }) => {
           </Row>
         </Form>
       </div>
-      <div className="w-100 mt-0">
+      <div className="w-100 list-scroll mt-0">
 				<Table striped className="tabela">
 					<thead>
 						<tr>

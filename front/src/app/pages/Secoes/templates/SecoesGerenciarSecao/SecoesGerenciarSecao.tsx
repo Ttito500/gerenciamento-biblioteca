@@ -17,7 +17,7 @@ import {
   getSecaoEstantePrateleiras,
 } from "./../../../../api/SecoesApi";
 import { GetEstantePrateleiraResponse } from "./../../../../interfaces/estante-prateleira";
-import { getEstantePrateleiras } from "./../../../../api/EstantePrateleiraApi";
+import { getEstantePrateleiras, getEstantePrateleirasPorSecao } from "./../../../../api/EstantePrateleiraApi";
 
 function transformEstantes(lista: GetEstantePrateleiraResponse[] | GetSecaoEstantePrateleiraResponse[]): Estante[] {
   const mapa = new Map<string, Estante>();
@@ -80,7 +80,7 @@ const SecoesGerenciarSecao: React.FC<SecoesGerenciarSecaoProps> = ({
 
   const listarEstantesPorSecao = async (): Promise<void> => {
     try {
-      const data = await getSecaoEstantePrateleiras(idSecao);
+      const data = await getEstantePrateleirasPorSecao(idSecao);
       const dataTransform = transformEstantes(data);
       setEstantesPorSecao(dataTransform);
 		} catch(err) {

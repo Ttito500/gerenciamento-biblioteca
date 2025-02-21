@@ -1,7 +1,7 @@
 import { CreateLivroRequest, CreateLivroResponse, GetLivroResponse, LivroFiltros, UpdateLivroRequest, UpdateLivroResponse } from '../interfaces/acervo';
 import { getQueryString } from '../shared/utils';
 import { ResponsePagination } from '../interfaces/pagination';
-import { GetExemplarResponse } from '../interfaces/exemplar';
+import { CreateExemplarRequest, GetExemplarResponse, UpdateExemplarRequest } from '../interfaces/exemplar';
 import api from '../shared/axios/axios';
 
 const API_URL = 'http://localhost:8090/livros';
@@ -65,6 +65,26 @@ export const getExemplares = async (idLivro: number): Promise<GetExemplarRespons
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar exemplares do livro:', error);
+    throw error;
+  }
+};
+
+export const createExemplar = async (exemplar: CreateExemplarRequest): Promise<any> => {
+  try {
+    const response = await api.post<any>(`${API_URL}/exemplares`, exemplar);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar exemplares:', error);
+    throw error;
+  }
+};
+
+export const updateExemplar = async (idExemplar: number, exemplar: UpdateExemplarRequest): Promise<any> => {
+  try {
+    const response = await api.patch<any>(`${API_URL}/exemplares/atualizar/${idExemplar}`, exemplar);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar exemplares:', error);
     throw error;
   }
 };
