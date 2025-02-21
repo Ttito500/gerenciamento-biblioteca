@@ -139,7 +139,7 @@ public class AlunosService {
         alunoRepository.saveAll(alunos);
     }
 
-    public List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim) {
+    public List<AlunoLeiturasDTO> obterAlunosMaisLeitures(LocalDate dataInicio, LocalDate dataFim, Integer qtdMax) {
         if (dataInicio == null) {
             throw new ValidationException("A data de início é obrigatória.");
         } else if (dataFim == null) {
@@ -148,6 +148,6 @@ public class AlunosService {
             throw new ValidationException("A data de início deve ser anterior à data final.");
         }
 
-        return alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim);
+        return alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim).subList(0, qtdMax);
     }
 }
