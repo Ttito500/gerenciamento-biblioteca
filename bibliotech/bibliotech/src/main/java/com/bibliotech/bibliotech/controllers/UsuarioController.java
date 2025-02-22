@@ -11,9 +11,11 @@ import com.bibliotech.bibliotech.services.TokenService;
 import com.bibliotech.bibliotech.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -89,12 +91,16 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenticacaoDTO autenticacaoDTO) {
-        var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
-        var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
+        try {
+            var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
+            var autenticacao = authenticationManager.authenticate(tokenAutenticacao);
 
-        var token = tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
+            var token = tokenService.gerarToken((Usuario) autenticacao.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (AuthenticationException e) {
+            throw new ValidationException("Email ou senha incorretos.");
+        }
     }
 
 }

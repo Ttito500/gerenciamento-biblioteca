@@ -26,6 +26,69 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET, "/alunos/mais-leitores/export/pdf").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/alunos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/alunos/{id}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/alunos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PUT, "/alunos/{id}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PATCH, "/alunos/inativar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/alunos/ativar/{id}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.GET, "/autor/buscar").authenticated() //testar
+                        .requestMatchers(HttpMethod.GET, "/autor/sem-associacao").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/cronograma").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/cronograma").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/cronograma/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/cronograma/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.DELETE, "/cronograma/{id}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.POST, "/emprestimos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/emprestimos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/emprestimos/aluno/{idAluno}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/emprestimos/livro/{idLivro}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PATCH, "/emprestimos/renovar/{id}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PATCH, "/emprestimos/cancelar/{id}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PATCH, "/emprestimos/concluir/{id}").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.POST, "/emprestimos/enviar-email").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/estanteprateleira").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/estanteprateleira").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PUT, "/estanteprateleira/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.DELETE, "/estanteprateleira/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/estanteprateleira/{id}").hasAnyRole("bibliotecario", "aluno_monitor")
+
+                        .requestMatchers(HttpMethod.POST, "/estantesecao").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.DELETE, "/estantesecao").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/estantesecao/{idSecao}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.POST, "/secoes").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.DELETE, "/secoes/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/secoes").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/secoes/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/secoes/{id}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.POST, "/frequencia-alunos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/frequencia-alunos/export/pdf").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/frequencia-alunos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.DELETE, "/frequencia-alunos/{id}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.GET, "/generos/buscar").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/generos/sem-associacao").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/ocorrencias").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.POST, "/frequencia-alunos/export/pdf").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/frequencia-alunos").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.DELETE, "/frequencia-alunos/{id}").hasRole("bibliotecario")
+
+                        .requestMatchers(HttpMethod.POST, "/turmas").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/turmas/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/turmas/mais-leitoras/export/pdf").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/turmas/filtrar").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.PUT, "/turmas/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/turmas/inativar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/turmas/ativar/{id}").hasRole("bibliotecario")
+
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()  //MUDAR ISSO, permitir apenas bilbiotecario
                         .requestMatchers(HttpMethod.GET, "/usuarios/filtrar").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() //a permissao mais abranjente de um mesmo http method e mesmo root de endpoint tem que estar em baixo das menos abranjentes
@@ -46,6 +109,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/livros/relatorio/acervo/export/pdf").hasRole("bibliotecario")
 
 
+                        .requestMatchers(HttpMethod.GET, "/root").permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
