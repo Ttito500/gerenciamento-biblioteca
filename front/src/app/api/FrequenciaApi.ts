@@ -12,7 +12,7 @@ export const getFrequencias = async (filtros: FrequenciaFiltros): Promise<GetFre
     const response = await api.get<GetFrequenciaResponse[]>(url);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar frequencia:", error);
+    console.error("Erro ao buscar frequencias:", error);
     throw error;
   }
 };
@@ -28,7 +28,6 @@ export const createFrequencia = async (
     throw error;
   }
 };
-
 
 export const deleteFrequencia = async (id: number): Promise<void> => {
   try {
