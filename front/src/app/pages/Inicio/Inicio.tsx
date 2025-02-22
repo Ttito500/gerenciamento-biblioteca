@@ -21,6 +21,8 @@ import { createFrequencia } from "./../../api/FrequenciaApi";
 import { AlunoFiltros, GetAlunoResponse } from "./../../interfaces/aluno";
 import { getAlunos } from "./../../api/AlunosApi";
 import { showError } from "./../../shared/components/error-toast/ErrorToast";
+import { createOcorrencia } from "./../../api/OcorrenciaApi";
+import { CreateOcorrenciaRequest } from "./../../interfaces/ocorrencia";
 
 const Inicio: React.FC = () => {
 
@@ -114,9 +116,79 @@ const Inicio: React.FC = () => {
 
 
 
+  const [formDataCadastrarOcorrencia, setFormDataCadastrarOcorrencia] = useState({
+    idAluno: null as number,
+    registradaPor: null as number,
+    detalhes: ''
+  } as CreateOcorrenciaRequest);
 
-  
+  const handleChangeCadastrarOcorrencia = (e: ChangeEvent<any>): void => {
+    const { name, value } = e.target;
+    setFormDataCadastrarOcorrencia({ ...formDataCadastrarOcorrencia, [name]: value });
+  };
 
+  const handleSubmitCadastrarOcorrencia = async (): Promise<void> => {
+    const body: CreateOcorrenciaRequest = {
+      idAluno: Number(formDataCadastrarOcorrencia.idAluno),
+      registradaPor: 1, // TO DO
+      detalhes: formDataCadastrarOcorrencia.detalhes
+    }
+    try {
+      await createOcorrencia(body);
+      setFormDataCadastrarOcorrencia({
+        idAluno: null as number,
+        registradaPor: null as number,
+        detalhes: ''
+      });
+      handleClearSelectionAlunoOcorrencia();
+    } catch(err) {
+      console.log(err)
+    }
+  };
+
+  const [nomeAlunoOcorrencia, setNomeAlunoOcorrencia] = useState('');
+  const [queryAlunoOcorrencia, setQueryAlunoOcorrencia] = useState('');
+  const [suggestionsAlunosOcorrencia, setSuggestionsAlunosOcorrencia] = useState<GetAlunoResponse[]>([]);
+  const [selectedAlunoIdOcorrencia, setSelectedAlunoIdOcorrencia] = useState<number | null>(null);
+
+  const handleClearSelectionAlunoOcorrencia = () => {
+    setSelectedAlunoIdOcorrencia(null);
+    setQueryAlunoOcorrencia('');
+    setNomeAlunoOcorrencia('');
+  };
+
+  const handleSelectAlunoOcorrencia = (aluno: GetAlunoResponse) => {
+    setNomeAlunoOcorrencia(aluno.nome);
+    setSelectedAlunoIdOcorrencia(aluno.id);
+    setSuggestionsAlunosOcorrencia([]);
+  };
+
+  useEffect(() => {
+    formDataCadastrarOcorrencia.idAluno = selectedAlunoIdOcorrencia;
+    const e: any = { target: { name: 'idAluno', value: selectedAlunoIdOcorrencia } }
+    handleChangeCadastrarOcorrencia(e)
+  }, [selectedAlunoIdOcorrencia]);
+
+  useEffect(() => {
+    const listarAlunos = async () => {
+      if (queryAlunoOcorrencia.length > 2) {
+        try {
+          const filtros: AlunoFiltros = {
+            nome: queryAlunoOcorrencia,
+            ativo: true
+          }
+          const response = await getAlunos(filtros)
+          setSuggestionsAlunosOcorrencia(response.content);
+        } catch (error) {
+          console.error('Erro ao buscar alunos:', error);
+        }
+      } else {
+        setSuggestionsAlunosOcorrencia([]);
+      }
+    };
+
+    listarAlunos();
+  }, [queryAlunoOcorrencia]);
 
   useEffect(() => {
     null
@@ -311,20 +383,52 @@ const Inicio: React.FC = () => {
             <Accordion.Body className="accordion-body-expanded">
               <Form className="mt-0">
                 <Row>
-                  <Col xs={6}>
+                <Col xs={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        Nome <span className="obgr">*</span>
+                        Selecionar Aluno <span className="obgr">*</span>
                       </Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Busque pelo nome do aluno"
-                        required
-                      />
+                      <InputGroup>
+                        <Form.Control
+                          type="text"
+                          placeholder="Digite o nome do aluno"
+                          value={nomeAlunoOcorrencia}
+                          onChange={(e) => {
+                            setNomeAlunoOcorrencia(e.target.value);
+                            setQueryAlunoOcorrencia(e.target.value);
+                            setSelectedAlunoIdOcorrencia(null);
+                          }}
+                          required
+                          readOnly={!!selectedAlunoIdOcorrencia}
+                          style={{
+                            backgroundColor: selectedAlunoIdOcorrencia ? '#e9ecef' : 'white',
+                            cursor: selectedAlunoIdOcorrencia ? 'not-allowed' : 'text',
+                          }}
+                        />
+                          {selectedAlunoIdOcorrencia && (
+                            <Button variant="outline-secondary" onClick={handleClearSelectionAlunoOcorrencia}>
+                              Limpar
+                            </Button>
+                          )}
+                      </InputGroup>
                       <Form.Control.Feedback type="invalid">
                         Campo obrigatório.
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback>       
                     </Form.Group>
+                    {suggestionsAlunosOcorrencia.length > 0 && (
+                      <ListGroup style={{
+                        position: 'absolute',
+                        zIndex: 1000,
+                        maxHeight: '200px',
+                        overflowY: 'auto',
+                      }}>
+                        {suggestionsAlunosOcorrencia?.map((aluno) => (
+                          <ListGroup.Item style={{cursor: 'pointer'}} key={aluno.id} onClick={() => handleSelectAlunoOcorrencia(aluno)}>
+                            {aluno.turma.serie}ª {aluno.turma.turma} - {aluno.nome}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    )}
                   </Col>
                   <Col xs={4}>
                     <Form.Group className="mb-3">
@@ -333,6 +437,8 @@ const Inicio: React.FC = () => {
                       </Form.Label>
                       <Form.Control
                         type="text"
+                        name="detalhes"
+                        onChange={handleChangeCadastrarOcorrencia}
                         placeholder="Digite os detalhes da ocorrência"
                         required
                       />
@@ -349,6 +455,7 @@ const Inicio: React.FC = () => {
                     <Button
                       variant="info"
                       className="btn-danger resizable-button"
+                      onClick={handleSubmitCadastrarOcorrencia}
                     >
                       <FontAwesomeIcon icon={faPlus} /> Registrar Ocorrência
                     </Button>
@@ -386,11 +493,8 @@ const Inicio: React.FC = () => {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseOcorrencia}>
-              Voltar
-            </Button>
-            <Button variant="success">
-              <FontAwesomeIcon icon={faFileExport} /> Exportar
+            <Button variant="info" onClick={handleCloseOcorrencia}>
+              Ok
             </Button>
           </Modal.Footer>
         </Modal>
