@@ -20,7 +20,7 @@ const Relatorios: React.FC = () => {
                 <Accordion defaultActiveKey="0" className="accordion-relatorios">
                     <Accordion.Item eventKey="0">
                         <Accordion.Header className="custon-accordion-header-cyan">
-                            Relatório
+                            Alunos Mais Leitores
                         </Accordion.Header>
                         <Accordion.Body className="accordion-body-expanded">
                             <Row className="mb-3">
@@ -37,7 +37,7 @@ const Relatorios: React.FC = () => {
                                                         type="text"
                                                         placeholder="Selecione a data"
                                                         readOnly
-                                                        style={{ cursor: "pointer" }}
+                                                        style={{cursor: "pointer"}}
                                                         className="no-border-radius-right"
                                                     />
                                                 }
@@ -58,7 +58,7 @@ const Relatorios: React.FC = () => {
                                                         type="text"
                                                         placeholder="Selecione a data"
                                                         readOnly
-                                                        style={{ cursor: "pointer" }}
+                                                        style={{cursor: "pointer"}}
                                                         className="no-border-radius-right"
                                                     />
                                                 }
@@ -67,7 +67,8 @@ const Relatorios: React.FC = () => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <p>Gere um relatório detalhado e exporte-o em formato PDF, destacando os 10 alunos com o maior número de livros lidos.</p>
+                            <p>Selecione a data inicial e final do período desejado para gerar um relatório com os 10 alunos mais
+                                leitores e exporte-o em formato PDF</p>
 
                             <div className="d-flex justify-content-center">
                                 <Button variant="success">
@@ -81,7 +82,7 @@ const Relatorios: React.FC = () => {
                 <Accordion defaultActiveKey="0" className="accordion-relatorios">
                     <Accordion.Item eventKey="0">
                         <Accordion.Header className="custon-accordion-header-blue">
-                            Relatório
+                            Turmas Mais Leitoras
                         </Accordion.Header>
                         <Accordion.Body className="accordion-body-expanded">
                             <Row className="mb-3">
@@ -98,7 +99,7 @@ const Relatorios: React.FC = () => {
                                                         type="text"
                                                         placeholder="Selecione a data"
                                                         readOnly
-                                                        style={{ cursor: "pointer" }}
+                                                        style={{cursor: "pointer"}}
                                                         className="no-border-radius-right"
                                                     />
                                                 }
@@ -119,7 +120,7 @@ const Relatorios: React.FC = () => {
                                                         type="text"
                                                         placeholder="Selecione a data"
                                                         readOnly
-                                                        style={{ cursor: "pointer" }}
+                                                        style={{cursor: "pointer"}}
                                                         className="no-border-radius-right"
                                                     />
                                                 }
@@ -128,17 +129,145 @@ const Relatorios: React.FC = () => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <p>Gere um relatório detalhado e exporte-o em formato Excel, destacando os 10 alunos com o maior número de livros lidos.</p>
+                            <p>Selecione a data inicial e final do período desejado para gerar um relatório com as turmas mais
+                                leitoras e exporte-o em formato PDF.</p>
 
                             <div className="d-flex justify-content-center">
                                 <Button variant="success">
-                                    <FontAwesomeIcon icon={faFileExport} /> Exportar Relatório
+                                    <FontAwesomeIcon icon={faFileExport}/> Exportar Relatório
                                 </Button>
                             </div>
                         </Accordion.Body>
                     </Accordion.Item>
                 </Accordion>
             </div>
+
+            <div className="accordion-container">
+                <Accordion defaultActiveKey="0" className="accordion-relatorios">
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header className="custon-accordion-header-yellow">
+                            Livros Mais Lidos
+                        </Accordion.Header>
+                        <Accordion.Body className="accordion-body-expanded">
+                            <Row className="mb-3">
+                                <Col md={6}>
+                                    <Form.Group controlId="formData" className="mb-3">
+                                        <Form.Label>Data Inicial <span className="obgr">*</span> </Form.Label>
+                                        <InputGroup>
+                                            <DatePicker
+                                                selected={dataInicio}
+                                                onChange={(date: Date) => setdataInicio(date)}
+                                                dateFormat="dd/MM/yyyy"
+                                                customInput={
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Selecione a data"
+                                                        readOnly
+                                                        style={{cursor: "pointer"}}
+                                                        className="no-border-radius-right"
+                                                    />
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group controlId="formData" className="mb-3">
+                                        <Form.Label>Data Final <span className="obgr">*</span> </Form.Label>
+                                        <InputGroup>
+                                            <DatePicker
+                                                selected={dataFinal}
+                                                onChange={(date: Date) => setdataFinal(date)}
+                                                dateFormat="dd/MM/yyyy"
+                                                customInput={
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Selecione a data"
+                                                        readOnly
+                                                        style={{cursor: "pointer"}}
+                                                        className="no-border-radius-right"
+                                                    />
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <p>Selecione a data inicial e final do período desejado para gerar um relatório
+                                com os livros mais lidos e exporte-o em formato PDF.</p>
+
+                            <div className="d-flex justify-content-center">
+                                <Button variant="success">
+                                    <FontAwesomeIcon icon={faFileExport}/> Exportar Relatório
+                                </Button>
+                            </div>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+
+                <Accordion defaultActiveKey="0" className="accordion-relatorios">
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header className="custon-accordion-header-orange">
+                            Relatório Geral do Acervo
+                        </Accordion.Header>
+                        <Accordion.Body className="accordion-body-expanded">
+                            <Row className="mb-3">
+                                <Col md={6}>
+                                    <Form.Group controlId="formData" className="mb-3">
+                                        <Form.Label>Data Inicial <span className="obgr">*</span> </Form.Label>
+                                        <InputGroup>
+                                            <DatePicker
+                                                selected={dataInicio}
+                                                onChange={(date: Date) => setdataInicio(date)}
+                                                dateFormat="dd/MM/yyyy"
+                                                customInput={
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Selecione a data"
+                                                        readOnly
+                                                        style={{cursor: "pointer"}}
+                                                        className="no-border-radius-right"
+                                                    />
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group controlId="formData" className="mb-3">
+                                        <Form.Label>Data Final <span className="obgr">*</span> </Form.Label>
+                                        <InputGroup>
+                                            <DatePicker
+                                                selected={dataFinal}
+                                                onChange={(date: Date) => setdataFinal(date)}
+                                                dateFormat="dd/MM/yyyy"
+                                                customInput={
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="Selecione a data"
+                                                        readOnly
+                                                        style={{cursor: "pointer"}}
+                                                        className="no-border-radius-right"
+                                                    />
+                                                }
+                                            />
+                                        </InputGroup>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <p>Selecione a data inicial e final do período desejado para gerar um relatório
+                                com as informações do acervo.</p>
+
+                            <div className="d-flex justify-content-center">
+                                <Button variant="success">
+                                    <FontAwesomeIcon icon={faFileExport}/> Exportar Relatório
+                                </Button>
+                            </div>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </div>
+
         </section>
     );
 };

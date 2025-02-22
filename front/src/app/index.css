@@ -309,6 +309,26 @@ body {
   box-shadow: none !important;
 }
 
+.custon-accordion-header-orange .accordion-button {
+  background-color: #FFE5D0 !important;
+  color: black !important;
+}
+
+.custon-accordion-header-orange .accordion-button:not(.collapsed) {
+  background-color: #FFE5D0 !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-yellow .accordion-button {
+  background-color: #FFF3CD !important;
+  color: black !important;
+}
+
+.custon-accordion-header-yellow .accordion-button:not(.collapsed) {
+  background-color: #FFF3CD !important;
+  box-shadow: none !important;
+}
+
 .custom-placeholder:invalid {
   color: #495057
 }
