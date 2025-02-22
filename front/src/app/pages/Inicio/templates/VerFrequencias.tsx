@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import Form from "react-bootstrap/esm/Form";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import { faCalendarDay, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDay, faFileExport, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/esm/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InputGroup from "react-bootstrap/InputGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ListagemFrequencias from "./ListagemFrequencias";
-import { FrequenciaFiltros, GetFrequenciaResponse } from "./../../../interfaces/frequencia";
-import { deleteFrequencia, getFrequencias } from "./../../../api/FrequenciaApi";
+import { CreateFrequenciaRequest, FrequenciaFiltros, GetFrequenciaResponse } from "./../../../interfaces/frequencia";
+import { createFrequencia, deleteFrequencia, getFrequencias } from "./../../../api/FrequenciaApi";
 
 import { format } from "date-fns/format";
 import { registerLocale } from 'react-datepicker';
 import { ptBR } from 'date-fns/locale';
 import Modal from "react-bootstrap/esm/Modal";
 import ConfirmacaoFrequencia from "./ConfirmacaoFrequencia";
+import { showError } from './../../../shared/components/error-toast/ErrorToast';
+import { showSuccess } from './../../../shared/components/success-toast/SuccessToast';
 
 registerLocale('ptBR', ptBR);
 
@@ -56,6 +58,18 @@ const VerFrequencias: React.FC = () => {
     }
   };
 
+  const handleExportar = async () => {
+    const pdfUrl = `http://localhost:8090/frequencia-alunos/export/pdf?data=${format(dataFrequencia, "yyyy-MM-dd")}`;
+
+    try {
+      await window.electron.savePdf(pdfUrl);
+      showSuccess('PDF exportado com sucesso! Confira nos seus Downloads.');
+    } catch (error) {
+      console.error('Erro ao baixar o PDF:', error);
+      showError('Não foi possível exportar o PDF, tente novamente.')
+    }
+  }
+
   useEffect(() => {
     listarFrequencias()
   }, [dataFrequencia]);
@@ -65,8 +79,8 @@ const VerFrequencias: React.FC = () => {
       <div className="Exemplar-acoes">
         <Form className="mt-0">
           <Row>
-            <Col xs={4}>
-              <Form.Group controlId="formData" className="mb-3">
+            <Col className="d-flex align-items-end">
+              <Form.Group controlId="formData">
                 <Form.Label>
                   Data da Frequência <span className="obgr">*</span>
                 </Form.Label>
@@ -94,6 +108,11 @@ const VerFrequencias: React.FC = () => {
                   />
                 </InputGroup>
               </Form.Group>
+            </Col>
+            <Col className="d-flex w-100 align-items-end justify-content-end">
+              <Button variant="success" onClick={handleExportar}>
+                <FontAwesomeIcon icon={faFileExport} /> Exportar
+              </Button>
             </Col>
           </Row>
         </Form>
