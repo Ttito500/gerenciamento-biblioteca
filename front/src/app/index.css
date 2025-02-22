@@ -284,6 +284,11 @@ body {
   max-width: 550px;
 }
 
+.no-calendar::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 .custon-accordion-header-cyan .accordion-button {
   background-color: #CFF4FC !important;
   color: black !important;
@@ -291,6 +296,16 @@ body {
 
 .custon-accordion-header-cyan .accordion-button:not(.collapsed) {
   background-color: #CFF4FC !important;
+  box-shadow: none !important;
+}
+
+.custon-accordion-header-blue .accordion-button {
+  background-color: #CFE2FF !important;
+  color: black !important;
+}
+
+.custon-accordion-header-blue .accordion-button:not(.collapsed) {
+  background-color: #CFE2FF !important;
   box-shadow: none !important;
 }
 
