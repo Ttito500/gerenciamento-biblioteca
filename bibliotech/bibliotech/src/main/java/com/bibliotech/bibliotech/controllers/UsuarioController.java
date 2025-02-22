@@ -43,7 +43,7 @@ public class UsuarioController {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioResponseMapper usuarioResponseMapper
+    private UsuarioResponseMapper usuarioResponseMapper;
 
     @PostMapping("")
     public ResponseEntity<UsuarioResponseDTO> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
