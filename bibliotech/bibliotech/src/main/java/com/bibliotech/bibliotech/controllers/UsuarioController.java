@@ -4,6 +4,8 @@ import com.bibliotech.bibliotech.dtos.AutenticacaoDTO;
 import com.bibliotech.bibliotech.dtos.request.UsuarioRequestDTO;
 import com.bibliotech.bibliotech.dtos.request.mappers.UsuarioRequestMapper;
 import com.bibliotech.bibliotech.dtos.response.LoginResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.UsuarioResponseDTO;
+import com.bibliotech.bibliotech.dtos.response.mappers.UsuarioResponseMapper;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Turma;
 import com.bibliotech.bibliotech.models.Usuario;
@@ -40,8 +42,11 @@ public class UsuarioController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UsuarioResponseMapper usuarioResponseMapper
+
     @PostMapping("")
-    public ResponseEntity<Usuario> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
+    public ResponseEntity<UsuarioResponseDTO> criarUsuario (@Valid @RequestBody UsuarioRequestDTO body, BindingResult result){
         if (result.hasErrors()) {
             throw new ValidationException(result);
         }
@@ -49,9 +54,8 @@ public class UsuarioController {
         String senhaEncriptada = new BCryptPasswordEncoder().encode(body.getSenha());
         body.setSenha(senhaEncriptada);
 
-        Usuario usuario = usuarioService.cadastrarUsuario(body);
-        URI location = URI.create("/usuarios/" + usuario.getId());
-        return ResponseEntity.created(location).body(usuario);
+        UsuarioResponseDTO usuario = usuarioResponseMapper.toDto(usuarioService.cadastrarUsuario(body));
+        return ResponseEntity.ok(usuario);
     }
 
 

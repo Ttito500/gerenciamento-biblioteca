@@ -110,6 +110,10 @@ public class SecurityConfigurations {
 
 
                         .requestMatchers(HttpMethod.GET, "/root").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/health/readiness").permitAll()
+
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
