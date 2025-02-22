@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,13 +15,14 @@ import Col from "react-bootstrap/esm/Col";
 import Modal from "react-bootstrap/esm/Modal";
 import VerFrequencias from "./templates/VerFrequencias";
 import VerOcorrencias from "./templates/VerOcorrencias";
-import AlunosCadastrarAluno from "../Alunos/templates/AlunosCadastrarAluno";
-import {Table} from "react-bootstrap";
+import {InputGroup, ListGroup, Table} from "react-bootstrap";
+import { CreateFrequenciaRequest } from "./../../interfaces/frequencia";
+import { createFrequencia } from "./../../api/FrequenciaApi";
+import { AlunoFiltros, GetAlunoResponse } from "./../../interfaces/aluno";
+import { getAlunos } from "./../../api/AlunosApi";
+import { showError } from "./../../shared/components/error-toast/ErrorToast";
 
 const Inicio: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showToastError, setShowToastError] = useState(false);
-  const [showToastSuccess, setShowToastSuccess] = useState(false);
 
   const [showFrequencia, setFrequencia] = useState(false);
   const handleCloseFrequencia = () => setFrequencia(false);
@@ -31,41 +32,95 @@ const Inicio: React.FC = () => {
   const handleCloseOcorrencia = () => setOcorrencia(false);
   const handleShowOcorrencia = () => setOcorrencia(true);
 
-  const [showCadastrar, setShowCadastrar] = useState(false);
-  const handleCloseCadastrar = () => setShowCadastrar(false);
-  const handleShowCadastrar = () => setShowCadastrar(true);
+  const [formDataCadastrarFrequencia, setFormDataCadastrarFrequencia] = useState({
+    idAluno: null as number,
+    registradaPor: null as number,
+    atividade: ''
+  } as CreateFrequenciaRequest);
 
-  const [formDataCadastrarAluno, setFormDataCadastrarAluno] = useState({
-    nome: "",
-    email: "",
-    telefone: "",
-  });
-
-  const handleChangeCadastrarAluno = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChangeCadastrarFrequencia = (e: ChangeEvent<any>): void => {
     const { name, value } = e.target;
-    setFormDataCadastrarAluno((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormDataCadastrarFrequencia({ ...formDataCadastrarFrequencia, [name]: value });
+  };
+
+  const handleSubmitCadastrarFrequencia = async (): Promise<void> => {
+    const body: CreateFrequenciaRequest = {
+      idAluno: Number(formDataCadastrarFrequencia.idAluno),
+      registradaPor: 1, // TO DO
+      atividade: formDataCadastrarFrequencia.atividade
+    }
+
+    if(body.atividade && body.idAluno && body.registradaPor) {
+      try {
+        await createFrequencia(body);
+        setFormDataCadastrarFrequencia({
+          idAluno: null as number,
+          registradaPor: null as number,
+          atividade: ''
+        });
+        handleClearSelectionAluno();
+      } catch(err) {
+        console.log(err)
+      }
+    } else {
+      showError("Insira todos os dados necessários.")
+    }
+
+  };
+
+  const [nomeAluno, setNomeAluno] = useState('');
+  const [queryAluno, setQueryAluno] = useState('');
+  const [suggestionsAlunos, setSuggestionsAlunos] = useState<GetAlunoResponse[]>([]);
+  const [selectedAlunoId, setSelectedAlunoId] = useState<number | null>(null);
+
+  const handleClearSelectionAluno = () => {
+    setSelectedAlunoId(null);
+    setQueryAluno('');
+    setNomeAluno('');
+  };
+
+  const handleSelectAluno = (aluno: GetAlunoResponse) => {
+    setNomeAluno(aluno.nome);
+    setSelectedAlunoId(aluno.id);
+    setSuggestionsAlunos([]);
   };
 
   useEffect(() => {
-    TelaInicio();
+    formDataCadastrarFrequencia.idAluno = selectedAlunoId;
+    const e: any = { target: { name: 'idAluno', value: selectedAlunoId } }
+    handleChangeCadastrarFrequencia(e)
+  }, [selectedAlunoId]);
+
+  useEffect(() => {
+    const listarAlunos = async () => {
+      if (queryAluno.length > 2) {
+        try {
+          const filtros: AlunoFiltros = {
+            nome: queryAluno,
+            ativo: true
+          }
+          const response = await getAlunos(filtros)
+          setSuggestionsAlunos(response.content);
+        } catch (error) {
+          console.error('Erro ao buscar alunos:', error);
+        }
+      } else {
+        setSuggestionsAlunos([]);
+      }
+    };
+
+    listarAlunos();
+  }, [queryAluno]);
+
+
+
+
+  
+
+
+  useEffect(() => {
+    null
   }, []);
-
-  const TelaInicio = async (): Promise<void> => {
-    setLoading(true);
-
-    try {
-      /* empty */
-    } catch (err) {
-      setShowToastError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <section className="Exemplar">
@@ -118,17 +173,49 @@ const Inicio: React.FC = () => {
                   <Col xs={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        Nome <span className="obgr">*</span>
+                        Selecionar Aluno <span className="obgr">*</span>
                       </Form.Label>
-                      <Form.Control
+                      <InputGroup>
+                        <Form.Control
                           type="text"
-                          placeholder="Busque pelo nome do aluno"
+                          placeholder="Digite o nome do aluno"
+                          value={nomeAluno}
+                          onChange={(e) => {
+                            setNomeAluno(e.target.value);
+                            setQueryAluno(e.target.value);
+                            setSelectedAlunoId(null);
+                          }}
                           required
-                      />
+                          readOnly={!!selectedAlunoId}
+                          style={{
+                            backgroundColor: selectedAlunoId ? '#e9ecef' : 'white',
+                            cursor: selectedAlunoId ? 'not-allowed' : 'text',
+                          }}
+                        />
+                          {selectedAlunoId && (
+                            <Button variant="outline-secondary" onClick={handleClearSelectionAluno}>
+                              Limpar
+                            </Button>
+                          )}
+                      </InputGroup>
                       <Form.Control.Feedback type="invalid">
                         Campo obrigatório.
-                      </Form.Control.Feedback>
+                      </Form.Control.Feedback>       
                     </Form.Group>
+                    {suggestionsAlunos.length > 0 && (
+                      <ListGroup style={{
+                        position: 'absolute',
+                        zIndex: 1000,
+                        maxHeight: '200px',
+                        overflowY: 'auto',
+                      }}>
+                        {suggestionsAlunos?.map((aluno) => (
+                          <ListGroup.Item style={{cursor: 'pointer'}} key={aluno.id} onClick={() => handleSelectAluno(aluno)}>
+                            {aluno.turma.serie}ª {aluno.turma.turma} - {aluno.nome}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    )}
                   </Col>
                   <Col xs={4}>
                     <Form.Group className="mb-3">
@@ -137,10 +224,13 @@ const Inicio: React.FC = () => {
                       </Form.Label>
                       <Form.Select
                           aria-label="Selecione"
+                          onChange={handleChangeCadastrarFrequencia}
+                          name="atividade"
+                          value={formDataCadastrarFrequencia.atividade}
                           required
                           className="custom-placeholder"
                       >
-                        <option value="" disabled selected hidden>
+                        <option value="">
                           Atividade que o aluno está fazendo
                         </option>
                         <option value="lendo">Lendo</option>
@@ -166,22 +256,14 @@ const Inicio: React.FC = () => {
                     <Button
                       variant="info"
                       className="btn-orange resizable-button"
+                      onClick={handleSubmitCadastrarFrequencia}
                     >
                       <FontAwesomeIcon icon={faPlus} /> Registrar
                     </Button>
                   </Col>
                 </Row>
                 <Row>
-                  <Col className="justify-content-start">
-                    <Button
-                      variant="info"
-                      className="btn-blue"
-                      onClick={handleShowCadastrar}
-                    >
-                      <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Aluno
-                    </Button>
-                  </Col>
-                  <Col xs={2} className="d-flex justify-content-end">
+                  <Col xs={2} className="w-100 d-flex justify-content-end">
                     <Button
                       variant="info"
                       className="btn-blue resizable-button"
@@ -213,11 +295,8 @@ const Inicio: React.FC = () => {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseFrequencia}>
-              Voltar
-            </Button>
-            <Button variant="success">
-              <FontAwesomeIcon icon={faFileExport} /> Exportar
+            <Button variant="info" onClick={handleCloseFrequencia}>
+              Ok
             </Button>
           </Modal.Footer>
         </Modal>
@@ -276,16 +355,7 @@ const Inicio: React.FC = () => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col className="justify-content-start">
-                    <Button
-                      variant="info"
-                      className="btn-blue"
-                      onClick={handleShowCadastrar}
-                    >
-                      <FontAwesomeIcon icon={faPlus} /> Cadastrar Novo Aluno
-                    </Button>
-                  </Col>
-                  <Col xs={2} className="d-flex justify-content-end">
+                  <Col xs={2} className="w-100 d-flex justify-content-end">
                     <Button
                       variant="info"
                       className="btn-blue resizable-button"
@@ -321,36 +391,6 @@ const Inicio: React.FC = () => {
             </Button>
             <Button variant="success">
               <FontAwesomeIcon icon={faFileExport} /> Exportar
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal
-          show={showCadastrar}
-          onHide={handleCloseCadastrar}
-          size="xl"
-          backdrop="static"
-          centered
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Cadastrar Novo Aluno</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            {/* <AlunosCadastrarAluno
-              formData={formDataCadastrarAluno}
-              onChange={handleChangeCadastrarAluno}
-            /> */}
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseCadastrar}>
-              Cancelar
-            </Button>
-            <Button variant="success">
-              {" "}
-              <FontAwesomeIcon icon={faCheck} /> Salvar
             </Button>
           </Modal.Footer>
         </Modal>

@@ -12,7 +12,20 @@ export const getFrequencias = async (filtros: FrequenciaFiltros): Promise<GetFre
     const response = await api.get<GetFrequenciaResponse[]>(url);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar frequencia:", error);
+    console.error("Erro ao buscar frequencias:", error);
+    throw error;
+  }
+};
+
+export const exportFrequencias = async (filtros: FrequenciaFiltros): Promise<any> => {
+  try {
+    const queryString = getQueryString(filtros);
+    const url = queryString ? `${API_URL}/export/pdf?${queryString}` : `${API_URL}/export/pdf`;
+    
+    const response = await api.get<any>(url, { responseType: "arraybuffer" });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao exportar frequencias:", error);
     throw error;
   }
 };
@@ -28,7 +41,6 @@ export const createFrequencia = async (
     throw error;
   }
 };
-
 
 export const deleteFrequencia = async (id: number): Promise<void> => {
   try {
