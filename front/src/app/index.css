@@ -272,6 +272,28 @@ body {
   box-shadow: none !important;
 }
 
+.accordion-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.accordion-relatorios {
+  width: 48%;
+  max-width: 550px;
+}
+
+.custon-accordion-header-cyan .accordion-button {
+  background-color: #CFF4FC !important;
+  color: black !important;
+}
+
+.custon-accordion-header-cyan .accordion-button:not(.collapsed) {
+  background-color: #CFF4FC !important;
+  box-shadow: none !important;
+}
+
 .custom-placeholder:invalid {
   color: #495057
 }
