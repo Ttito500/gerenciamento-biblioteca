@@ -148,6 +148,12 @@ public class AlunosService {
             throw new ValidationException("A data de início deve ser anterior à data final.");
         }
 
-        return alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim).subList(0, qtdMax);
+        List<AlunoLeiturasDTO> result = alunoRepository.obterAlunosMaisLeitures(dataInicio, dataFim);
+
+        if (qtdMax != null && result.size() > qtdMax) {
+            return result.subList(0, qtdMax);
+        }
+
+        return result;
     }
 }
