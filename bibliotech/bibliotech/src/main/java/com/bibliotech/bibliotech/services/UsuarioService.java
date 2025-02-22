@@ -88,4 +88,13 @@ public class UsuarioService {
         usuarioExistente.setAtivo(false);
         usuarioRepository.save(usuarioExistente);
     }
+
+    public void ativarUsuario(Integer id) {
+
+        Usuario usuarioExistente = usuarioRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new NotFoundException("Usuario com ID " + id + " não encontrado."));
+
+        usuarioExistente.setAtivo(true);
+        usuarioRepository.save(usuarioExistente);
+    }
 }

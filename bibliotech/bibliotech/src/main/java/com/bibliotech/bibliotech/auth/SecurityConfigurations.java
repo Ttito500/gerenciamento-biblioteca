@@ -26,11 +26,25 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()  //MUDAR ISSO, permitir apenas bilbiotecario
+                        .requestMatchers(HttpMethod.GET, "/usuarios/filtrar").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() //a permissao mais abranjente de um mesmo http method e mesmo root de endpoint tem que estar em baixo das menos abranjentes
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/usuarios/{id}/inativar").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/usuarios/{id}/ativar").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/livros").hasRole("bibliotecario")
-                        .requestMatchers(HttpMethod.PATCH, "/livros").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.POST, "/livros/exemplares").hasRole("bibliotecario")
                         .requestMatchers(HttpMethod.GET, "/livros/filtrar").hasAnyRole("bibliotecario", "aluno_monitor")
+                        .requestMatchers(HttpMethod.GET, "/livros/exemplares/{id}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/livros/inativar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/livros/ativar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/livros/exemplares/extraviar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.PATCH, "/livros/exemplares/atualizar/{id}").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/livros/relatorio/export/pdf").hasRole("bibliotecario")
+                        .requestMatchers(HttpMethod.GET, "/livros/relatorio/acervo/export/pdf").hasRole("bibliotecario")
+
 
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

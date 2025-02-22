@@ -81,6 +81,12 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}/ativar")
+    public ResponseEntity<Void> ativarUsuario(@PathVariable Integer id) {
+        usuarioService.ativarUsuario(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AutenticacaoDTO autenticacaoDTO) {
         var tokenAutenticacao = new UsernamePasswordAuthenticationToken(autenticacaoDTO.getEmail(), autenticacaoDTO.getSenha());
