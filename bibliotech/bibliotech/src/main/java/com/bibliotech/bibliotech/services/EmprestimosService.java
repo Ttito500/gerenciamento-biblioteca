@@ -83,6 +83,9 @@ public class EmprestimosService {
             throw new ValidationException("O exemplar não está disponível");
         }
 
+        //tambem existe um getNomeUsuario no tokenService
+        //System.out.println(requestDTO.getIdUsuario() + " ////////////////////////"); so para exemplificar como pegar id
+
         Usuario usuario = usuarioRepository.findById(requestDTO.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
