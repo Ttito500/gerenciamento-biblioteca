@@ -35,6 +35,9 @@ import java.util.List;
 public class EmprestimosService {
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private EmprestimoRepository emprestimoRepository;
 
     @Autowired
@@ -65,9 +68,6 @@ public class EmprestimosService {
         if (requestDTO.getIdExemplar() == null) {
             throw new ValidationException("O ID do exemplar não pode ser nulo.");
         }
-        if (requestDTO.getIdUsuario() == null) {
-            throw new ValidationException("O ID do usuário não pode ser nulo.");
-        }
 
         Aluno aluno = alunoRepository.findById(requestDTO.getIdAluno())
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
@@ -83,10 +83,7 @@ public class EmprestimosService {
             throw new ValidationException("O exemplar não está disponível");
         }
 
-        //tambem existe um getNomeUsuario no tokenService
-        //System.out.println(requestDTO.getIdUsuario() + " ////////////////////////"); so para exemplificar como pegar id
-
-        Usuario usuario = usuarioRepository.findById(requestDTO.getIdUsuario())
+        Usuario usuario = usuarioRepository.findById(tokenService.getUsuarioId())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         Emprestimo emprestimo = emprestimoRequestMapper.toEntity(requestDTO);
@@ -104,10 +101,12 @@ public class EmprestimosService {
         return emprestimoResponseMapper.toDto(emprestimoSalvo);
     }
 
-    //CONSERTAR USUARIO DEPOIS
     public String cancelarEmprestimo(Integer id){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
+
+        Usuario usuario = usuarioRepository.findById(tokenService.getUsuarioId())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         if (emprestimo.getSituacao().equals("cancelado")){
             throw new ValidationException("Emprestimo ja cancelado.");
@@ -117,7 +116,7 @@ public class EmprestimosService {
         emprestimo.getAluno().setSituacao("regular");
         emprestimo.getExemplar().setSituacao("disponivel");
 
-        emprestimo.setConcluidoPor(emprestimo.getRealizadoPor()); //TEMPORARIO
+        emprestimo.setConcluidoPor(usuario);
 
         emprestimo.setDataConclusao(LocalDate.now());
 
@@ -126,10 +125,13 @@ public class EmprestimosService {
         return "Emprestimo cancelado com sucesso.";
     }
 
-    //CONSERTAR USUARIO DEPOIS
+
     public String concluirEmprestimo(Integer id, EmprestimoRequestDTOConcluir DTOConcluir){
         Emprestimo emprestimo = emprestimoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Emprestimo com o ID " + id + " não encontrado."));
+
+        Usuario usuario = usuarioRepository.findById(tokenService.getUsuarioId())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         if (emprestimo.getSituacao().equals("cancelado") || emprestimo.getSituacao().equals("entregue") || emprestimo.getSituacao().equals("extraviado")){
             throw new ValidationException("Emprestimo ja concluido.");
@@ -138,7 +140,7 @@ public class EmprestimosService {
         emprestimo.setObservacao(DTOConcluir.getObservacao());
         emprestimo.setDataConclusao(LocalDate.now());
 
-        emprestimo.setConcluidoPor(emprestimo.getRealizadoPor()); //TEMPORARIO
+        emprestimo.setConcluidoPor(usuario);
 
         if (!DTOConcluir.isExtraviado()){
             emprestimo.setSituacao("entregue");
