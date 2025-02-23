@@ -40,8 +40,8 @@ jobs:
           api_port="${{ vars.API_PORT }}" 
           email_smtp="${{ vars.EMAIL_SMTP }}"
           db_password="${{ secrets.DB_PASSWORD }}"
-          senha_email_smtp="${{ vars.GCP_DATA_PROJECT }}"
-          jwt_secret="${{ vars.GCP_DATA_PROJECT }}"
+          senha_email_smtp="${{ secrets.SENHA_EMAIL_SMTP }}"
+          jwt_secret="${{ secrets.JWT_SECRET }}"
           EOF
 
       - name: Terraform Init
