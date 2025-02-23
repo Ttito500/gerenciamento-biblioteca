@@ -14,8 +14,7 @@ resource "google_compute_instance" "docker_instance" {
     access_config {}  # IP público
   }
 
-  # Carrega o conteúdo do template, já com as variáveis interpoladas
-  metadata_startup_script = templatefile("${path.module}/startup.sh.tpl", {
+   metadata = {
     repo_url    = var.repo_url
 
     db_name          = var.db_name
@@ -31,5 +30,32 @@ resource "google_compute_instance" "docker_instance" {
     senha_email_smtp = var.senha_email_smtp
 
     jwt_secret       = var.jwt_secret
-  })
+  }
+
+  metadata_startup_script = <<-EOF
+  set -e
+
+  apt-get update && apt-get install -y docker.io docker-compose git
+
+  systemctl start docker
+
+  export DB_NAME="${db_name}"
+  export DB_USER="${db_user}"
+  export DB_PORT="${db_port}"
+  export JDBC_URL="${jdbc_url}"
+  export DB_SCHEMA_NAME="${db_schema_name}"
+  export API_PORT="${api_port}"
+  export EMAIL_SMTP="${email_smtp}"
+  export DB_PASSWORD="${db_password}"
+  export SENHA_EMAIL_SMTP="${senha_email_smtp}"
+  export JWT_SECRET="${jwt_secret}"
+
+  git clone "${repo_url}" /opt/app
+  cd /opt/app
+
+  cd bibliotech/bibliotech
+
+  # Roda apenas o banco e a API
+  docker-compose up -d --build postgres api
+  EOF
 }
