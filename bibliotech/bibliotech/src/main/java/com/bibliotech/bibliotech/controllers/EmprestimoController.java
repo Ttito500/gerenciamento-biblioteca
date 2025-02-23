@@ -9,6 +9,7 @@ import com.bibliotech.bibliotech.dtos.response.EmprestimoResponseDTOLivro;
 import com.bibliotech.bibliotech.exception.ValidationException;
 import com.bibliotech.bibliotech.models.Emprestimo;
 import com.bibliotech.bibliotech.services.EmprestimosService;
+import com.bibliotech.bibliotech.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,12 +29,17 @@ public class EmprestimoController {
     private final EmprestimosService emprestimosService;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     public EmprestimoController(EmprestimosService emprestimosService) {
         this.emprestimosService = emprestimosService;
     }
 
     @PostMapping("")
     public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(@RequestBody EmprestimoRequestDTO requestDTO) {
+        requestDTO.setIdUsuario(tokenService.getUsuarioId());
+
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimosService.realizarEmprestimo(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(emprestimoResponseDTO);
     }
