@@ -249,26 +249,26 @@ public class EmprestimosService {
 
     public List<EmprestimoNotificacaoDTO> enviarEmailAtrasadosEPresteAAtrasar() {
         LocalDate hoje = LocalDate.now();
-        List<EmprestimoNotificacaoDTO> emprestimosNotificados = new ArrayList<>();
+        List<EmprestimoNotificacaoDTO> emprestimosNaoNotificados = new ArrayList<>();
 
         verificarAtrasados();
 
         List<Emprestimo> emprestimosAtrasados = emprestimoRepository.findBySituacao("atrasado");
         for (Emprestimo emprestimo : emprestimosAtrasados) {
-            if (enviarNotificacaoAtraso(emprestimo)) {
-                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
+            if (!enviarNotificacaoAtraso(emprestimo)) {
+                emprestimosNaoNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
             }
         }
 
         LocalDate amanha = hoje.plusDays(1);
         List<Emprestimo> emprestimosPrestesAAtasar = emprestimoRepository.findBySituacaoAndDataPrazo("pendente", amanha);
         for (Emprestimo emprestimo : emprestimosPrestesAAtasar) {
-            if (enviarNotificacaoPreAtraso(emprestimo)) {
-                emprestimosNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
+            if (!enviarNotificacaoPreAtraso(emprestimo)) {
+                emprestimosNaoNotificados.add(emprestimoResponseMapper.toDTONotificacao(emprestimo));
             }
         }
 
-        return emprestimosNotificados;
+        return emprestimosNaoNotificados;
     }
 
     private boolean enviarNotificacaoAtraso(Emprestimo emprestimo) {
@@ -313,7 +313,7 @@ public class EmprestimosService {
             return true;
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao enviar e-mail para: " + emprestimo.getAluno().getEmail(), e);
+            return false;
         }
     }
 
@@ -359,7 +359,7 @@ public class EmprestimosService {
             return true;
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao enviar e-mail para: " + emprestimo.getAluno().getEmail(), e);
+            return false;
         }
     }
 
@@ -368,7 +368,7 @@ public class EmprestimosService {
         List<Emprestimo> emprestimosPendentes = emprestimoRepository.findBySituacao("pendente");
 
         for (Emprestimo emprestimo : emprestimosPendentes) {
-            if (!emprestimo.getDataPrazo().isAfter(hoje)) { // Se a data prazo já passou ou é hoje
+            if (!emprestimo.getDataPrazo().isAfter(hoje)) {
                 emprestimo.setSituacao("atrasado");
             }
         }
