@@ -27,7 +27,7 @@ jobs:
         id: vars
         run: |-
           cat > pipeline.auto.tfvars <<EOF
-          project_id=bibliotech-451801" 
+          project_id="bibliotech-451801" 
           region="us-central1" 
           zone="us-central1-a" 
           instance_name="bibliotech-instance" 
